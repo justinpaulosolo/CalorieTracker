@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -41,7 +39,7 @@ export default defineConfig({
     plugins: [plugin()],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            "@": path.resolve(__dirname, "./src"),
         }
     },
     server: {
@@ -49,6 +47,14 @@ export default defineConfig({
             '^/weatherforecast': {
                 target: 'https://localhost:7207/',
                 secure: false
+            },
+            '^/account': {
+                target: 'https://localhost:7207/account',
+                secure: false
+            },
+            '^/requires-auth': {
+                target: 'https://localhost:7207/requires-auth',
+                secure: true
             }
         },
         port: 5173,
