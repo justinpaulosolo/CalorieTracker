@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Server.Data;
+using MiniValidation;
 
 namespace CalorieTracker.Server.Foods;
 
@@ -10,6 +11,11 @@ public static class FoodApi
         group.WithTags("Foods");
         group.MapPost("/", async (ApplicationDbContext context, CreateFoodRequest foodRequest) =>
         {
+            if (!MiniValidator.TryValidate(foodRequest, out var errors))
+            {
+                return Results.ValidationProblem(errors);
+            }
+            
             var food = new Food()
             {
                 Name = foodRequest.Name,
