@@ -1,7 +1,8 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Users;
-using System.Security.Claims;
 using CalorieTracker.Server.Account;
+using CalorieTracker.Server.FoodEntries;
+using CalorieTracker.Server.Meals;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +32,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapAccount();
-
-app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
+app.MapMeals();
+app.MapFoodEntries();
 
 var summaries = new[]
 {
