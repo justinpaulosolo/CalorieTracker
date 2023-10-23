@@ -1,4 +1,14 @@
+using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Users;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSqlite<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,6 +45,8 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapUsers();
 
 app.MapFallbackToFile("/index.html");
 
