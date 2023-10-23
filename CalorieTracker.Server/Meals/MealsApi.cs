@@ -1,5 +1,4 @@
 ﻿using CalorieTracker.Server.Data;
-using CalorieTracker.Server.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Meals;
@@ -10,10 +9,10 @@ public static class MealsApi
     {
         var group = builder.MapGroup("/Meals");
         group.WithTags("Meals");
-        group.MapPost("/", async (ApplicationDbContext context, Meal meal) =>
+        group.MapPost("/", async (ApplicationDbContext context, CreateMealRequest mealRequest) =>
         {
             var existingMeal = await context.Meals
-                .Where(m => m.UserId == meal.UserId && m.Date.Date == meal.Date.Date && m.MealType == meal.MealType)
+                .Where(m => m.UserId == mealRequest.UserId && m.Date.Date == new DateTime().Date && m.MealType == mealRequest.MealType)
                 .FirstOrDefaultAsync();
 
             if (existingMeal != null)
@@ -21,9 +20,15 @@ public static class MealsApi
                 return Results.BadRequest("A meal of this type already exists for this user on this day.");
             }
 
+            var meal = new Meal()
+            {
+                UserId = mealRequest.UserId,
+                MealType = mealRequest.MealType
+            };
+
             context.Meals.Add(meal);
             await context.SaveChangesAsync();
-            return Results.Created($"/api/meals{meal.MealId}", meal);
+            return Results.Created($"/api/meals{meal.MealId}", mealRequest);
         });
         return group;
     }

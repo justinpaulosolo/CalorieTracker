@@ -2,6 +2,7 @@ using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Users;
 using CalorieTracker.Server.Account;
 using CalorieTracker.Server.FoodEntries;
+using CalorieTracker.Server.Foods;
 using CalorieTracker.Server.Meals;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,7 @@ app.UseAuthorization();
 
 app.MapAccount();
 app.MapMeals();
+app.MapFoods();
 app.MapFoodEntries();
 
 var summaries = new[]
