@@ -1,5 +1,6 @@
 ﻿using CalorieTracker.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using MiniValidation;
 
 namespace CalorieTracker.Server.FoodEntries;
 
@@ -11,6 +12,11 @@ public static class FoodEntriesApi
         group.WithTags("FoodEntries");
         group.MapPost("/", async (ApplicationDbContext context, CreateFoodEntryRequest foodEntryRequest) =>
         {
+            if (!MiniValidator.TryValidate(foodEntryRequest, out var errors))
+            {
+                return Results.ValidationProblem(errors);
+            }
+            
             // Check if the meal exists
             var meal = await context.Meals.FindAsync(foodEntryRequest.MealId);
 
