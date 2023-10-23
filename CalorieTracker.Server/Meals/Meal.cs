@@ -1,4 +1,5 @@
-﻿using CalorieTracker.Server.FoodEntries;
+﻿using System.ComponentModel.DataAnnotations;
+using CalorieTracker.Server.FoodEntries;
 
 namespace CalorieTracker.Server.Meals;
 
@@ -13,6 +14,8 @@ public class Meal
 
 public class CreateMealRequest
 {
+    [Required]
     public string UserId { get; set; }
+    [Required]
     public string MealType { get; set; }
 }
