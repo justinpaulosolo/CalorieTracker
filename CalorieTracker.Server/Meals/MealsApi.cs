@@ -12,7 +12,6 @@ public static class MealsApi
         group.WithTags("Meals");
         group.MapPost("/", async (ApplicationDbContext context, CreateMealRequest mealRequest) =>
         {
-
             if (!MiniValidator.TryValidate(mealRequest, out var errors))
             {
                 return Results.ValidationProblem(errors);
