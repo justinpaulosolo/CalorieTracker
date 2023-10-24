@@ -4,6 +4,7 @@ using CalorieTracker.Server.Account;
 using CalorieTracker.Server.FoodEntries;
 using CalorieTracker.Server.Foods;
 using CalorieTracker.Server.Meals;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSqlite<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddEndpointsApiExplorer();
