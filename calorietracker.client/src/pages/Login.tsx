@@ -11,14 +11,25 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(10),
 });
 
+function useLoginUser() {
+    return useMutation({
+        mutationFn: (user: z.infer<typeof formSchema>) =>
+        axios.post('/Account/login', user)
+    })
+}
+
 
 function LoginPage() {
+    const loginUser = useLoginUser();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -31,7 +42,12 @@ function LoginPage() {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+        loginUser.mutate(values, {
+            onSuccess: (data) => console.log(data),
+            onError: (error) => console.error(error),
+        });
     }
+
     return (
         <div className="flex h-screen flex-1 flex-col justify-center px-16 py-12 lg:px-8 space-y-4">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
