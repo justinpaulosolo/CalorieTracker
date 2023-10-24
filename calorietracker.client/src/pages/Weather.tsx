@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 interface Forecast {
@@ -12,6 +13,7 @@ function Weather() {
 
     useEffect(() => {
         populateWeatherData();
+        getUserInfo();
     }, []);
 
     const contents = forecasts === undefined
@@ -42,6 +44,9 @@ function Weather() {
             <h1 id="tabelLabel">Weather forecast</h1>
             <p>This component demonstrates fetching data from the server.</p>
             {contents}
+            <div>
+                <Button onClick={() => getLogout()}>Log out</Button>
+            </div>
         </div>
     );
 
@@ -49,6 +54,16 @@ function Weather() {
         const response = await fetch('weatherforecast');
         const data = await response.json();
         setForecasts(data);
+    }
+
+    async function getUserInfo() {
+        const response = await fetch('/Account/manage/info');
+        const data = await response.json();
+        console.log(data);
+    }
+
+    async function getLogout() {
+        await fetch('/Account/logout',{ method: 'POST' });
     }
 }
 

@@ -55,6 +55,7 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast")
+    .RequireAuthorization()
     .WithOpenApi();
 
 app.MapFallbackToFile("/index.html");
