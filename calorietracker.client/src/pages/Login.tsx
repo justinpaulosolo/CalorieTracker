@@ -22,7 +22,7 @@ const formSchema = z.object({
 function useLoginUser() {
     return useMutation({
         mutationFn: (user: z.infer<typeof formSchema>) =>
-        axios.post('/Account/login', user)
+        axios.post('/Account/login?useCookies=true&useSessionCookies=true', user)
     })
 }
 
