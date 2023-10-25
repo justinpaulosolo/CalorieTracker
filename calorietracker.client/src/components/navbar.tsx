@@ -13,8 +13,10 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar.tsx';
+import { useGetUserInfo } from '@/services/account-services';
 
 export default function Navbar() {
+  const { data } = useGetUserInfo();
   const navigate = useNavigate();
 
   return (
@@ -38,9 +40,9 @@ export default function Navbar() {
           <DropdownMenuContent className="w-48" align="end" forceMount>
             <div className="flex items-center justify-start gap-2 p-2">
               <div className="flex flex-col space-y-1 leading-none">
-                <p className="font-medium">UserName</p>
+                <p className="font-medium">{data.username}</p>
                 <p className="w-[200px] truncate text-sm text-muted-foreground">
-                  Email
+                  {data.email}
                 </p>
               </div>
             </div>
