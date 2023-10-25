@@ -1,6 +1,7 @@
 ﻿using CalorieTracker.Server.Users;
 using Microsoft.AspNetCore.Identity;
 using MiniValidation;
+using System.Security.Claims;
 
 namespace CalorieTracker.Server.Account
 {
@@ -25,7 +26,7 @@ namespace CalorieTracker.Server.Account
                     Email = registerUserRequest.Email
                 };
 
-                var result = await userManager.CreateAsync(user);
+                var result = await userManager.CreateAsync(user, registerUserRequest.Password);
 
                 if(!result.Succeeded)
                 {
@@ -35,12 +36,53 @@ namespace CalorieTracker.Server.Account
                 return Results.Ok(new { user.Id, user.UserName, user.Email });
             });
 
-            group.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) =>
+            group.MapPost("/login", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, LoginUserRequest loginUserRequest) =>
+            {
+                if (!MiniValidator.TryValidate(loginUserRequest, out var errors))
+                {
+                    return Results.ValidationProblem(errors);
+                }
+
+                var result = await signInManager.PasswordSignInAsync(loginUserRequest.Username, loginUserRequest.Password, true, false);
+
+                if (!result.Succeeded)
+                {
+                    return Results.BadRequest(result);
+                }
+
+                return Results.Ok();
+            });
+
+            var accountGroup = group.MapGroup("/manage").RequireAuthorization();
+
+            accountGroup.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) =>
             {
                 await signInManager.SignOutAsync();
                 return Results.Ok();
-            }).RequireAuthorization();
+            });
+
+            accountGroup.MapPost("/info", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ClaimsPrincipal claimsPrincipal) =>
+            {
+                if (await userManager.GetUserAsync(claimsPrincipal) is not { } user)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(await CreateInfoResponseAsync(user, claimsPrincipal, userManager));
+            });
+
+
             return group;
+        }
+
+        private static async Task<UserInfo> CreateInfoResponseAsync(ApplicationUser user, ClaimsPrincipal claimsPrincipal, UserManager<ApplicationUser> userManager)
+        {
+            return new()
+            {
+                Id = await userManager.GetUserIdAsync(user),
+                Username = await userManager.GetUserNameAsync(user) ?? throw new NotSupportedException("Users must have an username."),
+                Email = await userManager.GetEmailAsync(user) ?? throw new NotSupportedException("Users must have an email.")
+            };
         }
     }
 }

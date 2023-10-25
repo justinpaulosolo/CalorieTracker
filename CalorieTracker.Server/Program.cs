@@ -13,8 +13,11 @@ builder.Services.AddAuthorization();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
