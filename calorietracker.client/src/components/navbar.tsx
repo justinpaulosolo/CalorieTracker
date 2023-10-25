@@ -13,10 +13,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar.tsx';
-import { useGetUserInfo } from '@/services/account-services';
+import { useGetUserInfo, useLogoutUser } from '@/services/account-services';
 
 export default function Navbar() {
   const { data } = useGetUserInfo();
+  const logout = useLogoutUser();
   const navigate = useNavigate();
 
   return (
@@ -49,7 +50,7 @@ export default function Navbar() {
             <DropdownMenuItem>Dashboard</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onSelect={()=> console.log('logout')}
+              onSelect={()=> logout.mutate()}
               className="cursor-pointer"
             >
               Logout

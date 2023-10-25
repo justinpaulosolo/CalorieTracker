@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 async function fetchUserInfo() {
@@ -11,6 +11,16 @@ export function useLoginUser() {
     return useMutation({
         mutationFn: (user: {username: string, password: string}) =>
         axios.post('/Account/login?useCookies=true&useSessionCookies=true', user)
+    })
+}
+
+export function useLogoutUser() {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: () => axios.post('/Account/manage/logout'),
+        onSuccess: () => {
+            queryClient.setQueryData(['user-info'], null)
+        },
     })
 }
 
