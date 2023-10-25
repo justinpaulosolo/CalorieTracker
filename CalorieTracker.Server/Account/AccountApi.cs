@@ -61,7 +61,7 @@ namespace CalorieTracker.Server.Account
                 return Results.Ok();
             });
 
-            accountGroup.MapPost("/info", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ClaimsPrincipal claimsPrincipal) =>
+            accountGroup.MapGet("/info", async (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ClaimsPrincipal claimsPrincipal) =>
             {
                 if (await userManager.GetUserAsync(claimsPrincipal) is not { } user)
                 {
