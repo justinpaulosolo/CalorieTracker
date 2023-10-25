@@ -44,18 +44,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/weatherforecast': {
-                target: 'https://localhost:7207',
-                secure: false
-            },
             '/Account': {
                 target: 'https://localhost:7207',
                 secure: false
             },
-            '^/requires-auth': {
-                target: 'https://localhost:7207/requires-auth',
-                secure: true
-            }
         },
         port: 5173,
         https: {
