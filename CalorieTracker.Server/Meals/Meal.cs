@@ -13,9 +13,11 @@ public class Meal
 }
 
 public class CreateMealRequest
-{
+{ 
     [Required]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     [Required]
-    public string MealType { get; set; }
+    public string MealType { get; set; } = default!;
+    [Required]
+    public DateTime Date { get; set; } = default!;
 }

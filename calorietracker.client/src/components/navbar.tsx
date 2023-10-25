@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <header className="bg-background">
-      <div className="container max-w-3xl flex h-16 justify-between items-center">
+      <div className="container max-w-4xl flex h-16 justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <Banana size={22} />
           <span className="font-bold">Crispy Happiness</span>

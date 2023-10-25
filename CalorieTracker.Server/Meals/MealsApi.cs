@@ -29,7 +29,8 @@ public static class MealsApi
             var meal = new Meal()
             {
                 UserId = mealRequest.UserId,
-                MealType = mealRequest.MealType
+                MealType = mealRequest.MealType,
+                Date = mealRequest.Date,
             };
 
             context.Meals.Add(meal);

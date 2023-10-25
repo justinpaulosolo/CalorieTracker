@@ -17,7 +17,7 @@ function PrivateRoute () {
     return (
         <div className="h-screen flex flex-col space-y-6">
             <Navbar />
-            <div className="container max-w-3xl">
+            <div className="container max-w-4xl">
                 <main>{outlet}</main>
             </div>
         </div>
