@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useLoginUser } from "@/services/account-services";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
     username: z.string(),
@@ -21,6 +22,7 @@ const formSchema = z.object({
 
 function LoginPage() {
     const loginUser = useLoginUser();
+    const navigate = useNavigate();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,7 +37,7 @@ function LoginPage() {
         // ✅ This will be type-safe and validated.
         console.log(values)
         loginUser.mutate(values, {
-            onSuccess: (data) => console.log(data),
+            onSuccess: () => navigate("/", { replace: true }),
             onError: (error) => console.error(error),
         });
     }

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Banana, User } from 'lucide-react';
 import {
   DropdownMenu,
@@ -18,7 +18,6 @@ import { useGetUserInfo, useLogoutUser } from '@/services/account-services';
 export default function Navbar() {
   const { data } = useGetUserInfo();
   const logout = useLogoutUser();
-  const navigate = useNavigate();
 
   return (
     <header className="bg-background">
