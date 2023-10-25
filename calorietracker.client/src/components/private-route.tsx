@@ -1,23 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Navigate, useOutlet } from "react-router-dom";
 import Navbar from "./navbar";
-
-async function fetchUserInfo() {
-    const response = await axios.get('/Account/manage/info');
-    const data = response.data;
-    return data;
-}
-
-function useGetUserInfo() {
-    return useQuery({
-        queryKey: ['user-info'],
-        queryFn: fetchUserInfo,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        retry: false,
-    })
-}
+import { useGetUserInfo } from "@/services/account-services";
 
 function PrivateRoute () {
     const { data, isLoading } = useGetUserInfo();
