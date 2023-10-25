@@ -16,6 +16,7 @@ import axios from "axios";
 
 const formSchema = z.object({
     email: z.string().email(),
+    username: z.string(),
     password: z.string().min(10),
 });
 
@@ -32,6 +33,7 @@ function RegisterPage() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
+            username: "",
             password: "",
         },
     });
@@ -53,7 +55,7 @@ function RegisterPage() {
                 <div className="grid grid-6">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
-                            <div className="grid gap-2">
+                        <div className="grid gap-2">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -62,6 +64,21 @@ function RegisterPage() {
                                         <FormLabel className="sr-only">Email</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Email" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="sr-only">Username</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Username" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
