@@ -11,20 +11,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { useLoginUser } from "@/services/account-services";
 
 const formSchema = z.object({
     username: z.string(),
     password: z.string().min(10),
 });
-
-function useLoginUser() {
-    return useMutation({
-        mutationFn: (user: z.infer<typeof formSchema>) =>
-        axios.post('/Account/login?useCookies=true&useSessionCookies=true', user)
-    })
-}
 
 
 function LoginPage() {
