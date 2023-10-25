@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const formSchema = z.object({
-    email: z.string().email(),
+    username: z.string(),
     password: z.string().min(10),
 });
 
@@ -33,7 +33,7 @@ function LoginPage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "",
+            username: "",
             password: "",
         },
     });
@@ -62,12 +62,12 @@ function LoginPage() {
                             <div className="grid gap-2">
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="username"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="sr-only">Email</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Email" {...field} />
+                                            <Input placeholder="Username" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
