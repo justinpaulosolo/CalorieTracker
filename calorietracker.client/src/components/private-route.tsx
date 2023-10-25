@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Navigate, useOutlet } from "react-router-dom";
+import Navbar from "./navbar";
 
 async function fetchUserInfo() {
     const response = await axios.get('/Account/manage/info');
@@ -30,7 +31,14 @@ function PrivateRoute () {
         return <Navigate to="/login" replace />
     }
     
-    return <>{outlet}</>
+    return (
+        <div className="h-screen flex flex-col space-y-6">
+            <Navbar />
+            <div className="container max-w-3xl">
+                <main>{outlet}</main>
+            </div>
+        </div>
+    )
 }
 
 export default PrivateRoute;
