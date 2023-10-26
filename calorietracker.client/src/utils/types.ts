@@ -9,3 +9,14 @@ export type CreateMealEntry = {
     calories: number,
     quantity: number,
 }
+
+export type MealEntries = {
+    calories: string,
+    carbs: string,
+    fats: string,
+    foodEntryId: string,
+    foodId: string,
+    mealId: string,
+    name: string
+    proteins: string
+}

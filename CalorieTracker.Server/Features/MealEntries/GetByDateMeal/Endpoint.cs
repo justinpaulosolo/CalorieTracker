@@ -13,24 +13,20 @@ public static class Endpoint
 
     private static async Task<IResult> HandleAsync(string meal, DateTime date, ApplicationDbContext context)
     {
-        var meals = await context.Meals
+        var foods = await context.Meals
             .Where(m => m.Date.Date == date.Date && m.MealType == meal)
-            .Select(m => new 
+            .SelectMany(m => m.FoodEntries.Select(fe => new
             {
-                Foods = m.FoodEntries.Select(fe => new 
-                {
-                    fe.FoodId,
-                    fe.Food.Name,
-                    fe.Food.Proteins,
-                    fe.Food.Carbs,
-                    fe.Food.Fats,
-                    fe.Food.Calories,
-                    fe.FoodEntryId,
-                    fe.MealId,
-                }).ToList()
-            })
-            .ToListAsync();
+                fe.FoodId,
+                fe.Food.Name,
+                fe.Food.Proteins,
+                fe.Food.Carbs,
+                fe.Food.Fats,
+                fe.Food.Calories,
+                fe.FoodEntryId,
+                fe.MealId,
+            })).ToListAsync();
 
-        return Results.Ok(meals);
+        return Results.Ok(foods);
     }
 }
