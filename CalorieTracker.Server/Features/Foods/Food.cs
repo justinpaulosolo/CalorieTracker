@@ -1,4 +1,4 @@
-﻿namespace CalorieTracker.Server.Foods;
+﻿namespace CalorieTracker.Server.Features.Foods;
 
 public class Food
 {

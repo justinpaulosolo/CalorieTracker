@@ -1,7 +1,7 @@
-﻿using CalorieTracker.Server.Foods;
-using CalorieTracker.Server.Meals;
+﻿using CalorieTracker.Server.Features.Foods;
+using CalorieTracker.Server.Features.Meals;
 
-namespace CalorieTracker.Server.FoodEntries;
+namespace CalorieTracker.Server.Features.FoodEntries;
 
 public class FoodEntry
 {

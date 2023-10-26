@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CalorieTracker.Server.FoodEntries;
+using CalorieTracker.Server.Features.FoodEntries;
 
-namespace CalorieTracker.Server.Meals;
+namespace CalorieTracker.Server.Features.Meals;
 
 public class Meal
 {
