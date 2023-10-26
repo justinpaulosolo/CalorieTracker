@@ -13,7 +13,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar.tsx';
-import { useGetUserInfo, useLogoutUser } from '@/services/account-services';
+import { useGetUserInfo, useLogoutUser } from '@/utils/services/account-services';
 
 export default function Navbar() {
   const { data } = useGetUserInfo();

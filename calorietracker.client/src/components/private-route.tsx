@@ -1,6 +1,6 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import Navbar from "./navbar";
-import { useGetUserInfo } from "@/services/account-services";
+import { useGetUserInfo } from "@/utils/services/account-services";
 
 function PrivateRoute () {
     const { data, isLoading } = useGetUserInfo();

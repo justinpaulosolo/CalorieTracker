@@ -12,9 +12,12 @@ import {
     FormMessage,
 } from '@/components/ui/form.tsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useGetUserInfo } from '@/utils/services/account-services';
+import { CreateMealEntry } from '@/utils/types';
+import { useCreateMealEntry } from '@/utils/services/meal-entries-services';
 
 const newEntryFormScheme = z.object({
-    meal: z.enum(['Breakfast', 'Lunch', 'Dinner', 'Other'], {
+    mealType: z.enum(['Breakfast', 'Lunch', 'Dinner', 'Other'], {
         required_error: 'Please select a meal.',
     }),
     name: z.string().min(2, 'Name must be at least characters'),
@@ -33,6 +36,8 @@ const newEntryFormScheme = z.object({
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
 function FoodEntryForm() {
+    const userInfo = useGetUserInfo();
+    const mutation = useCreateMealEntry();
     const form = useForm<NewEntryFormValues>({
         resolver: zodResolver(newEntryFormScheme),
         defaultValues: {
@@ -45,8 +50,22 @@ function FoodEntryForm() {
     });
 
     async function onSubmit(data: NewEntryFormValues) {
-        console.log(data);
-        form.reset();
+        const payload: CreateMealEntry = {
+            userId: userInfo.data.id,
+            mealType: data.mealType,
+            date:  new Date().toISOString(),
+            name: data.name,
+            proteins: data.proteins,
+            carbs: data.carbohydrates,
+            fats: data.fats,
+            calories: data.calories,
+            quantity: 1,
+        }
+        console.log(payload);
+
+        await mutation.mutateAsync(payload, {onSuccess: () => {
+            form.reset();
+        }});
     }
 
     return (
@@ -56,7 +75,7 @@ function FoodEntryForm() {
                     <div className="w-28">
                         <FormField
                             control={form.control}
-                            name="meal"
+                            name="mealType"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Meal</FormLabel>
