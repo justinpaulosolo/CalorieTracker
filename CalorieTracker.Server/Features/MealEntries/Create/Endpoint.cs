@@ -20,8 +20,8 @@ public static class Endpoint
         if (!MiniValidator.TryValidate(request, out var errors))
             return await Task.FromResult(Results.ValidationProblem(errors));
 
-        var mealId = 0;
-        var foodId = 0;
+        int mealId;
+        int foodId;
 
         var existingMeal = await context.Meals.Where(m =>
                 m.UserId == request.UserId && m.Date.Date == request.Date.Date && m.MealType == request.MealType)
@@ -82,10 +82,10 @@ public static class Endpoint
             {
                 MealName = fe.Meal.MealType,
                 FoodName = fe.Food.Name,
-                Proteins = fe.Food.Proteins,
-                Carbs = fe.Food.Carbs,
-                Fats = fe.Food.Fats,
-                Calories = fe.Food.Calories
+                fe.Food.Proteins,
+                fe.Food.Carbs,
+                fe.Food.Fats,
+                fe.Food.Calories
             })
             .FirstAsync();
         
