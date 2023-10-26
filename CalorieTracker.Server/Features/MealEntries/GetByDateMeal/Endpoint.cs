@@ -1,23 +1,22 @@
 ﻿using CalorieTracker.Server.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalorieTracker.Server.Features.MealEntries.GetByDate;
+namespace CalorieTracker.Server.Features.MealEntries.GetByDateMeal;
 
 public static class Endpoint
 {
-    public static WebApplication GetMealEntriesByDate(this WebApplication app)
+    public static WebApplication GetMealEntriesByDateMeal(this WebApplication app)
     {
-        app.MapGet("api/meal-entries{date}", HandleAsync).RequireAuthorization();
+        app.MapGet("api/meal-entries/{meal}/{date}", HandleAsync).RequireAuthorization();
         return app;
     }
 
-    private static async Task<IResult> HandleAsync(DateTime date, ApplicationDbContext context)
+    private static async Task<IResult> HandleAsync(string meal, DateTime date, ApplicationDbContext context)
     {
         var meals = await context.Meals
-            .Where(m => m.Date.Date == date.Date)
+            .Where(m => m.Date.Date == date.Date && m.MealType == meal)
             .Select(m => new 
             {
-                MealType = m.MealType,
                 Foods = m.FoodEntries.Select(fe => new 
                 {
                     fe.FoodId,
@@ -26,6 +25,7 @@ public static class Endpoint
                     fe.Food.Carbs,
                     fe.Food.Fats,
                     fe.Food.Calories,
+                    fe.FoodEntryId,
                     fe.MealId,
                 }).ToList()
             })
