@@ -2,6 +2,7 @@ using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Users;
 using CalorieTracker.Server.Account;
 using CalorieTracker.Server.Features.MealEntries.Create;
+using CalorieTracker.Server.Features.MealEntries.GetByDate;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,7 +46,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapAccount();
-app.MapMealEntriesEndpoint();
+app.CreateMealEntryEndpoint();
+app.GetMealEntriesByDate();
 
 app.MapFallbackToFile("/index.html");
 

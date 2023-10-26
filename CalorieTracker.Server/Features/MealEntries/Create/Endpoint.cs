@@ -9,7 +9,7 @@ namespace CalorieTracker.Server.Features.MealEntries.Create;
 
 public static class Endpoint
 {
-    public static WebApplication MapMealEntriesEndpoint(this WebApplication app)
+    public static WebApplication CreateMealEntryEndpoint(this WebApplication app)
     {
         app.MapPost("api/meal-entries", HandleAsync).RequireAuthorization();
         return app;
