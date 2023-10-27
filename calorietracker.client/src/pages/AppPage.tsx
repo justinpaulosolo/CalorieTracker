@@ -12,7 +12,7 @@ function AppPage() {
     const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Other'];
     return (
         <div className="fle flex-col space-y-4">
-            <FoodEntryForm />
+            <FoodEntryForm currentDate={date} />
             {mealTypes.map(mealType => (
                 <MealEntries key={mealType} date={date} mealType={mealType} />
             ))}

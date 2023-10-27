@@ -35,7 +35,7 @@ const newEntryFormScheme = z.object({
 
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
-function FoodEntryForm() {
+function FoodEntryForm({currentDate} : {currentDate: string}) {
     const userInfo = useGetUserInfo();
     const createMealEntry = useCreateMealEntry();
     const form = useForm<NewEntryFormValues>({
@@ -50,10 +50,14 @@ function FoodEntryForm() {
     });
 
     async function onSubmit(data: NewEntryFormValues) {
+        const now = new Date();
+        const timezoneOffset = now.getTimezoneOffset() * 60000;
+        const date = (new Date(now.getTime() - timezoneOffset)).toISOString().slice(0,-1);
+
         const payload: CreateMealEntry = {
             userId: userInfo.data.id,
             mealType: data.mealType,
-            date:  new Date().toISOString(),
+            date:  date,
             name: data.name,
             proteins: data.proteins,
             carbs: data.carbohydrates,
@@ -62,11 +66,7 @@ function FoodEntryForm() {
             quantity: 1,
         }
 
-        await createMealEntry.mutateAsync(payload, {
-            onSuccess: () => {
-                form.reset();
-            }
-        });
+        await createMealEntry.mutateAsync({ mealEntry: payload, date: currentDate, mealType: data.mealType }, { onSettled: () => form.reset() });
     }
 
     return (

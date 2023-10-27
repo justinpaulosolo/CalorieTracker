@@ -90,7 +90,7 @@ function MealEntries({date, mealType}:{date:string, mealType:string}) {
                             <DropdownMenuItem
                               onClick={() => {
                                 console.log(entry.foodEntryId, 'delete');
-                                deleteMealEntry.mutateAsync(entry.foodEntryId);
+                                deleteMealEntry.mutateAsync({ id: entry.foodEntryId, date: date, mealType: mealType });
                               }}
                             >
                               Delete

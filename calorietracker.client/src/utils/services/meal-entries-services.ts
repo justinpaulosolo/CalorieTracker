@@ -12,17 +12,29 @@ const deleteMealEntry = async (id: number) => {
     return response.data;
 }
 
-export function useDeleteMealEntry() {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (id: number) => deleteMealEntry(id),
-        onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ['meals']
-            })
-        }
-    })
+interface DeleteMealEntryVariables {
+    id: number;
+    date: string;
+    mealType: string;
 }
+
+interface CreateMealEntryVariables {
+    mealEntry: CreateMealEntry;
+    date: string;
+    mealType: string;
+  }
+  
+  export function useDeleteMealEntry() {
+    const queryClient = useQueryClient();
+    return useMutation<void, unknown, DeleteMealEntryVariables>({
+      mutationFn: ({ id }) => deleteMealEntry(id),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: ['meals', variables.date, variables.mealType]
+        });
+      }
+    });
+  }
 
 export function useFetchMealEntryByDateMeal({date, mealType} : {date: string, mealType: string}) {
     return useQuery({ queryKey: ['meals', date, mealType], queryFn: ()=> fetchMeals({date, mealType})});
@@ -31,14 +43,13 @@ export function useFetchMealEntryByDateMeal({date, mealType} : {date: string, me
 
 export function useCreateMealEntry() {
     const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (mealEntry: CreateMealEntry) =>
-        axios.post('/api/meal-entries', mealEntry),
-        onSettled: (data, error, variables) => {
-            queryClient.invalidateQueries({
-                queryKey: ['meals', variables.date, variables.mealType]
-            })
-        }
-    })
-}
+    return useMutation<void, unknown, CreateMealEntryVariables>({
+      mutationFn: ({ mealEntry }) => axios.post('/api/meal-entries', mealEntry),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: ['meals', variables.date, variables.mealType]
+        });
+      }
+    });
+  }
 
