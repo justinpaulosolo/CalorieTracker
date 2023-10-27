@@ -24,7 +24,9 @@ public static class Endpoint
         }
         
         // Check if the Food is being referenced by other FoodEntries
-        var isFoodReferencedElsewhere = await context.FoodEntries.AnyAsync(fe => fe.FoodId == foodEntry.FoodId && fe.FoodEntryId != id);
+        var isFoodReferencedElsewhere = await context.FoodEntries
+            .AnyAsync(fe => fe.FoodId == foodEntry.FoodId && fe.FoodEntryId != id);
+        
         if (!isFoodReferencedElsewhere)
         {
             // If not, delete the Food
