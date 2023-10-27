@@ -23,11 +23,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useFetchMealEntryByDateMeal } from '@/utils/services/meal-entries-services';
+import { useDeleteMealEntry, useFetchMealEntryByDateMeal } from '@/utils/services/meal-entries-services';
 import { MealEntriesType } from '@/utils/types';
 
 function MealEntries({date, mealType}:{date:string, mealType:string}) {
     const { data, isLoading, error } = useFetchMealEntryByDateMeal({date, mealType});
+    const deleteMealEntry = useDeleteMealEntry();
     
     if (isLoading) {
         return (
@@ -89,6 +90,7 @@ function MealEntries({date, mealType}:{date:string, mealType:string}) {
                             <DropdownMenuItem
                               onClick={() => {
                                 console.log(entry.foodEntryId, 'delete');
+                                deleteMealEntry.mutateAsync(entry.foodEntryId);
                               }}
                             >
                               Delete

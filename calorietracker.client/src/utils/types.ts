@@ -14,7 +14,7 @@ export type MealEntriesType = {
     calories: string,
     carbs: string,
     fats: string,
-    foodEntryId: string,
+    foodEntryId: number,
     foodId: string,
     mealId: string,
     name: string

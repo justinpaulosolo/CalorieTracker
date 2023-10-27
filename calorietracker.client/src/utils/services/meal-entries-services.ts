@@ -7,9 +7,27 @@ const fetchMeals = async ({date, mealType} : {date: string, mealType: string}) =
     return response.data;
 }
 
+const deleteMealEntry = async (id: number) => {
+    const response = await axios.delete(`/api/meal-entries/${id}`);
+    return response.data;
+}
+
+export function useDeleteMealEntry() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: number) => deleteMealEntry(id),
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['meals']
+            })
+        }
+    })
+}
+
 export function useFetchMealEntryByDateMeal({date, mealType} : {date: string, mealType: string}) {
     return useQuery({ queryKey: ['meals', date, mealType], queryFn: ()=> fetchMeals({date, mealType})});
 }
+
 
 export function useCreateMealEntry() {
     const queryClient = useQueryClient();
