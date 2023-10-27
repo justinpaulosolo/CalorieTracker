@@ -10,7 +10,7 @@ export type CreateMealEntry = {
     quantity: number,
 }
 
-export type MealEntries = {
+export type MealEntriesType = {
     calories: string,
     carbs: string,
     fats: string,

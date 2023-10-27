@@ -37,7 +37,7 @@ type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
 function FoodEntryForm() {
     const userInfo = useGetUserInfo();
-    const mutation = useCreateMealEntry();
+    const createMealEntry = useCreateMealEntry();
     const form = useForm<NewEntryFormValues>({
         resolver: zodResolver(newEntryFormScheme),
         defaultValues: {
@@ -61,11 +61,12 @@ function FoodEntryForm() {
             calories: data.calories,
             quantity: 1,
         }
-        console.log(payload);
 
-        await mutation.mutateAsync(payload, {onSuccess: () => {
-            form.reset();
-        }});
+        await createMealEntry.mutateAsync(payload, {
+            onSuccess: () => {
+                form.reset();
+            }
+        });
     }
 
     return (

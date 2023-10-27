@@ -1,55 +1,26 @@
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateMealEntry } from "../types";
 
-type fetchMealEntryByDateMealProps = {
-    date: string,
-    mealType: string
-};
-
-async function fetchMealEntryByDateMeal(props: fetchMealEntryByDateMealProps) {
-    const response = await axios.get(`/api/meal-entries/${props.mealType}/${props.date}`);
-    const data = response.data;
-    return data;
+const fetchMeals = async ({date, mealType} : {date: string, mealType: string}) => {
+    const response =await axios.get(`/api/meal-entries/${mealType}/${date}`);
+    return response.data;
 }
 
-export function useBreakfastMealEnties({date}: {date: string}) {
-    const props = {
-        date: date,
-        mealType: 'Breakfast'
-    }
-    return useQuery({
-        queryKey: ['breakfast-meal-entries', props],
-        queryFn: () => fetchMealEntryByDateMeal(props)
-    })
+export function useFetchMealEntryByDateMeal({date, mealType} : {date: string, mealType: string}) {
+    return useQuery({ queryKey: ['meals', date, mealType], queryFn: ()=> fetchMeals({date, mealType})});
 }
-
-export function useLunchMealEnties({date}: {date: string}) {
-    const props = {
-        date: date,
-        mealType: 'Lunch'
-    }
-    return useQuery({
-        queryKey: ['lunch-meal-entries', props],
-        queryFn: () => fetchMealEntryByDateMeal(props)
-    })
-}
-export function useDinnerMealEnties({date}: {date: string}) {
-    const props = {
-        date: date,
-        mealType: 'Dinner'
-    }
-    return useQuery({
-        queryKey: ['dinner-meal-entries', props],
-        queryFn: () => fetchMealEntryByDateMeal(props)
-    })
-}
-
 
 export function useCreateMealEntry() {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (mealEntry: CreateMealEntry) =>
-        axios.post('/api/meal-entries', mealEntry)
+        axios.post('/api/meal-entries', mealEntry),
+        onSettled: (data, error, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ['meals', variables.date, variables.mealType]
+            })
+        }
     })
 }
 
