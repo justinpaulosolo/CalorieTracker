@@ -1,6 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Account;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Features.Account.Commands;
 using CalorieTracker.Server.Features.MealEntries.Commands;
 using CalorieTracker.Server.Features.MealEntries.Queries;
 using Microsoft.AspNetCore.Identity;
@@ -48,7 +49,11 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapAccount();
+//app.MapAccount();
+
+app.CreateAccountEndpoint();
+app.LoginEndpoint();
+app.LogoutEndpoint();
 
 app.CreateMealEntryEndpoint();
 app.DeleteMealEntryEndpoint();

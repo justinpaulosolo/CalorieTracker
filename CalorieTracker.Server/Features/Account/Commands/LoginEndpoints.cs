@@ -2,11 +2,11 @@
 
 namespace CalorieTracker.Server.Features.Account.Commands;
 
-public static class CreateAccountEndpoints
+public static class LoginEndpoints
 {
-    public static void CreateAccountEndpoint(this IEndpointRouteBuilder app)
+    public static void LoginEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPost("api/account/register", async (CreateAccountCommand command, ISender sender) =>
+        app.MapPost("api/account/login", async (LoginCommand command, ISender sender) =>
         {
             var result = await sender.Send(command);
             return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
