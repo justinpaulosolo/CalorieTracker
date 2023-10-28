@@ -1,5 +1,4 @@
 export type CreateMealEntry = {
-    userId: string,
     mealType: string,
     date:  string,
     name: string,
@@ -17,6 +16,6 @@ export type MealEntriesType = {
     foodEntryId: number,
     foodId: string,
     mealId: string,
-    name: string
+    foodName: string
     proteins: string
 }

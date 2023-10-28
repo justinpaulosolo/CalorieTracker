@@ -12,7 +12,6 @@ import {
     FormMessage,
 } from '@/components/ui/form.tsx';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { useGetUserInfo } from '@/utils/services/account-services';
 import { CreateMealEntry } from '@/utils/types';
 import { useCreateMealEntry } from '@/utils/services/meal-entries-services';
 
@@ -36,7 +35,6 @@ const newEntryFormScheme = z.object({
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
 function FoodEntryForm({currentDate} : {currentDate: string}) {
-    const userInfo = useGetUserInfo();
     const createMealEntry = useCreateMealEntry();
     const form = useForm<NewEntryFormValues>({
         resolver: zodResolver(newEntryFormScheme),
@@ -55,7 +53,6 @@ function FoodEntryForm({currentDate} : {currentDate: string}) {
         const date = (new Date(now.getTime() - timezoneOffset)).toISOString().slice(0,-1);
 
         const payload: CreateMealEntry = {
-            userId: userInfo.data.id,
             mealType: data.mealType,
             date:  date,
             name: data.name,

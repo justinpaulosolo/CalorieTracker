@@ -3,8 +3,7 @@ using CalorieTracker.Server.Users;
 using CalorieTracker.Server.Account;
 using CalorieTracker.Server.Features.MealEntries.Create;
 using CalorieTracker.Server.Features.MealEntries.Delete;
-using CalorieTracker.Server.Features.MealEntries.GetByDate;
-using CalorieTracker.Server.Features.MealEntries.GetByDateMeal;
+using CalorieTracker.Server.Features.MealEntries.Read;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +28,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddMediatR(configuration =>
+    configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -48,10 +50,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapAccount();
+
 app.CreateMealEntryEndpoint();
-app.GetMealEntriesByDate();
-app.GetMealEntriesByDateMeal();
-app.DeleteMealEntry();
+app.DeleteMealEntryEndpoint();
+app.GetMealEntriesByDateAndTypeEndpoint();
 
 app.MapFallbackToFile("/index.html");
 

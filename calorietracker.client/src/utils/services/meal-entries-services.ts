@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateMealEntry } from "../types";
 
 const fetchMeals = async ({date, mealType} : {date: string, mealType: string}) => {
-    const response =await axios.get(`/api/meal-entries/${mealType}/${date}`);
+    const response =await axios.get(`/api/meal-entries/${date}/${mealType}`);
     return response.data;
 }
 

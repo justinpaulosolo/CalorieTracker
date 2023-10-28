@@ -1,6 +1,4 @@
-﻿using CalorieTracker.Server.Features.FoodEntries;
-using CalorieTracker.Server.Features.Foods;
-using CalorieTracker.Server.Features.Meals;
+﻿using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -84,7 +84,7 @@ function MealEntries({ date, mealType }: { date: string; mealType: string }) {
             <TableBody>
               {data.map((entry: MealEntriesType) => (
                 <TableRow key={entry.foodEntryId}>
-                  <TableCell>{entry.name}</TableCell>
+                  <TableCell>{entry.foodName}</TableCell>
                   <TableCell>{entry.proteins}</TableCell>
                   <TableCell>{entry.carbs}</TableCell>
                   <TableCell>{entry.fats}</TableCell>
