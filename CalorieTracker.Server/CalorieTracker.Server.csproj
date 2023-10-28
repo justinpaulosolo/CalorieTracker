@@ -32,8 +32,4 @@
     </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Account\Queries\" />
-  </ItemGroup>
-
 </Project>
