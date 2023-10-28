@@ -11,26 +11,22 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { useRegisterUser } from "@/utils/services/account-services";
+import { useNavigate } from "react-router-dom";
 
-const formSchema = z.object({
+const registerFormSchema = z.object({
     email: z.string().email(),
     username: z.string(),
     password: z.string().min(10),
 });
 
-function useRegisterUser() {
-    return useMutation({
-        mutationFn: (user: z.infer<typeof formSchema>) =>
-        axios.post('/Account/register', user)
-    })
-}
+export type RegisterFormInputs = z.infer<typeof registerFormSchema>;
 
 function RegisterPage() {
     const mutate = useRegisterUser();
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const navigate = useNavigate();
+    const form = useForm<RegisterFormInputs>({
+        resolver: zodResolver(registerFormSchema),
         defaultValues: {
             email: "",
             username: "",
@@ -38,11 +34,8 @@ function RegisterPage() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values);
-        mutate.mutate(values);
+    function onSubmit(values: RegisterFormInputs) {
+        mutate.mutate(values, { onSuccess: () => navigate("/login")});
     }
     return (
         <div className="flex h-screen flex-1 flex-col justify-center px-16 py-12 lg:px-8 space-y-4">
