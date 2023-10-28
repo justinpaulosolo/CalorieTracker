@@ -8,7 +8,6 @@ function AppPage() {
         const timezoneOffset = now.getTimezoneOffset() * 60000;
         return (new Date(now.getTime() - timezoneOffset)).toISOString().slice(0,-1);
     });
-    console.log(date);
     const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Other'];
     return (
         <div className="fle flex-col space-y-4">
