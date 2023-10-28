@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Create;
+namespace CalorieTracker.Server.Features.MealEntries.Commands;
 
 public sealed class CreateMealEntryCommand : IRequest<int>
 {

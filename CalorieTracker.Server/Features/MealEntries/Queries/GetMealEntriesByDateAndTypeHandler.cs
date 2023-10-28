@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalorieTracker.Server.Features.MealEntries.Read;
+namespace CalorieTracker.Server.Features.MealEntries.Queries;
 
 internal sealed class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext) : IRequestHandler<
     GetMealEntriesByDateAndTypeQuery, List<GetMealEntriesByDateAndTypeResponse>>

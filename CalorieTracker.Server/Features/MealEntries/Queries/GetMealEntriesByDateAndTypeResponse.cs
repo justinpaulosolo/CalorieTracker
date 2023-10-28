@@ -1,4 +1,4 @@
-﻿namespace CalorieTracker.Server.Features.MealEntries.Read;
+﻿namespace CalorieTracker.Server.Features.MealEntries.Queries;
 
 public class GetMealEntriesByDateAndTypeResponse
 {

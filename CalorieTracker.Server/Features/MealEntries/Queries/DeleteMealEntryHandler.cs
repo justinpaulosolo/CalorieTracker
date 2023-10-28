@@ -3,7 +3,7 @@ using CalorieTracker.Server.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalorieTracker.Server.Features.MealEntries.Delete;
+namespace CalorieTracker.Server.Features.MealEntries.Queries;
 
 internal sealed class DeleteMealEntryHandler
     (ApplicationDbContext dbContext) : IRequestHandler<DeleteMealEntryCommand, CommandResult<bool>>

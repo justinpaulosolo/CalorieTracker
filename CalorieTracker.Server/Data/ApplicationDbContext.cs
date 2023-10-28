@@ -1,5 +1,4 @@
 ﻿using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

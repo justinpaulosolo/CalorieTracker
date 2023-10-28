@@ -1,6 +1,4 @@
-﻿using CalorieTracker.Server.Features.Meals;
-
-namespace CalorieTracker.Server.Entities;
+﻿namespace CalorieTracker.Server.Entities;
 
 public class FoodEntry
 {

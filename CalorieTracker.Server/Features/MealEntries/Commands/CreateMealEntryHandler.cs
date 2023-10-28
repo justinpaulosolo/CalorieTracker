@@ -3,7 +3,7 @@ using CalorieTracker.Server.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalorieTracker.Server.Features.MealEntries.Create;
+namespace CalorieTracker.Server.Features.MealEntries.Commands;
 
 internal sealed class CreateMealEntryHandler
     (ApplicationDbContext dbContext) : IRequestHandler<CreateMealEntryCommand, int>

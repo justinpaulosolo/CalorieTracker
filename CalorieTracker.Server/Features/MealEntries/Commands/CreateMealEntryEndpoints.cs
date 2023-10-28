@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Create;
+namespace CalorieTracker.Server.Features.MealEntries.Commands;
 
 public static class CreateMealEntryEndpoints
 {

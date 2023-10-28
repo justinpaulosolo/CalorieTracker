@@ -1,9 +1,8 @@
 using CalorieTracker.Server.Data;
-using CalorieTracker.Server.Users;
 using CalorieTracker.Server.Account;
-using CalorieTracker.Server.Features.MealEntries.Create;
-using CalorieTracker.Server.Features.MealEntries.Delete;
-using CalorieTracker.Server.Features.MealEntries.Read;
+using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Features.MealEntries.Commands;
+using CalorieTracker.Server.Features.MealEntries.Queries;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);

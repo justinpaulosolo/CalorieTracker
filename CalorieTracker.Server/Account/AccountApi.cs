@@ -1,7 +1,7 @@
-﻿using CalorieTracker.Server.Users;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using MiniValidation;
 using System.Security.Claims;
+using CalorieTracker.Server.Entities;
 
 namespace CalorieTracker.Server.Account
 {
