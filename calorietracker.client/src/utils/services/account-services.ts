@@ -1,3 +1,4 @@
+import { LoginFormInputs } from "@/pages/Login";
 import { RegisterFormInputs } from "@/pages/Register";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,7 +15,7 @@ export function useRegisterUser() {
 
 export function useLoginUser() {
     return useMutation({
-        mutationFn: (user: {username: string, password: string}) =>
+        mutationFn: (user: LoginFormInputs) =>
         axios.post('/Account/login', user)
     })
 }
