@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Queries;
+namespace CalorieTracker.Server.Features.MealEntries.Commands;
 
 public static class DeleteMealEntryEndpoints
 {
