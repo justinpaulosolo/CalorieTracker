@@ -32,4 +32,11 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Properties\ServiceDependencies\CalorieTrackerServer - Zip Deploy\apis1.arm.json" />
+    <None Remove="Properties\ServiceDependencies\CalorieTrackerServer - Zip Deploy\profile.arm.json" />
+    <None Remove="Properties\serviceDependencies.json" />
+    <None Remove="Properties\serviceDependencies.CalorieTrackerServer - Zip Deploy.json" />
+  </ItemGroup>
+
 </Project>
