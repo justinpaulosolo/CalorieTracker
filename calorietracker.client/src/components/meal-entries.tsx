@@ -27,11 +27,11 @@ import {
   useDeleteMealEntry,
   useGetMealEntriesByDateAndType,
 } from "@/utils/services/meal-entries-services";
-import { MealEntriesType } from "@/utils/types";
+import { MealEntries } from "@/utils/types";
 import { useCallback } from "react";
 
 interface DropdownMenuActionsProps {
-  entry: MealEntriesType;
+  entry: MealEntries;
   date: string;
   mealType: string;
 }
@@ -58,9 +58,8 @@ function MealEntries({ date, mealType }: { date: string; mealType: string }) {
     return <span>Error: {error.message}</span>;
   }
 
-   // If data length is zero, don't render the table row
-   if (data.length === 0) {
-    return null; // or return a different component
+  if (data.length === 0) {
+    return null;
   }
 
   return (
@@ -82,7 +81,7 @@ function MealEntries({ date, mealType }: { date: string; mealType: string }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((entry: MealEntriesType) => (
+              {data.map((entry: MealEntries) => (
                 <TableRow key={entry.foodEntryId}>
                   <TableCell>{entry.foodName}</TableCell>
                   <TableCell>{entry.proteins}</TableCell>
