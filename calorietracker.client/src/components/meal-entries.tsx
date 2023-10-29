@@ -25,7 +25,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useDeleteMealEntry,
-  useFetchMealEntryByDateMeal,
+  useGetMealEntriesByDateAndType,
 } from "@/utils/services/meal-entries-services";
 import { MealEntriesType } from "@/utils/types";
 import { useCallback } from "react";
@@ -37,7 +37,7 @@ interface DropdownMenuActionsProps {
 }
 
 function MealEntries({ date, mealType }: { date: string; mealType: string }) {
-  const { data, isLoading, error } = useFetchMealEntryByDateMeal({
+  const { data, isLoading, error } = useGetMealEntriesByDateAndType({
     date,
     mealType,
   });

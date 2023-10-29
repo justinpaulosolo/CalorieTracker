@@ -11,7 +11,7 @@ public static class GetMealEntriesByDateAndTypeEndpoints
             async (DateTime date, string mealType, ISender sender, ClaimsPrincipal user) =>
             {
                 var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-                var query = new GetMealEntriesByDateAndTypeQuery { UserId = userId!, Date = date, MealType = mealType };
+                var query = new GetMealEntriesByDateAndTypeQuery { UserId = userId, Date = date, MealType = mealType };
                 var result = await sender.Send(query);
                 return Results.Ok(result);
             }).WithTags("MealEntries").RequireAuthorization();
