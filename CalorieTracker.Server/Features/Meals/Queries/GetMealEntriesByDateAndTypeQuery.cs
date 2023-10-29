@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Queries;
+namespace CalorieTracker.Server.Features.Meals.Queries;
 
-public class GetMealEntriesByDateAndTypeQuery : IRequest<List<GetMealEntriesByDateAndTypeResponse>>
+public class GetMealEntriesByDateAndTypeQuery : IRequest<GetMealEntriesByDateAndTypeResponse?>
 {
     public string UserId { get; set; } = string.Empty;
     public DateTime Date { get; set; }

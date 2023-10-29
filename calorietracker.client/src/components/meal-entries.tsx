@@ -6,13 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   useDeleteMealEntry,
   useGetMealEntriesByDateAndType,
-} from "@/utils/services/meal-entries-services";
+} from "@/utils/services/meal-services";
 import { MealEntryType } from "@/utils/types";
 import { useCallback } from "react";
 
@@ -61,12 +55,12 @@ function MealEntry({ date, mealType }: { date: string; mealType: string }) {
   if (data.length === 0) {
     return null;
   }
+  console.log(data.foods.length, data.mealType);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{mealType}</CardTitle>
-        <CardDescription></CardDescription>
+        <CardTitle>{data.mealType}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="w-full">
@@ -81,7 +75,7 @@ function MealEntry({ date, mealType }: { date: string; mealType: string }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((entry: MealEntryType) => (
+              {data.foods.map((entry: MealEntryType) => (
                 <TableRow key={entry.foodEntryId}>
                   <TableCell>{entry.foodName}</TableCell>
                   <TableCell>{entry.proteins}</TableCell>
@@ -97,6 +91,17 @@ function MealEntry({ date, mealType }: { date: string; mealType: string }) {
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow>
+                <TableCell className="font-medium">Total</TableCell>
+                <TableCell className="font-medium">
+                  {data.totalProteins}
+                </TableCell>
+                <TableCell className="font-medium">{data.totalCarbs}</TableCell>
+                <TableCell className="font-medium">{data.totalFats}</TableCell>
+                <TableCell className="font-medium">
+                  {data.totalCalories}
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </div>

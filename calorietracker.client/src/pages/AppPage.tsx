@@ -1,5 +1,6 @@
 import FoodEntryForm from "@/components/food-entry-form";
 import MealEntry from "@/components/meal-entries";
+import TotalMacros from "@/components/total-macros";
 import { useState } from "react";
 
 function AppPage() {
@@ -12,6 +13,7 @@ function AppPage() {
   return (
     <div className="fle flex-col space-y-4">
       <FoodEntryForm currentDate={date} />
+      <TotalMacros currentDate={date} />
       {mealTypes.map(mealType => (
         <MealEntry key={mealType} date={date} mealType={mealType} />
       ))}

@@ -8,4 +8,9 @@ public class FoodEntry
     public int FoodId { get; set; } // Foreign Key referencing Foods Table
     public Food Food { get; set; } = default!;
     public int Quantity { get; set; }
+    
+    public (int Proteins, int Carbs, int Fats, int Calories) CalculateMacros()
+    {
+        return (Food.Proteins * Quantity, Food.Carbs * Quantity, Food.Fats * Quantity, Food.Calories * Quantity);
+    }
 }

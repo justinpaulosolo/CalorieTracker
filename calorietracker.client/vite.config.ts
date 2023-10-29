@@ -52,6 +52,10 @@ export default defineConfig({
                 target: 'https://localhost:7207',
                 secure: false
             },
+            '/api/meals': {
+                target: 'https://localhost:7207',
+                secure: false
+            },
         },
         port: 5173,
         https: {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Commands;
+namespace CalorieTracker.Server.Features.Meals.Commands;
 
 public static class DeleteMealEntryEndpoints
 {
@@ -10,6 +10,6 @@ public static class DeleteMealEntryEndpoints
         {
             var result = await sender.Send(new DeleteMealEntryCommand { Id = id });
             return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
-        }).WithTags("MealEntries").RequireAuthorization();
+        }).WithTags("Meals").RequireAuthorization();
     }
 }

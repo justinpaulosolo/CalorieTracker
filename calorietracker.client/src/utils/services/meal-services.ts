@@ -57,3 +57,14 @@ export function useCreateMealEntry() {
     },
   });
 }
+
+export function useGetMealsTotalMacrosByDate({ date }: { date: string }) {
+  return useQuery({
+    queryKey: ["meals-total-macros", date],
+    queryFn: async () => {
+      const response = await axios.get(`/api/meals/${date}/total-macros`);
+      const data = response.data;
+      return data;
+    },
+  });
+}

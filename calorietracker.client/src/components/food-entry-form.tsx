@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { CreateMealEntry } from "@/utils/types";
-import { useCreateMealEntry } from "@/utils/services/meal-entries-services";
+import { useCreateMealEntry } from "@/utils/services/meal-services";
 
 const newEntryFormScheme = z.object({
   mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Other"], {

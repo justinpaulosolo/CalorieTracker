@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Queries;
+namespace CalorieTracker.Server.Features.Meals.Queries;
 
 public static class GetMealEntriesByDateAndTypeEndpoints
 {
@@ -14,6 +14,6 @@ public static class GetMealEntriesByDateAndTypeEndpoints
                 var query = new GetMealEntriesByDateAndTypeQuery { UserId = userId, Date = date, MealType = mealType };
                 var result = await sender.Send(query);
                 return Results.Ok(result);
-            }).WithTags("MealEntries").RequireAuthorization();
+            }).WithTags("Meals").RequireAuthorization();
     }
 }

@@ -2,8 +2,8 @@ using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Features.Account.Commands;
 using CalorieTracker.Server.Features.Account.Queries;
-using CalorieTracker.Server.Features.MealEntries.Commands;
-using CalorieTracker.Server.Features.MealEntries.Queries;
+using CalorieTracker.Server.Features.Meals.Commands;
+using CalorieTracker.Server.Features.Meals.Queries;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +57,7 @@ app.AccountInfoEndpoint();
 app.CreateMealEntryEndpoint();
 app.DeleteMealEntryEndpoint();
 app.GetMealEntriesByDateAndTypeEndpoint();
+app.GetMealsTotalMacrosByDateEndpoint();
 
 app.MapFallbackToFile("/index.html");
 

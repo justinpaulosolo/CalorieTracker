@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using MediatR;
 
-namespace CalorieTracker.Server.Features.MealEntries.Commands;
+namespace CalorieTracker.Server.Features.Meals.Commands;
 
 public static class CreateMealEntryEndpoints
 {
@@ -12,6 +12,6 @@ public static class CreateMealEntryEndpoints
             var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             command.UserId = userId;
             var foodEntryId = await sender.Send(command);
-        }).WithTags("MealEntries").RequireAuthorization();
+        }).WithTags("Meals").RequireAuthorization();
     }
 }
