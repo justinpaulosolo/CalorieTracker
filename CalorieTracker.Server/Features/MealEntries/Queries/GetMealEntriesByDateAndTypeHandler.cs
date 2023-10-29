@@ -11,7 +11,8 @@ internal sealed class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext db
         CancellationToken cancellationToken)
     {
         var result = await dbContext.Meals
-            .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date && m.MealType == request.MealType)
+            .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date &&
+                        m.MealType == request.MealType)
             .SelectMany(m => m.FoodEntries.Select(fe => new GetMealEntriesByDateAndTypeResponse
             {
                 FoodId = fe.FoodId,
