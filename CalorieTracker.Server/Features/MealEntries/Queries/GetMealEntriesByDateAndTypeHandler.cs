@@ -7,11 +7,11 @@ namespace CalorieTracker.Server.Features.MealEntries.Queries;
 internal sealed class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext) : IRequestHandler<
     GetMealEntriesByDateAndTypeQuery, List<GetMealEntriesByDateAndTypeResponse>>
 {
-    public async Task<List<GetMealEntriesByDateAndTypeResponse>> Handle(GetMealEntriesByDateAndTypeQuery query,
+    public async Task<List<GetMealEntriesByDateAndTypeResponse>> Handle(GetMealEntriesByDateAndTypeQuery request,
         CancellationToken cancellationToken)
     {
         var result = await dbContext.Meals
-            .Where(m => m.Date.Date == query.Date.Date && m.MealType == query.MealType)
+            .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date && m.MealType == request.MealType)
             .SelectMany(m => m.FoodEntries.Select(fe => new GetMealEntriesByDateAndTypeResponse
             {
                 FoodId = fe.FoodId,
