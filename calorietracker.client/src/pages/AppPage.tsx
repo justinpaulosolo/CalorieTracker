@@ -1,5 +1,5 @@
 import FoodEntryForm from "@/components/food-entry-form";
-import MealEntries from "@/components/meal-entries";
+import MealEntry from "@/components/meal-entries";
 import { useState } from "react";
 
 function AppPage() {
@@ -13,7 +13,7 @@ function AppPage() {
     <div className="fle flex-col space-y-4">
       <FoodEntryForm currentDate={date} />
       {mealTypes.map(mealType => (
-        <MealEntries key={mealType} date={date} mealType={mealType} />
+        <MealEntry key={mealType} date={date} mealType={mealType} />
       ))}
     </div>
   );
