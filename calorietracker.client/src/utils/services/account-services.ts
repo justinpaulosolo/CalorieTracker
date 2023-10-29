@@ -16,7 +16,7 @@ export function useRegisterUser() {
 export function useLoginUser() {
     return useMutation({
         mutationFn: (user: LoginFormInputs) =>
-        axios.post('/Account/login', user)
+        axios.post('api/account/login', user)
     })
 }
 
