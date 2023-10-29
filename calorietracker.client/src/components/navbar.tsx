@@ -1,19 +1,22 @@
-import { Link } from 'react-router-dom';
-import { Banana, User } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { Banana, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu.tsx';
-import { Button } from '@/components/ui/button.tsx';
+} from "@/components/ui/dropdown-menu.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/components/ui/avatar.tsx';
-import { useGetUserInfo, useLogoutUser } from '@/utils/services/account-services';
+} from "@/components/ui/avatar.tsx";
+import {
+  useGetUserInfo,
+  useLogoutUser,
+} from "@/utils/services/account-services";
 
 export default function Navbar() {
   const { data } = useGetUserInfo();
@@ -49,7 +52,7 @@ export default function Navbar() {
             <DropdownMenuItem>Dashboard</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onSelect={()=> logout.mutate()}
+              onSelect={() => logout.mutate()}
               className="cursor-pointer"
             >
               Logout
