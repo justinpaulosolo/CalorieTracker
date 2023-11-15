@@ -39,5 +39,5 @@
     <None Remove="Properties\serviceDependencies.json" />
     <None Remove="Properties\serviceDependencies.CalorieTrackerServer - Zip Deploy.json" />
   </ItemGroup>
-
+	
 </Project>
