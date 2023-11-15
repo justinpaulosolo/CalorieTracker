@@ -10,8 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
+var connectionString = builder.Configuration.GetConnectionString("Sqlite");
+builder.Services.AddSqlite<ApplicationDbContext>(connectionString);
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
