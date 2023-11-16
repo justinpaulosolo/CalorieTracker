@@ -17,6 +17,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedEmail = false;
+
+    if (builder.Environment.IsDevelopment())
+    {
+        options.User.RequireUniqueEmail = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 4;
+        options.Password.RequiredUniqueChars = 0;
+    };
+
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
