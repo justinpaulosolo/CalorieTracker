@@ -3,6 +3,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AppPage from "./pages/AppPage";
 import PrivateRoute from "./components/private-route";
+import SettingsLayout from "./components/settings/settings-layout";
+import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
+import GoalSettingsPage from "./pages/settings/GoalSettingsPage";
 
 function App() {
   return (
@@ -11,6 +14,10 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<AppPage />} />
+        <Route path="/settings" element={<SettingsLayout />}>
+          <Route path="/settings/goals" element={<GoalSettingsPage />} />
+          <Route path="/settings/account" element={<AccountSettingsPage />} />
+        </Route>
       </Route>
     </Routes>
   );

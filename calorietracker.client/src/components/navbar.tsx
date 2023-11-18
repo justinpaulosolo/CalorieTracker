@@ -49,7 +49,9 @@ export default function Navbar() {
                 </p>
               </div>
             </div>
-            <DropdownMenuItem>Dashboard</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to="/settings/goals">Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => logout.mutate()}
