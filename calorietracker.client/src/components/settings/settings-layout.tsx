@@ -5,7 +5,7 @@ import { useOutlet } from "react-router-dom";
 const sidebarNavItems = [
   {
     title: "Goals",
-    href: "",
+    href: "/settings/goals",
   },
   {
     title: "Account",
