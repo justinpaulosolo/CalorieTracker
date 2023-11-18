@@ -14,7 +14,7 @@ public static class CreateMealEntryEndpoint
             var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             command.UserId = userId;
             var foodEntryId = await sender.Send(command);
-        }).WithTags("Meal Entries").RequireAuthorization();
+        }).WithTags("Meals").RequireAuthorization();
     }
 }
 

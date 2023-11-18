@@ -15,7 +15,7 @@ public static class EditMealEntryEndpoint
             command.MealFoodEntryId = mealFoodEntryId;
             var result = await mediator.Send(command);
             return Results.Ok(result);
-        }).WithTags("Meal Entries").RequireAuthorization();
+        }).WithTags("Meals").RequireAuthorization();
     }
 }
 public sealed class EditMealEntryCommand : IRequest<int>
