@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Features.Meals.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -35,13 +36,13 @@ public class GetMealsTotalMacrosByDateQuery : IRequest<GetMealsTotalMacrosByDate
 }
 
 public class GetMealsTotalMacrosByDateHandler
-    (ApplicationDbContext dbContext) : IRequestHandler<GetMealsTotalMacrosByDateQuery, GetMealsTotalMacrosByDateResponse>
+    (ApplicationDbContext dbContext, IMealMacrosCalculator mealMacrosCalculator) : IRequestHandler<GetMealsTotalMacrosByDateQuery, GetMealsTotalMacrosByDateResponse>
 {
     public async Task<GetMealsTotalMacrosByDateResponse> Handle(GetMealsTotalMacrosByDateQuery request,
         CancellationToken cancellationToken)
     {
         // Get all meals for the user on the specified date
-        var meals = await dbContext.Meals
+        var meals = await dbContext.UserMeals
             .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date)
             .Include(m => m.FoodEntries)
             .ThenInclude(fe => fe.Food)
@@ -54,12 +55,12 @@ public class GetMealsTotalMacrosByDateHandler
         var totalCalories = 0;
 
         // Calculate total macros
-        foreach (var mealMacros in meals.Select(meal => meal.CalculateTotalMacros()))
+        foreach (var (Proteins, Carbs, Fats, Calories) in meals.Select(meal => mealMacrosCalculator.CalculateTotalMacros(meal)))
         {
-            totalProteins += mealMacros.Proteins;
-            totalCarbs += mealMacros.Carbs;
-            totalFats += mealMacros.Fats;
-            totalCalories += mealMacros.Calories;
+            totalProteins += Proteins;
+            totalCarbs += Carbs;
+            totalFats += Fats;
+            totalCalories += Calories;
         }
 
         // Create response

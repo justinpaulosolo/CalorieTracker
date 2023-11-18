@@ -1,7 +1,7 @@
 ﻿using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Features.Meals.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Queries;
@@ -50,13 +50,13 @@ public class GetMealEntriesByDateAndTypeQuery : IRequest<GetMealEntriesByDateAnd
     public string MealType { get; set; } = string.Empty;
 }
 
-public class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext) : IRequestHandler<
+public class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext, IMealMacrosCalculator mealMacrosCalculator) : IRequestHandler<
     GetMealEntriesByDateAndTypeQuery, GetMealEntriesByDateAndTypeResponse?>
 {
     public async Task<GetMealEntriesByDateAndTypeResponse?> Handle(GetMealEntriesByDateAndTypeQuery request,
         CancellationToken cancellationToken)
     {
-        var meal = await dbContext.Meals
+        var meal = await dbContext.UserMeals
             .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date &&
                         m.MealType == request.MealType)
             .Include(m => m.FoodEntries)
@@ -68,10 +68,10 @@ public class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext) 
             return null; // or throw an exception, or return a default response
         }
 
-        var mealMacros = meal.CalculateTotalMacros();
+        var (Proteins, Carbs, Fats, Calories) = mealMacrosCalculator.CalculateTotalMacros(meal);
         var mealResponse = new GetMealEntriesByDateAndTypeResponse
         {
-            MealId = meal.MealId,
+            MealId = meal.Id,
             MealType = meal.MealType,
             Foods = meal.FoodEntries.Select(fe => new FoodEntryResponse
             {
@@ -81,12 +81,12 @@ public class GetMealEntriesByDateAndTypeHandler(ApplicationDbContext dbContext) 
                 Carbs = fe.Food.Carbs,
                 Fats = fe.Food.Fats,
                 Calories = fe.Food.Calories,
-                FoodEntryId = fe.FoodEntryId
+                FoodEntryId = fe.Id
             }).ToList(),
-            TotalProteins = mealMacros.Proteins,
-            TotalCarbs = mealMacros.Carbs,
-            TotalFats = mealMacros.Fats,
-            TotalCalories = mealMacros.Calories
+            TotalProteins = Proteins,
+            TotalCarbs = Carbs,
+            TotalFats = Fats,
+            TotalCalories = Calories
         };
 
         return mealResponse;

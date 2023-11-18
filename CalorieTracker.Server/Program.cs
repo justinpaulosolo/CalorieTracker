@@ -6,6 +6,7 @@ using CalorieTracker.Server.Features.MacrosGoals.Commands;
 using CalorieTracker.Server.Features.MacrosGoals.Queries;
 using CalorieTracker.Server.Features.Meals.Commands;
 using CalorieTracker.Server.Features.Meals.Queries;
+using CalorieTracker.Server.Features.Meals.Services;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,8 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });
+
+builder.Services.AddSingleton<IMealMacrosCalculator, MealMacrosCalculator>();
 
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly));

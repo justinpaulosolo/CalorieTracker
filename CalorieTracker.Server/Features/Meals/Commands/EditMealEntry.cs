@@ -36,10 +36,10 @@ public class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHand
 {
     public async Task<int> Handle(EditMealEntryCommand request, CancellationToken cancellationToken)
     {
-        var foodEntry = await dbContext.FoodEntries
+        var foodEntry = await dbContext.MealFoodEntries
             .Include(fe => fe.Meal)
             .Include(fe => fe.Food)
-            .FirstOrDefaultAsync(fe => fe.FoodEntryId == request.FoodEntryId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(fe => fe.Id == request.FoodEntryId, cancellationToken: cancellationToken);
 
         if (foodEntry == null)
         {
@@ -53,26 +53,26 @@ public class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHand
         food.Fats = request.Fats;
         food.Calories = request.Calories;
 
-        var meal = await dbContext.Meals
+        var meal = await dbContext.UserMeals
             .FirstOrDefaultAsync(m => m.UserId == request.UserId
             && m.MealType == request.MealType
             && m.Date.Date == request.Date.Date, cancellationToken: cancellationToken);
 
         if (meal == null)
         {
-            meal = new Meal
+            meal = new UserMeal
             {
                 UserId = request.UserId,
                 MealType = request.MealType,
                 Date = request.Date,
             };
-            dbContext.Meals.Add(meal);
+            dbContext.UserMeals.Add(meal);
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        foodEntry.MealId = meal.MealId;
+        foodEntry.MealId = meal.Id;
 
         await dbContext.SaveChangesAsync(cancellationToken);
-        return foodEntry.FoodEntryId;
+        return foodEntry.Id;
     }
 }

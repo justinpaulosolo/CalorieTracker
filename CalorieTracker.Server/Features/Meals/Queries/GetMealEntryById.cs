@@ -42,10 +42,10 @@ public class GetMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandl
 
     public async Task<GetMealEntryByIdResponse?> Handle(GetMealEntryByIdQuery request, CancellationToken cancellationToken)
     {
-        var foodEntry = await _dbContext.FoodEntries
+        var foodEntry = await _dbContext.MealFoodEntries
             .Include(fe => fe.Meal)
             .Include(fe => fe.Food)
-            .FirstOrDefaultAsync(fe => fe.FoodEntryId == request.FoodEntryId, cancellationToken);
+            .FirstOrDefaultAsync(fe => fe.Id == request.FoodEntryId, cancellationToken);
 
         if (foodEntry == null)
         {
@@ -54,7 +54,7 @@ public class GetMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandl
 
         return new GetMealEntryByIdResponse
         {
-            FoodMealEntryId = foodEntry.FoodEntryId,
+            FoodMealEntryId = foodEntry.Id,
             MealType = foodEntry.Meal.MealType,
             FoodName = foodEntry.Food.Name,
             Proteins = foodEntry.Food.Proteins,

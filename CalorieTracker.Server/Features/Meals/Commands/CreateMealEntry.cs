@@ -39,20 +39,20 @@ public class CreateMealEntryHandler
         var meal = await GetOrCreateMeal(command, cancellationToken);
         var food = await GetOrCreateFood(command, cancellationToken);
 
-        var foodEntry = new FoodEntry
+        var foodEntry = new MealFoodEntry
         {
-            MealId = meal.MealId, FoodId = food.FoodId, Quantity = command.Quantity
+            MealId = meal.Id, FoodId = food.Id, Quantity = command.Quantity
         };
 
-        dbContext.FoodEntries.Add(foodEntry);
+        dbContext.MealFoodEntries.Add(foodEntry);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return foodEntry.FoodEntryId;
+        return foodEntry.Id;
     }
 
-    private async Task<Meal> GetOrCreateMeal(CreateMealEntryCommand command, CancellationToken cancellationToken)
+    private async Task<UserMeal> GetOrCreateMeal(CreateMealEntryCommand command, CancellationToken cancellationToken)
     {
-        var existingMeal = await dbContext.Meals.Where(m =>
+        var existingMeal = await dbContext.UserMeals.Where(m =>
                 m.UserId == command.UserId && m.Date.Date == command.Date.Date && m.MealType == command.MealType)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
@@ -61,19 +61,19 @@ public class CreateMealEntryHandler
             return existingMeal;
         }
 
-        var meal = new Meal
+        var meal = new UserMeal
         {
             UserId = command.UserId, MealType = command.MealType, Date = command.Date
         };
 
-        dbContext.Meals.Add(meal);
+        dbContext.UserMeals.Add(meal);
         await dbContext.SaveChangesAsync(cancellationToken);
         return meal;
     }
 
-    private async Task<Food> GetOrCreateFood(CreateMealEntryCommand command, CancellationToken cancellationToken)
+    private async Task<FoodItem> GetOrCreateFood(CreateMealEntryCommand command, CancellationToken cancellationToken)
     {
-        var existingFood = await dbContext.Foods.FirstOrDefaultAsync(f =>
+        var existingFood = await dbContext.FoodItems.FirstOrDefaultAsync(f =>
             f.Name == command.Name && f.Proteins == command.Proteins && f.Carbs == command.Carbs &&
             f.Fats == command.Fats && f.Calories == command.Calories, cancellationToken: cancellationToken);
 
@@ -82,7 +82,7 @@ public class CreateMealEntryHandler
             return existingFood;
         }
 
-        var food = new Food
+        var food = new FoodItem
         {
             Name = command.Name,
             Proteins = command.Proteins,
@@ -91,7 +91,7 @@ public class CreateMealEntryHandler
             Calories = command.Calories
         };
 
-        dbContext.Foods.Add(food);
+        dbContext.FoodItems.Add(food);
         await dbContext.SaveChangesAsync(cancellationToken);
         return food;
     }
