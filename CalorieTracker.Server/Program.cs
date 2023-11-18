@@ -65,7 +65,7 @@ app.UseAuthorization();
 
 app.CreateAccountEndpoint();
 app.LoginEndpoint();
-app.LogoutEndpoint();
+app.MapLogoutEndpoint();
 app.MapAccountInfoEndpoint();
 
 app.MapCreateMealEntryEndpoint();
