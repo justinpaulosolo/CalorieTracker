@@ -20,6 +20,7 @@ import {
 } from "./ui/select";
 import { CreateMealEntry } from "@/utils/types";
 import { useCreateMealEntry } from "@/utils/services/meal-services";
+import useCurrentDate from "@/utils/hooks/useCurrentDate";
 
 const newEntryFormScheme = z.object({
   mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Other"], {
@@ -41,6 +42,7 @@ const newEntryFormScheme = z.object({
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
 function FoodEntryForm() {
+  const [currentDate] = useCurrentDate();
   const createMealEntry = useCreateMealEntry();
   const form = useForm<NewEntryFormValues>({
     resolver: zodResolver(newEntryFormScheme),
@@ -54,15 +56,9 @@ function FoodEntryForm() {
   });
 
   async function onSubmit(data: NewEntryFormValues) {
-    const now = new Date();
-    const timezoneOffset = now.getTimezoneOffset() * 60000;
-    const date = new Date(now.getTime() - timezoneOffset)
-      .toISOString()
-      .slice(0, -1);
-
     const payload: CreateMealEntry = {
       mealType: data.mealType,
-      date: date,
+      date: currentDate,
       name: data.name,
       proteins: data.proteins,
       carbs: data.carbohydrates,
