@@ -23,6 +23,7 @@ import {
 } from "@/utils/services/meal-services";
 import { MealEntryType } from "@/utils/types";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface DropdownMenuActionsProps {
   entry: MealEntryType;
@@ -116,10 +117,12 @@ function DropdownMenuActions({
   mealType,
 }: DropdownMenuActionsProps) {
   const deleteMealEntry = useDeleteMealEntry();
+  const navigate = useNavigate();
 
   const handleEdit = useCallback(() => {
     console.log(entry.foodEntryId, "edit");
-  }, [entry]);
+    navigate(`/food-entry/edit/${entry.foodEntryId}`);
+  }, [entry, navigate]);
 
   const handleDelete = useCallback(() => {
     console.log(entry.foodEntryId, "delete");
