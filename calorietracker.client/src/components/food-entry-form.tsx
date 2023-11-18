@@ -40,7 +40,7 @@ const newEntryFormScheme = z.object({
 
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
-function FoodEntryForm({ currentDate }: { currentDate: string }) {
+function FoodEntryForm() {
   const createMealEntry = useCreateMealEntry();
   const form = useForm<NewEntryFormValues>({
     resolver: zodResolver(newEntryFormScheme),
@@ -72,8 +72,8 @@ function FoodEntryForm({ currentDate }: { currentDate: string }) {
     };
 
     await createMealEntry.mutateAsync(
-      { mealEntry: payload, date: currentDate, mealType: data.mealType },
-      { onSettled: () => form.reset() },
+      { mealEntry: payload, mealType: data.mealType },
+      { onSettled: () => form.reset() }
     );
   }
 

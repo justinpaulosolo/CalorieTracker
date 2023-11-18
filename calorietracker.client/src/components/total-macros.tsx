@@ -4,9 +4,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import useCurrentDate from "@/utils/hooks/useCurrentDate";
 import { useGetMealsTotalMacrosByDate } from "@/utils/services/meal-services";
 
-function TotalMacros({ currentDate }: { currentDate: string }) {
+function TotalMacros() {
+  const [currentDate] = useCurrentDate();
   const { data, isLoading, error } = useGetMealsTotalMacrosByDate({
     date: currentDate,
   });

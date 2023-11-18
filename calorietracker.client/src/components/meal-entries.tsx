@@ -24,6 +24,7 @@ import {
 import { MealEntryType } from "@/utils/types";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import useCurrentDate from "@/utils/hooks/useCurrentDate";
 
 interface DropdownMenuActionsProps {
   entry: MealEntryType;
@@ -31,9 +32,10 @@ interface DropdownMenuActionsProps {
   mealType: string;
 }
 
-function MealEntry({ date, mealType }: { date: string; mealType: string }) {
+function MealEntry({ mealType }: { mealType: string }) {
+  const [currentDate] = useCurrentDate();
   const { data, isLoading, error } = useGetMealEntriesByDateAndType({
-    date,
+    currentDate,
     mealType,
   });
 
@@ -86,7 +88,7 @@ function MealEntry({ date, mealType }: { date: string; mealType: string }) {
                   <TableCell className="w-20">
                     <DropdownMenuActions
                       entry={entry}
-                      date={date}
+                      date={currentDate}
                       mealType={mealType}
                     />
                   </TableCell>

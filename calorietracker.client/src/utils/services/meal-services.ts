@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateMealEntry } from "../types";
+import useCurrentDate from "../hooks/useCurrentDate";
 
 interface DeleteMealEntryVariables {
   id: number;
@@ -10,7 +11,6 @@ interface DeleteMealEntryVariables {
 
 interface CreateMealEntryVariables {
   mealEntry: CreateMealEntry;
-  date: string;
   mealType: string;
 }
 
@@ -30,16 +30,18 @@ export function useDeleteMealEntry() {
 }
 
 export function useGetMealEntriesByDateAndType({
-  date,
+  currentDate,
   mealType,
 }: {
-  date: string;
+  currentDate: string;
   mealType: string;
 }) {
   return useQuery({
-    queryKey: ["meals", date, mealType],
+    queryKey: ["meals", currentDate, mealType],
     queryFn: async () => {
-      const response = await axios.get(`/api/meal-entries/${date}/${mealType}`);
+      const response = await axios.get(
+        `/api/meal-entries/${currentDate}/${mealType}`
+      );
       const data = response.data;
       return data;
     },
@@ -47,12 +49,13 @@ export function useGetMealEntriesByDateAndType({
 }
 
 export function useCreateMealEntry() {
+  const [currentDate] = useCurrentDate();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, CreateMealEntryVariables>({
     mutationFn: ({ mealEntry }) => axios.post("/api/meal-entries", mealEntry),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["meals", variables.date, variables.mealType],
+        queryKey: ["meals", currentDate, variables.mealType],
       });
     },
   });
