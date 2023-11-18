@@ -8,7 +8,7 @@ public static class GetMealEntryByIdEndpoint
 {
     public static void MapGetMealEntryByIdEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/meal-entries/{foodEntryId}", async (int foodEntryId, ISender sender) =>
+        app.MapGet("api/meals/{foodEntryId}", async (int foodEntryId, ISender sender) =>
         {
             var query = new GetMealEntryByIdQuery { FoodEntryId = foodEntryId };
             var mealEntry = await sender.Send(query);

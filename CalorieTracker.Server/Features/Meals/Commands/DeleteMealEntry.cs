@@ -9,7 +9,7 @@ public static class DeleteMealEntryEndpoint
 {
     public static void MapDeleteMealEntryEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapDelete("api/meal-entries/{id}", async (int id, ISender sender) =>
+        app.MapDelete("api/meals/{id}", async (int id, ISender sender) =>
         {
             var result = await sender.Send(new DeleteMealEntryCommand { Id = id });
             return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);

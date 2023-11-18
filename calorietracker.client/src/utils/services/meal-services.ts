@@ -18,7 +18,7 @@ export function useDeleteMealEntry() {
   const queryClient = useQueryClient();
   return useMutation<void, unknown, DeleteMealEntryVariables>({
     mutationFn: async ({ id }: { id: number }) => {
-      const response = await axios.delete(`/api/meal-entries/${id}`);
+      const response = await axios.delete(`/api/meals/${id}`);
       return response.data;
     },
     onSuccess: (_, variables) => {
@@ -39,9 +39,7 @@ export function useGetMealEntriesByDateAndType({
   return useQuery({
     queryKey: ["meals", currentDate, mealType],
     queryFn: async () => {
-      const response = await axios.get(
-        `/api/meal-entries/${currentDate}/${mealType}`
-      );
+      const response = await axios.get(`/api/meals/${currentDate}/${mealType}`);
       const data = response.data;
       return data;
     },
@@ -52,7 +50,7 @@ export function useCreateMealEntry() {
   const [currentDate] = useCurrentDate();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, CreateMealEntryVariables>({
-    mutationFn: ({ mealEntry }) => axios.post("/api/meal-entries", mealEntry),
+    mutationFn: ({ mealEntry }) => axios.post("/api/meals", mealEntry),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["meals", currentDate, variables.mealType],

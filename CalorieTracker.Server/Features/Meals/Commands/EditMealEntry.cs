@@ -10,9 +10,9 @@ public static class EditMealEntryEndpoint
 {
     public static void MapEditMealEntryEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/api/meal-entries/edit/{foodEntryId}", async (int foodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
+        app.MapPut("/api/meals/edit/{mealFoodEntryId}", async (int mealFoodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
         {
-            command.FoodEntryId = foodEntryId;
+            command.MealFoodEntryId = mealFoodEntryId;
             var result = await mediator.Send(command);
             return Results.Ok(result);
         }).WithTags("Meal Entries").RequireAuthorization();
@@ -20,7 +20,7 @@ public static class EditMealEntryEndpoint
 }
 public sealed class EditMealEntryCommand : IRequest<int>
 {
-    public int FoodEntryId { get; set; }
+    public int MealFoodEntryId { get; set; }
     public string UserId { get; set; } = null!;
     public string MealType { get; init; } = null!;
     public DateTime Date { get; init; }
@@ -39,7 +39,7 @@ public class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHand
         var foodEntry = await dbContext.MealFoodEntries
             .Include(fe => fe.Meal)
             .Include(fe => fe.Food)
-            .FirstOrDefaultAsync(fe => fe.Id == request.FoodEntryId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(fe => fe.Id == request.MealFoodEntryId, cancellationToken: cancellationToken);
 
         if (foodEntry == null)
         {

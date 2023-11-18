@@ -10,7 +10,7 @@ public static class GetMealEntriesByDateAndTypeEndpoint
 {
     public static void MapGetMealEntriesByDateAndTypeEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("api/meal-entries/{date}/{mealType}",
+        app.MapGet("api/meals/{date}/{mealType}",
             async (DateTime date, string mealType, ISender sender, ClaimsPrincipal user) =>
             {
                 var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;

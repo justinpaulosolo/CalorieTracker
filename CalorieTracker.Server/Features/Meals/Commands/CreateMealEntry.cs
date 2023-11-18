@@ -9,7 +9,7 @@ public static class CreateMealEntryEndpoint
 { 
     public static void MapCreateMealEntryEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPost("api/meal-entries", async (CreateMealEntryCommand command, ISender sender, ClaimsPrincipal user) =>
+        app.MapPost("api/meals", async (CreateMealEntryCommand command, ISender sender, ClaimsPrincipal user) =>
         {
             var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
             command.UserId = userId;
