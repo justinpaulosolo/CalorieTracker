@@ -1,10 +1,40 @@
 ﻿using CalorieTracker.Server.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Queries;
 
-internal sealed class GetMealsTotalMacrosByDateHandler
+public static class GetMealsTotalMacrosByDateEndpoint
+{
+    public static void MapGetMealsTotalMacrosByDateEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/api/meals/{date}/total-macros", async (DateTime date, ClaimsPrincipal user, ISender sender) =>
+        {
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var query = new GetMealsTotalMacrosByDateQuery { UserId = userId, Date = date };
+            var result = await sender.Send(query);
+            return Results.Ok(result);
+        }).WithTags("Meals").RequireAuthorization();
+    }
+}
+
+public class GetMealsTotalMacrosByDateResponse
+{
+    public DateTime Date { get; set; }
+    public long TotalProteins { get; set; }
+    public long TotalCarbs { get; set; }
+    public long TotalFats { get; set; }
+    public long TotalCalories { get; set; }
+}
+
+public class GetMealsTotalMacrosByDateQuery : IRequest<GetMealsTotalMacrosByDateResponse>
+{
+    public DateTime Date { get; set; }
+    public string UserId { get; set; } = string.Empty;
+}
+
+public class GetMealsTotalMacrosByDateHandler
     (ApplicationDbContext dbContext) : IRequestHandler<GetMealsTotalMacrosByDateQuery, GetMealsTotalMacrosByDateResponse>
 {
     public async Task<GetMealsTotalMacrosByDateResponse> Handle(GetMealsTotalMacrosByDateQuery request,
