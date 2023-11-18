@@ -69,12 +69,12 @@ app.MapLogoutEndpoint();
 app.MapAccountInfoEndpoint();
 
 app.MapCreateMealEntryEndpoint();
-app.MapDeleteMealEntryEndpoint();
-app.MapGetMealEntriesByDateAndTypeEndpoint();
-app.MapGetMealsTotalMacrosByDateEndpoint();
-
-app.MapEditMealEntryEndpoint();
 app.MapGetMealEntryByIdEndpoint();
+app.MapGetMealEntriesByDateAndTypeEndpoint();
+app.MapEditMealEntryEndpoint();
+app.MapDeleteMealEntryEndpoint();
+
+app.MapGetMealsTotalMacrosByDateEndpoint();
 
 app.MapCreateMacroGoalEndpoint();
 app.MapGetMacroGoalEndpoint();
