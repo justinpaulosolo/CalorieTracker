@@ -5,7 +5,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Features.Meals.Commands;
 
-internal sealed class DeleteMealEntryHandler
+public static class DeleteMealEntryEndpoint
+{
+    public static void MapDeleteMealEntryEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapDelete("api/meal-entries/{id}", async (int id, ISender sender) =>
+        {
+            var result = await sender.Send(new DeleteMealEntryCommand { Id = id });
+            return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
+        }).WithTags("Meals").RequireAuthorization();
+    }
+}
+
+public sealed class DeleteMealEntryCommand : IRequest<OperationResult<bool>>
+{
+    public int Id { get; set; }
+}
+
+public class DeleteMealEntryHandler
     (ApplicationDbContext dbContext) : IRequestHandler<DeleteMealEntryCommand, OperationResult<bool>>
 {
     public async Task<OperationResult<bool>> Handle(DeleteMealEntryCommand command, CancellationToken cancellationToken)
