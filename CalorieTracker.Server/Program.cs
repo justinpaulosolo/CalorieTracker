@@ -64,7 +64,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.CreateAccountEndpoint();
-app.LoginEndpoint();
+app.MapLoginEndpoint();
 app.MapLogoutEndpoint();
 app.MapAccountInfoEndpoint();
 
