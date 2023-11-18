@@ -2,10 +2,36 @@
 using CalorieTracker.Server.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Commands;
+public static class CreateMealEntryEndpoint
+{ 
+    public static void MapCreateMealEntryEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapPost("api/meal-entries", async (CreateMealEntryCommand command, ISender sender, ClaimsPrincipal user) =>
+        {
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            command.UserId = userId;
+            var foodEntryId = await sender.Send(command);
+        }).WithTags("Meals").RequireAuthorization();
+    }
+}
 
-internal sealed class CreateMealEntryHandler
+public sealed class CreateMealEntryCommand : IRequest<int>
+{
+    public string UserId { get; set; } = null!;
+    public string MealType { get; init; } = null!;
+    public DateTime Date { get; init; }
+    public string Name { get; init; } = null!;
+    public int Proteins { get; init; }
+    public int Carbs { get; init; }
+    public int Fats { get; init; }
+    public int Calories { get; init; }
+    public int Quantity { get; init; }
+}
+
+public class CreateMealEntryHandler
     (ApplicationDbContext dbContext) : IRequestHandler<CreateMealEntryCommand, int>
 {
     public async Task<int> Handle(CreateMealEntryCommand command, CancellationToken cancellationToken)
