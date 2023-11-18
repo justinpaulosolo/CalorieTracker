@@ -1,5 +1,5 @@
-import { LoginFormInputs } from "@/pages/Login";
-import { RegisterFormInputs } from "@/pages/Register";
+import { LoginFormInputs } from "@/pages/LoginPage";
+import { RegisterFormInputs } from "@/pages/RegisterPage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 

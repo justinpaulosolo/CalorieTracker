@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/LoginPage";
+import Register from "./pages/RegisterPage";
 import AppPage from "./pages/AppPage";
 import PrivateRoute from "./components/private-route";
 import SettingsLayout from "./components/settings/settings-layout";
