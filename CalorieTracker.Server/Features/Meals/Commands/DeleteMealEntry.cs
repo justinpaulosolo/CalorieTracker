@@ -13,7 +13,7 @@ public static class DeleteMealEntryEndpoint
         {
             var result = await sender.Send(new DeleteMealEntryCommand { Id = id });
             return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
-        }).WithTags("Meals").RequireAuthorization();
+        }).WithTags("Meal Entries").RequireAuthorization();
     }
 }
 

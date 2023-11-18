@@ -17,7 +17,7 @@ public static class GetMealEntryByIdEndpoint
                 return Results.Ok(mealEntry);
             }
             return Results.NotFound();
-        }).WithTags("Meals").RequireAuthorization();
+        }).WithTags("Meal Entries").RequireAuthorization();
     }
 }
 public class GetMealEntryByIdResponse

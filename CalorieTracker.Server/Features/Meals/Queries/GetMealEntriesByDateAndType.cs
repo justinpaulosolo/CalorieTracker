@@ -17,7 +17,7 @@ public static class GetMealEntriesByDateAndTypeEndpoint
                 var query = new GetMealEntriesByDateAndTypeQuery { UserId = userId, Date = date, MealType = mealType };
                 var result = await sender.Send(query);
                 return Results.Ok(result);
-            }).WithTags("Meals").RequireAuthorization();
+            }).WithTags("Meal Entries").RequireAuthorization();
     }
 }
 

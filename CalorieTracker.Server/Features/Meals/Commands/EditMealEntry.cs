@@ -10,12 +10,12 @@ public static class EditMealEntryEndpoint
 {
     public static void MapEditMealEntryEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPut("/meal-entries/edit/{foodEntryId}", async (int foodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
+        app.MapPut("/api/meal-entries/edit/{foodEntryId}", async (int foodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
         {
             command.FoodEntryId = foodEntryId;
             var result = await mediator.Send(command);
             return Results.Ok(result);
-        }).WithTags("Meals").RequireAuthorization();
+        }).WithTags("Meal Entries").RequireAuthorization();
     }
 }
 public sealed class EditMealEntryCommand : IRequest<int>
