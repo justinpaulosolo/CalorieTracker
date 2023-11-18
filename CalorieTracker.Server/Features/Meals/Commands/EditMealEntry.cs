@@ -1,11 +1,38 @@
 ﻿using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Features.Meals.Commands;
 
-internal sealed class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandler<EditMealEntryCommand, int>
+public static class EditMealEntryEndpoint
+{
+    public static void MapEditMealEntryEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapPut("/meal-entries/edit/{foodEntryId}", async (int foodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
+        {
+            command.FoodEntryId = foodEntryId;
+            var result = await mediator.Send(command);
+            return Results.Ok(result);
+        }).WithTags("Meals").RequireAuthorization();
+    }
+}
+public sealed class EditMealEntryCommand : IRequest<int>
+{
+    public int FoodEntryId { get; set; }
+    public string UserId { get; set; } = null!;
+    public string MealType { get; init; } = null!;
+    public DateTime Date { get; init; }
+    public string Name { get; init; } = null!;
+    public int Proteins { get; init; }
+    public int Carbs { get; init; }
+    public int Fats { get; init; }
+    public int Calories { get; init; }
+    public int Quantity { get; init; }
+}
+
+public class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandler<EditMealEntryCommand, int>
 {
     public async Task<int> Handle(EditMealEntryCommand request, CancellationToken cancellationToken)
     {

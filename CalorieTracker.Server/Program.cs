@@ -71,7 +71,7 @@ app.DeleteMealEntryEndpoint();
 app.MapGetMealEntriesByDateAndTypeEndpoint();
 app.MapGetMealsTotalMacrosByDateEndpoint();
 
-app.EditMealEntryEndpoint();
+app.MapEditMealEntryEndpoint();
 app.MapGetMealEntryByIdEndpoint();
 
 app.MapFallbackToFile("/index.html");
