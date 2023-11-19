@@ -1,31 +1,34 @@
 ﻿using CalorieTracker.Server.Entities;
+using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace CalorieTracker.Server.Features.Account.Commands;
 
-public static class LogoutEndpoint
+public static class Logout
 {
-    public static void MapLogoutEndpoint(this IEndpointRouteBuilder app)
+    public sealed class Command : IRequest
     {
-        app.MapPost("/api/account/manage/logout", async (LogoutCommand command, ISender sender) =>
+
+    }
+
+    internal sealed class Handler(SignInManager<ApplicationUser> signInManager) : IRequestHandler<Command>
+    {
+        public async Task Handle(Command request, CancellationToken cancellationToken)
         {
-            await sender.Send(command);
-        }).WithTags("Account").RequireAuthorization();
+            await signInManager.SignOutAsync();
+        }
     }
 }
 
-public sealed class LogoutCommand : IRequest
+public class LogoutEndpoint : ICarterModule
 {
-
-}
-
-public class LogoutHandler(SignInManager<ApplicationUser> signInManager) : IRequestHandler<LogoutCommand>
-{
-    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-
-    public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        await _signInManager.SignOutAsync();
+        app.MapPost("/api/account/manage/logout", async (ISender sender) =>
+        {
+            var command = new Logout.Command();
+            await sender.Send(command);
+        }).WithTags("Account").RequireAuthorization();
     }
 }

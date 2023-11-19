@@ -1,38 +1,37 @@
 ﻿using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Features.Meals.Contracts;
+using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Commands;
 
-public static class CreateMeal
+public static class CreateMealEntry
 {
-    public static void MapCreateMealEntryEndpoint(this IEndpointRouteBuilder app)
-    {
-        app.MapPost("api/meals", async (Command command, ISender sender, ClaimsPrincipal user) =>
-        {
-            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            command.UserId = userId;
-            var foodEntryId = await sender.Send(command);
-        }).WithTags("Meals").RequireAuthorization();
-    }
-
     public sealed class Command : IRequest<int>
     {
-        public string UserId { get; set; } = null!;
-        public string MealType { get; init; } = null!;
+        public string UserId { get; set; } = default!;
+
+        public string MealType { get; init; } = default!;
+
         public DateTime Date { get; init; }
-        public string Name { get; init; } = null!;
+
+        public string Name { get; init; } = default!;
+
         public int Proteins { get; init; }
+
         public int Carbs { get; init; }
+
         public int Fats { get; init; }
+
         public int Calories { get; init; }
+
         public int Quantity { get; init; }
     }
 
-    public class Handler
-        (ApplicationDbContext dbContext) : IRequestHandler<Command, int>
+    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Command, int>
     {
         public async Task<int> Handle(Command command, CancellationToken cancellationToken)
         {
@@ -97,7 +96,35 @@ public static class CreateMeal
 
             dbContext.FoodItems.Add(food);
             await dbContext.SaveChangesAsync(cancellationToken);
+
             return food;
         }
+    }
+}
+
+public class CreateMealEntryEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("api/meals", async (CreateMealEntryRequest request, ISender sender, ClaimsPrincipal user) =>
+        {
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var command = new CreateMealEntry.Command()
+            {
+                UserId = userId,
+                MealType = request.MealType,
+                Date = request.Date,
+                Name = request.Name,
+                Proteins = request.Proteins,
+                Carbs = request.Carbs,
+                Fats = request.Fats,
+                Calories = request.Calories,
+                Quantity = request.Quantity,
+            };
+
+            var foodEntryId = await sender.Send(command);
+
+            return Results.Ok(foodEntryId);
+        }).WithTags("Meals").RequireAuthorization();
     }
 }

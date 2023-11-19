@@ -1,12 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Features.Account.Commands;
-using CalorieTracker.Server.Features.Account.Queries;
-using CalorieTracker.Server.Features.MacrosGoals.Commands;
-using CalorieTracker.Server.Features.MacrosGoals.Queries;
-using CalorieTracker.Server.Features.Meals.Commands;
-using CalorieTracker.Server.Features.Meals.Queries;
 using CalorieTracker.Server.Features.Meals.Services;
+using Carter;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +45,7 @@ builder.Services.AddMediatR(configuration =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCarter();
 
 var app = builder.Build();
 
@@ -66,21 +62,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapCreateAccountEndpoint();
-app.MapLoginEndpoint();
-app.MapLogoutEndpoint();
-app.MapAccountInfoEndpoint();
+app.MapCarter();
 
-app.MapCreateMealEntryEndpoint();
-app.MapGetMealEntryByIdEndpoint();
-app.MapGetMealEntriesByDateAndTypeEndpoint();
-app.MapEditMealEntryEndpoint();
-app.MapDeleteMealEntryEndpoint();
-
-app.MapGetMealsTotalMacrosByDateEndpoint();
-
-app.MapCreateMacroGoalEndpoint();
-app.MapGetMacroGoalEndpoint();
 app.MapFallbackToFile("/index.html");
 
 app.Run();

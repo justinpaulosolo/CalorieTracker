@@ -1,78 +1,79 @@
 ﻿using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Features.Meals.Contracts;
 using CalorieTracker.Server.Features.Meals.Services;
+using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Queries;
 
-public static class GetMealsTotalMacrosByDateEndpoint
+public static class GetMealsTotalMacrosByDate
 {
-    public static void MapGetMealsTotalMacrosByDateEndpoint(this IEndpointRouteBuilder app)
+    public class Query : IRequest<GetMealsTotalMacrosByDateResponse>
     {
-        app.MapGet("/api/meals/{date}/total-macros", async (DateTime date, ClaimsPrincipal user, ISender sender) =>
+        public DateTime Date { get; set; }
+
+        public string UserId { get; set; } = default!;
+    }
+
+    internal sealed class Handler(ApplicationDbContext dbContext,
+        IMealMacrosCalculator mealMacrosCalculator) : IRequestHandler<Query, GetMealsTotalMacrosByDateResponse>
+    {
+        public async Task<GetMealsTotalMacrosByDateResponse> Handle(Query request,
+            CancellationToken cancellationToken)
         {
-            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var query = new GetMealsTotalMacrosByDateQuery { UserId = userId, Date = date };
-            var result = await sender.Send(query);
-            return Results.Ok(result);
-        }).WithTags("Meals").RequireAuthorization();
+            // Get all meals for the user on the specified date
+            var meals = await dbContext.UserMeals
+                .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date)
+                .Include(m => m.FoodEntries)
+                .ThenInclude(fe => fe.Food)
+                .ToListAsync(cancellationToken: cancellationToken);
+
+            // Initialize total macros
+            var totalProteins = 0;
+            var totalCarbs = 0;
+            var totalFats = 0;
+            var totalCalories = 0;
+
+            // Calculate total macros
+            foreach (var (proteins, carbs, fats, calories) in meals.Select(mealMacrosCalculator.CalculateTotalMacros))
+            {
+                totalProteins += proteins;
+                totalCarbs += carbs;
+                totalFats += fats;
+                totalCalories += calories;
+            }
+
+            // Create response
+            var response = new GetMealsTotalMacrosByDateResponse
+            {
+                Date = request.Date,
+                TotalProteins = totalProteins,
+                TotalCarbs = totalCarbs,
+                TotalFats = totalFats,
+                TotalCalories = totalCalories
+            };
+
+            return response;
+        }
     }
 }
 
-public class GetMealsTotalMacrosByDateResponse
+public class GetMealsTotalMacrosByDateEndpoint : ICarterModule
 {
-    public DateTime Date { get; set; }
-    public long TotalProteins { get; set; }
-    public long TotalCarbs { get; set; }
-    public long TotalFats { get; set; }
-    public long TotalCalories { get; set; }
-}
-
-public class GetMealsTotalMacrosByDateQuery : IRequest<GetMealsTotalMacrosByDateResponse>
-{
-    public DateTime Date { get; set; }
-    public string UserId { get; set; } = string.Empty;
-}
-
-public class GetMealsTotalMacrosByDateHandler
-    (ApplicationDbContext dbContext, IMealMacrosCalculator mealMacrosCalculator) : IRequestHandler<GetMealsTotalMacrosByDateQuery, GetMealsTotalMacrosByDateResponse>
-{
-    public async Task<GetMealsTotalMacrosByDateResponse> Handle(GetMealsTotalMacrosByDateQuery request,
-        CancellationToken cancellationToken)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        // Get all meals for the user on the specified date
-        var meals = await dbContext.UserMeals
-            .Where(m => m.UserId == request.UserId && m.Date.Date == request.Date.Date)
-            .Include(m => m.FoodEntries)
-            .ThenInclude(fe => fe.Food)
-            .ToListAsync(cancellationToken: cancellationToken);
-
-        // Initialize total macros
-        var totalProteins = 0;
-        var totalCarbs = 0;
-        var totalFats = 0;
-        var totalCalories = 0;
-
-        // Calculate total macros
-        foreach (var (Proteins, Carbs, Fats, Calories) in meals.Select(meal => mealMacrosCalculator.CalculateTotalMacros(meal)))
+        app.MapGet("/api/meals/{date:datetime}/total-macros",
+            async (DateTime date,
+                ClaimsPrincipal user,
+                ISender sender) =>
         {
-            totalProteins += Proteins;
-            totalCarbs += Carbs;
-            totalFats += Fats;
-            totalCalories += Calories;
-        }
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var query = new GetMealsTotalMacrosByDate.Query { UserId = userId, Date = date };
+            var result = await sender.Send(query);
 
-        // Create response
-        var response = new GetMealsTotalMacrosByDateResponse
-        {
-            Date = request.Date,
-            TotalProteins = totalProteins,
-            TotalCarbs = totalCarbs,
-            TotalFats = totalFats,
-            TotalCalories = totalCalories
-        };
-
-        return response;
+            return Results.Ok(result);
+        }).WithTags("Meals").RequireAuthorization();
     }
 }

@@ -1,78 +1,114 @@
 ﻿using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Features.Meals.Contracts;
+using Carter;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Meals.Commands;
 
-public static class EditMealEntryEndpoint
+public static class EditMealEntry
 {
-    public static void MapEditMealEntryEndpoint(this IEndpointRouteBuilder app)
+    public sealed class Command : IRequest<int>
     {
-        app.MapPut("/api/meals/edit/{mealFoodEntryId}", async (int mealFoodEntryId, EditMealEntryCommand command, [FromServices] IMediator mediator) =>
+        public int MealFoodEntryId { get; set; }
+
+        public string MealType { get; init; } = default!;
+
+        public DateTime Date { get; init; }
+
+        public string Name { get; init; } = default!;
+
+        public int Proteins { get; init; }
+
+        public int Carbs { get; init; }
+
+        public int Fats { get; init; }
+
+        public int Calories { get; init; }
+
+        public int Quantity { get; init; }
+
+        public string UserId { get; set; } = default!;
+    }
+
+    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Command, int>
+    {
+        public async Task<int> Handle(Command request, CancellationToken cancellationToken)
         {
-            command.MealFoodEntryId = mealFoodEntryId;
-            var result = await mediator.Send(command);
-            return Results.Ok(result);
-        }).WithTags("Meals").RequireAuthorization();
+            var foodEntry = await dbContext.MealFoodEntries
+                .Include(fe => fe.Meal)
+                .Include(fe => fe.Food)
+                .FirstOrDefaultAsync(fe => fe.Id == request.MealFoodEntryId, cancellationToken: cancellationToken);
+
+            if (foodEntry == null)
+            {
+                throw new DirectoryNotFoundException(nameof(foodEntry));
+            }
+
+            var food = foodEntry.Food;
+            food.Name = request.Name;
+            food.Proteins = request.Proteins;
+            food.Carbs = request.Carbs;
+            food.Fats = request.Fats;
+            food.Calories = request.Calories;
+
+            var meal = await dbContext.UserMeals
+                .FirstOrDefaultAsync(m => m.UserId == request.UserId
+                && m.MealType == request.MealType
+                && m.Date.Date == request.Date.Date, cancellationToken: cancellationToken);
+
+            if (meal == null)
+            {
+                meal = new UserMeal
+                {
+                    UserId = request.UserId,
+                    MealType = request.MealType,
+                    Date = request.Date,
+                };
+                dbContext.UserMeals.Add(meal);
+                await dbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            foodEntry.MealId = meal.Id;
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return foodEntry.Id;
+        }
     }
 }
-public sealed class EditMealEntryCommand : IRequest<int>
-{
-    public int MealFoodEntryId { get; set; }
-    public string UserId { get; set; } = null!;
-    public string MealType { get; init; } = null!;
-    public DateTime Date { get; init; }
-    public string Name { get; init; } = null!;
-    public int Proteins { get; init; }
-    public int Carbs { get; init; }
-    public int Fats { get; init; }
-    public int Calories { get; init; }
-    public int Quantity { get; init; }
-}
 
-public class EditMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandler<EditMealEntryCommand, int>
+public class EditMealEntryEndpoint : ICarterModule
 {
-    public async Task<int> Handle(EditMealEntryCommand request, CancellationToken cancellationToken)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var foodEntry = await dbContext.MealFoodEntries
-            .Include(fe => fe.Meal)
-            .Include(fe => fe.Food)
-            .FirstOrDefaultAsync(fe => fe.Id == request.MealFoodEntryId, cancellationToken: cancellationToken);
-
-        if (foodEntry == null)
+        app.MapPut("/api/meals/edit/{mealFoodEntryId:int}",
+            async (int mealFoodEntryId,
+                EditMealEntryRequest request,
+                ISender sender,
+                ClaimsPrincipal user) =>
         {
-            throw new DirectoryNotFoundException(nameof(foodEntry));
-        }
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-        var food = foodEntry.Food;
-        food.Name = request.Name;
-        food.Proteins = request.Proteins;
-        food.Carbs = request.Carbs;
-        food.Fats = request.Fats;
-        food.Calories = request.Calories;
-
-        var meal = await dbContext.UserMeals
-            .FirstOrDefaultAsync(m => m.UserId == request.UserId
-            && m.MealType == request.MealType
-            && m.Date.Date == request.Date.Date, cancellationToken: cancellationToken);
-
-        if (meal == null)
-        {
-            meal = new UserMeal
+            var command = new EditMealEntry.Command()
             {
-                UserId = request.UserId,
+                MealFoodEntryId = mealFoodEntryId,
                 MealType = request.MealType,
                 Date = request.Date,
+                Name = request.Name,
+                Proteins = request.Proteins,
+                Carbs = request.Carbs,
+                Fats = request.Fats,
+                Calories = request.Calories,
+                Quantity = request.Quantity,
+                UserId = userId
             };
-            dbContext.UserMeals.Add(meal);
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
 
-        foodEntry.MealId = meal.Id;
+            var result = await sender.Send(command);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return foodEntry.Id;
+            return Results.Ok(result);
+        }).WithTags("Meals").RequireAuthorization();
     }
 }

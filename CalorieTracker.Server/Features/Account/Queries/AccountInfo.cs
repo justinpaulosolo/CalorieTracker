@@ -1,57 +1,56 @@
 ﻿using CalorieTracker.Server.Common;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Features.Account.Contracts;
+using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace CalorieTracker.Server.Features.Account.Queries;
 
-public static class AccountInfoEndpoint
+public static class AccountInfo
 {
-    public static void MapAccountInfoEndpoint(this IEndpointRouteBuilder app)
+    public class Query : IRequest<OperationResult<AccountInfoResponse>>
     {
-        app.MapGet("api/account/manage/info", async (ISender sender, ClaimsPrincipal user) =>
+        public ClaimsPrincipal? User { get; set; }
+    }
+
+    internal sealed class Handler(UserManager<ApplicationUser> userManager) : IRequestHandler<Query, OperationResult<AccountInfoResponse>>
+    {
+        public async Task<OperationResult<AccountInfoResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var result = await sender.Send(new AccountInfoQuery { User = user });
-            return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
-        }).WithTags("Account").RequireAuthorization();
+            if (request.User is null)
+            {
+                return await Task.FromResult(new OperationResult<AccountInfoResponse>
+                {
+                    Errors = new List<string> { "User is not authenticated." }
+                });
+            }
+
+            var user = await userManager.GetUserAsync(request.User);
+
+            return new OperationResult<AccountInfoResponse>
+            {
+                Result = new AccountInfoResponse
+                {
+                    Id = user!.Id,
+                    Email = user.Email!,
+                    Username = user.UserName!
+                }
+            };
+        }
     }
 }
 
-public class AccountInfoResponse
+public class AccountInfoEndpoint : ICarterModule
 {
-    public string Id { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-}
-
-public sealed class AccountInfoQuery : IRequest<OperationResult<AccountInfoResponse>>
-{
-    public ClaimsPrincipal? User { get; set; }
-}
-
-public class AccountInfoHandler (UserManager<ApplicationUser> userManager) : IRequestHandler<AccountInfoQuery, OperationResult<AccountInfoResponse>>
-{
-    public async Task<OperationResult<AccountInfoResponse>> Handle(AccountInfoQuery request, CancellationToken cancellationToken)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        if (request.User is null)
+        app.MapGet("/api/account/manage/info", async (ISender sender, ClaimsPrincipal user) =>
         {
-            return await Task.FromResult(new OperationResult<AccountInfoResponse>
-            {
-                Errors = new List<string> { "User is not authenticated." }
-            });
-        }
+            var result = await sender.Send(new AccountInfo.Query { User = user });
 
-        var user = await userManager.GetUserAsync(request.User);
-
-        return new OperationResult<AccountInfoResponse>
-        {
-            Result = new AccountInfoResponse
-            {
-                Id = user!.Id,
-                Email = user.Email!,
-                Username = user.UserName!
-            }
-        };
+            return !result.IsSuccessful ? Results.BadRequest(result.Errors) : Results.Ok(result.Result);
+        }).WithTags("Account").RequireAuthorization();
     }
 }

@@ -1,66 +1,60 @@
 ﻿using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Features.Meals.Contracts;
+using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Features.Meals.Queries;
 
-public static class GetMealEntryByIdEndpoint
+public static class GetMealEntryById
 {
-    public static void MapGetMealEntryByIdEndpoint(this IEndpointRouteBuilder app)
+    public class Query : IRequest<GetMealEntryByIdResponse?>
     {
-        app.MapGet("api/meals/{foodEntryId}", async (int foodEntryId, ISender sender) =>
+        public int FoodEntryId { get; set; }
+    }
+
+    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, GetMealEntryByIdResponse?>
+    {
+        public async Task<GetMealEntryByIdResponse?> Handle(Query request, CancellationToken cancellationToken)
         {
-            var query = new GetMealEntryByIdQuery { FoodEntryId = foodEntryId };
-            var mealEntry = await sender.Send(query);
-            if (mealEntry != null)
+            var foodEntry = await dbContext.MealFoodEntries
+                .Include(fe => fe.Meal)
+                .Include(fe => fe.Food)
+                .FirstOrDefaultAsync(fe => fe.Id == request.FoodEntryId, cancellationToken);
+
+            if (foodEntry == null)
             {
-                return Results.Ok(mealEntry);
+                return null;
             }
-            return Results.NotFound();
-        }).WithTags("Meals").RequireAuthorization();
+
+            return new GetMealEntryByIdResponse
+            {
+                FoodMealEntryId = foodEntry.Id,
+                MealType = foodEntry.Meal.MealType,
+                FoodName = foodEntry.Food.Name,
+                Proteins = foodEntry.Food.Proteins,
+                Carbs = foodEntry.Food.Carbs,
+                Fats = foodEntry.Food.Fats,
+                Calories = foodEntry.Food.Calories,
+            };
+        }
     }
 }
-public class GetMealEntryByIdResponse
-{
-    public int FoodMealEntryId { get; set; }
-    public string MealType { get; set; } = default!;
-    public string FoodName { get; set; } = default!;
-    public int Proteins { get; set; }
-    public int Carbs { get; set; }
-    public int Fats { get; set; }
-    public int Calories { get; set; }
-}
 
-public class GetMealEntryByIdQuery : IRequest<GetMealEntryByIdResponse?>
+public class GetMealEntryByIdEndpoint : ICarterModule
 {
-    public int FoodEntryId { get; set; }
-}
-
-public class GetMealEntryHandler(ApplicationDbContext dbContext) : IRequestHandler<GetMealEntryByIdQuery, GetMealEntryByIdResponse?>
-{
-    private readonly ApplicationDbContext _dbContext = dbContext;
-
-    public async Task<GetMealEntryByIdResponse?> Handle(GetMealEntryByIdQuery request, CancellationToken cancellationToken)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var foodEntry = await _dbContext.MealFoodEntries
-            .Include(fe => fe.Meal)
-            .Include(fe => fe.Food)
-            .FirstOrDefaultAsync(fe => fe.Id == request.FoodEntryId, cancellationToken);
-
-        if (foodEntry == null)
+        app.MapGet("api/meals/{foodEntryId:int}", async (int foodEntryId, ISender sender) =>
         {
-            return null;
-        }
+            var query = new GetMealEntryById.Query()
+            {
+                FoodEntryId = foodEntryId
+            };
 
-        return new GetMealEntryByIdResponse
-        {
-            FoodMealEntryId = foodEntry.Id,
-            MealType = foodEntry.Meal.MealType,
-            FoodName = foodEntry.Food.Name,
-            Proteins = foodEntry.Food.Proteins,
-            Carbs = foodEntry.Food.Carbs,
-            Fats = foodEntry.Food.Fats,
-            Calories = foodEntry.Food.Calories,
-        };
+            var mealEntry = await sender.Send(query);
+
+            return mealEntry != null ? Results.Ok(mealEntry) : Results.NotFound();
+        }).WithTags("Meals").RequireAuthorization();
     }
 }
