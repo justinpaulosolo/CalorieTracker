@@ -1,14 +1,9 @@
 ﻿namespace CalorieTracker.Server.Features.Meals.Contracts;
 
-public class GetMealsTotalMacrosByDateResponse
-{
-    public DateTime Date { get; set; }
-
-    public long TotalProteins { get; set; }
-
-    public long TotalCarbs { get; set; }
-
-    public long TotalFats { get; set; }
-
-    public long TotalCalories { get; set; }
-}
+public record GetMealsTotalMacrosByDateResponse(
+    DateTime Date,
+    long TotalProteins,
+    long TotalCarbs,
+    long TotalFats,
+    long TotalCalories
+);
