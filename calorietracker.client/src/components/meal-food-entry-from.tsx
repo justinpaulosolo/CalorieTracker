@@ -47,6 +47,7 @@ function MealFoodEntryForm() {
   const form = useForm<NewEntryFormValues>({
     resolver: zodResolver(newEntryFormScheme),
     defaultValues: {
+      mealType: "Breakfast",
       name: "",
       proteins: 0,
       carbohydrates: 0,
@@ -69,7 +70,12 @@ function MealFoodEntryForm() {
 
     await createMealEntry.mutateAsync(
       { mealEntry: payload, mealType: data.mealType },
-      { onSettled: () => form.reset() }
+      {
+        onSettled: () => {
+          form.reset();
+          form.setValue("mealType", "Breakfast");
+        },
+      }
     );
   }
 
