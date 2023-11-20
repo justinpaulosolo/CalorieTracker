@@ -31,12 +31,10 @@ public static class AccountInfo
 
             return new OperationResult<AccountInfoResponse>
             {
-                Result = new AccountInfoResponse
-                {
-                    Id = user!.Id,
-                    Email = user.Email!,
-                    Username = user.UserName!
-                }
+                Result = new AccountInfoResponse(
+                    user!.Id,
+                    user.Email!,
+                    user.UserName!)
             };
         }
     }

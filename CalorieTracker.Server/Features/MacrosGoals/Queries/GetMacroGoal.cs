@@ -25,14 +25,12 @@ public static class GetMacroGoal
                 return null;
             }
 
-            var macroGoal = new GetMacroGoalResponse()
-            {
-                Id = result.Id,
-                ProteinGoal = result.ProteinGoal,
-                CarbsGoal = result.CarbsGoal,
-                FatGoal = result.FatsGoal,
-                CaloriesGoal = result.CaloriesGoal
-            };
+            var macroGoal = new GetMacroGoalResponse(
+                result.Id,
+                result.ProteinGoal,
+                result.CarbsGoal,
+                result.FatsGoal,
+                result.CaloriesGoal);
 
             return macroGoal;
         }

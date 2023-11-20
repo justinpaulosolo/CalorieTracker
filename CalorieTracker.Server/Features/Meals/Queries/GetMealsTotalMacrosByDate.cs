@@ -46,14 +46,13 @@ public static class GetMealsTotalMacrosByDate
             }
 
             // Create response
-            var response = new GetMealsTotalMacrosByDateResponse
-            {
-                Date = request.Date,
-                TotalProteins = totalProteins,
-                TotalCarbs = totalCarbs,
-                TotalFats = totalFats,
-                TotalCalories = totalCalories
-            };
+            var response = new GetMealsTotalMacrosByDateResponse(
+                request.Date,
+                totalProteins,
+                totalCarbs,
+                totalFats,
+                totalCalories
+            );
 
             return response;
         }

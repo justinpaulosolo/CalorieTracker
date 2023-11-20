@@ -38,25 +38,23 @@ public static class GetMealEntriesByDateAndType
             }
 
             var (proteins, carbs, fats, calories) = mealMacrosCalculator.CalculateTotalMacros(meal);
-            var mealResponse = new GetMealEntriesByDateAndTypeResponse
-            {
-                MealId = meal.Id,
-                MealType = meal.MealType,
-                Foods = meal.FoodEntries.Select(fe => new FoodEntryResponse
-                {
-                    FoodId = fe.FoodId,
-                    FoodName = fe.Food.Name,
-                    Proteins = fe.Food.Proteins,
-                    Carbs = fe.Food.Carbs,
-                    Fats = fe.Food.Fats,
-                    Calories = fe.Food.Calories,
-                    FoodEntryId = fe.Id
-                }).ToList(),
-                TotalProteins = proteins,
-                TotalCarbs = carbs,
-                TotalFats = fats,
-                TotalCalories = calories
-            };
+            var mealResponse = new GetMealEntriesByDateAndTypeResponse(
+                meal.Id,
+                meal.MealType,
+                meal.FoodEntries.Select(fe => new FoodEntryResponse(
+                    fe.FoodId,
+                    fe.Food.Name,
+                    fe.Food.Proteins,
+                    fe.Food.Carbs,
+                    fe.Food.Fats,
+                    fe.Food.Calories,
+                    fe.Id
+                )).ToList(),
+                proteins,
+                carbs,
+                fats,
+                calories
+            );
 
             return mealResponse;
         }

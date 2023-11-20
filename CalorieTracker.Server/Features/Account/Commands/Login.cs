@@ -37,12 +37,10 @@ public static class Login
 
             return new OperationResult<LoginResponse>
             {
-                Result = new LoginResponse
-                {
-                    Id = user!.Id,
-                    Username = user.UserName!,
-                    Email = user.Email!
-                }
+                Result = new LoginResponse(
+                    user!.Id,
+                    user.UserName!,
+                    user.Email!)
             };
         }
     }

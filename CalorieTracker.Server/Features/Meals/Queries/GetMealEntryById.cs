@@ -27,16 +27,15 @@ public static class GetMealEntryById
                 return null;
             }
 
-            return new GetMealEntryByIdResponse
-            {
-                FoodMealEntryId = foodEntry.Id,
-                MealType = foodEntry.Meal.MealType,
-                FoodName = foodEntry.Food.Name,
-                Proteins = foodEntry.Food.Proteins,
-                Carbs = foodEntry.Food.Carbs,
-                Fats = foodEntry.Food.Fats,
-                Calories = foodEntry.Food.Calories,
-            };
+            return new GetMealEntryByIdResponse(
+                foodEntry.Id,
+                foodEntry.Meal.MealType,
+                foodEntry.Food.Name,
+                foodEntry.Food.Proteins,
+                foodEntry.Food.Carbs,
+                foodEntry.Food.Fats,
+                foodEntry.Food.Calories
+            );
         }
     }
 }
