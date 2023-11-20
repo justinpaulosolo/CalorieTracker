@@ -41,7 +41,7 @@ const newEntryFormScheme = z.object({
 
 type NewEntryFormValues = z.infer<typeof newEntryFormScheme>;
 
-function FoodEntryForm() {
+function MealFoodEntryForm() {
   const [currentDate] = useCurrentDate();
   const createMealEntry = useCreateMealEntry();
   const form = useForm<NewEntryFormValues>({
@@ -184,4 +184,4 @@ function FoodEntryForm() {
   );
 }
 
-export default FoodEntryForm;
+export default MealFoodEntryForm;
