@@ -1,8 +1,8 @@
-import EditMealFoodEntryForm from "@/components/edit-meal-food-entry-form";
+import EditMealEntryForm from "@/components/edit-meal-entry-form";
 import { useGetMealEntriesById } from "@/utils/services/meal-services";
 import { useParams } from "react-router-dom";
 
-export default function EditFoodEntryPage() {
+export default function EditMealEntryPage() {
   const { id } = useParams();
   const foodEntryId = Number(id);
   const { data, isLoading, error } = useGetMealEntriesById({ foodEntryId });
@@ -15,5 +15,5 @@ export default function EditFoodEntryPage() {
     return <div>Something went wrong: {error.message}</div>;
   }
 
-  return <EditMealFoodEntryForm data={data} />;
+  return <EditMealEntryForm mealEntry={data} />;
 }

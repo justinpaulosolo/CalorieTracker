@@ -21,7 +21,7 @@ export type MealEntryType = {
   proteins: string;
 };
 
-export type EditFoodEntry = {
+export type EditMealEntry = {
   foodMealEntryId: number;
   mealType: string;
   foodName: string;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateMealEntry, EditFoodEntry } from "../types";
+import { CreateMealEntry, EditMealEntry } from "../types";
 import useCurrentDate from "../hooks/useCurrentDate";
 
 interface DeleteMealEntryVariables {
@@ -87,7 +87,7 @@ export function useGetMealEntriesById({
 
 export function useEditMealEntry() {
   const queryClient = useQueryClient();
-  return useMutation<void, unknown, EditFoodEntry>({
+  return useMutation<void, unknown, EditMealEntry>({
     mutationFn: async ({ foodMealEntryId, ...mealEntry }) => {
       const response = await axios.put(
         `/api/meals/edit/${foodMealEntryId}`,

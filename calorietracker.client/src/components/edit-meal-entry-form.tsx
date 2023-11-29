@@ -19,10 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { EditFoodEntry, MealEntryTypeEnums } from "@/utils/types";
+import { EditMealEntry, MealEntryTypeEnums } from "@/utils/types";
 import { useEditMealEntry } from "@/utils/services/meal-services";
+import { useNavigate } from "react-router-dom";
 
-const editFoodEntrySchema = z.object({
+const editMealEntrySchema = z.object({
   mealFoodEntryId: z.number(),
   mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Other"], {
     required_error: "Please select a meal.",
@@ -40,39 +41,46 @@ const editFoodEntrySchema = z.object({
   }),
 });
 
-type EditFoodEntryFormValues = z.infer<typeof editFoodEntrySchema>;
+type EditMealEntryFormValues = z.infer<typeof editMealEntrySchema>;
 
-export default function EditMealFoodEntryForm({
-  data,
-}: {
-  data: EditFoodEntry;
-}) {
+interface EditMealEntryFormProps {
+  mealEntry: EditMealEntry;
+}
+
+export default function EditMealEntryForm(
+  EditMealEntryFormProps: EditMealEntryFormProps
+) {
+  const mealEntry = EditMealEntryFormProps.mealEntry;
   const editMealEntry = useEditMealEntry();
-  const form = useForm<EditFoodEntryFormValues>({
-    resolver: zodResolver(editFoodEntrySchema),
+  const navigate = useNavigate();
+
+  const form = useForm<EditMealEntryFormValues>({
+    resolver: zodResolver(editMealEntrySchema),
     defaultValues: {
-      mealFoodEntryId: data.foodMealEntryId,
-      mealType: data.mealType as MealEntryTypeEnums,
-      name: data.foodName,
+      mealFoodEntryId: mealEntry.foodMealEntryId,
+      mealType: mealEntry.mealType as MealEntryTypeEnums,
+      name: mealEntry.foodName,
+      proteins: mealEntry.proteins,
+      carbohydrates: mealEntry.carbohydrates,
+      fats: mealEntry.fats,
+      calories: mealEntry.calories,
+    },
+  });
+
+  async function onSubmit(data: EditMealEntryFormValues) {
+    const payload: EditMealEntry = {
+      foodMealEntryId: data.mealFoodEntryId,
+      mealType: data.mealType,
+      foodName: data.name,
       proteins: data.proteins,
       carbohydrates: data.carbohydrates,
       fats: data.fats,
       calories: data.calories,
-    },
-  });
-
-  async function onSubmit(formData: EditFoodEntryFormValues) {
-    const payload: EditFoodEntry = {
-      foodMealEntryId: formData.mealFoodEntryId,
-      mealType: formData.mealType,
-      foodName: formData.name,
-      proteins: formData.proteins,
-      carbohydrates: formData.carbohydrates,
-      fats: formData.fats,
-      calories: formData.calories,
-      date: data.date,
+      date: mealEntry.date,
     };
-    await editMealEntry.mutateAsync(payload);
+    await editMealEntry.mutateAsync(payload, {
+      onSuccess: () => navigate("/"),
+    });
   }
 
   return (
@@ -121,7 +129,7 @@ export default function EditMealFoodEntryForm({
             name="proteins"
             render={({ field }) => (
               <FormItem className="align-middle">
-                <FormLabel>Protein</FormLabel>
+                <FormLabel>Proteins</FormLabel>
                 <FormControl>
                   <Input {...field} type="number" className="w-20 rounded-lg" />
                 </FormControl>
@@ -134,7 +142,7 @@ export default function EditMealFoodEntryForm({
             name="carbohydrates"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cabs</FormLabel>
+                <FormLabel>Carbohydrates</FormLabel>
                 <FormControl>
                   <Input {...field} className="w-20 rounded-lg" />
                 </FormControl>
