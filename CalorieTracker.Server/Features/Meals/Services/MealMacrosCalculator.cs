@@ -25,6 +25,6 @@ public class MealMacrosCalculator : IMealMacrosCalculator
 
     public (int Proteins, int Carbs, int Fats, int Calories) CalculateMacros(MealFoodEntry foodEntry)
     {
-        return (foodEntry.Food.Proteins * foodEntry.Quantity, foodEntry.Food.Carbohydrates * foodEntry.Quantity, foodEntry.Food.Fats * foodEntry.Quantity, foodEntry.Food.Calories * foodEntry.Quantity);
+        return (foodEntry.Food.Protein * foodEntry.Quantity, foodEntry.Food.Carbohydrates * foodEntry.Quantity, foodEntry.Food.Fat * foodEntry.Quantity, foodEntry.Food.Calories * foodEntry.Quantity);
     }
 }

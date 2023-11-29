@@ -45,9 +45,9 @@ public static class GetMealEntriesByDateAndType
                     meal.MealType,
                     fe.FoodId,
                     fe.Food.Name,
-                    fe.Food.Proteins,
+                    fe.Food.Protein,
                     fe.Food.Carbohydrates,
-                    fe.Food.Fats,
+                    fe.Food.Fat,
                     fe.Food.Calories,
                     fe.Id
                 )).ToList(),

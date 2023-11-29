@@ -47,9 +47,9 @@ public static class EditMealEntry
 
             var food = foodEntry.Food;
             food.Name = request.FoodName;
-            food.Proteins = request.Proteins;
+            food.Protein = request.Proteins;
             food.Carbohydrates = request.Carbohydrates;
-            food.Fats = request.Fats;
+            food.Fat = request.Fats;
             food.Calories = request.Calories;
 
             var meal = await dbContext.UserMeals

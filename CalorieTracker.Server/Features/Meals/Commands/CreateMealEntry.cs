@@ -77,8 +77,8 @@ public static class CreateMealEntry
         private async Task<FoodItem> GetOrCreateFood(Command command, CancellationToken cancellationToken)
         {
             var existingFood = await dbContext.FoodItems.FirstOrDefaultAsync(f =>
-                f.Name == command.FoodName && f.Proteins == command.Proteins && f.Carbohydrates == command.Carbs &&
-                f.Fats == command.Fats && f.Calories == command.Calories, cancellationToken: cancellationToken);
+                f.Name == command.FoodName && f.Protein == command.Proteins && f.Carbohydrates == command.Carbs &&
+                f.Fat == command.Fats && f.Calories == command.Calories, cancellationToken: cancellationToken);
 
             if (existingFood != null)
             {
@@ -88,9 +88,9 @@ public static class CreateMealEntry
             var food = new FoodItem
             {
                 Name = command.FoodName,
-                Proteins = command.Proteins,
+                Protein = command.Proteins,
                 Carbohydrates = command.Carbs,
-                Fats = command.Fats,
+                Fat = command.Fats,
                 Calories = command.Calories
             };
 
