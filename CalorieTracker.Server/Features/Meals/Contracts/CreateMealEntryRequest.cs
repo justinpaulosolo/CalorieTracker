@@ -5,7 +5,7 @@ public record CreateMealEntryRequest(
     DateTime Date,
     string Name,
     int Proteins,
-    int Carbs,
+    int Carbohydrates,
     int Fats,
     int Calories,
     int Quantity

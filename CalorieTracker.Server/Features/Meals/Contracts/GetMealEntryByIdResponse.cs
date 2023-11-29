@@ -5,7 +5,8 @@ public record GetMealEntryByIdResponse(
     string MealType,
     string FoodName,
     int Proteins,
-    int Carbs,
+    int Carbohydrates,
     int Fats,
-    int Calories
+    int Calories,
+    DateTime Date
 );

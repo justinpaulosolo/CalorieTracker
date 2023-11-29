@@ -32,9 +32,10 @@ public static class GetMealEntryById
                 foodEntry.Meal.MealType,
                 foodEntry.Food.Name,
                 foodEntry.Food.Proteins,
-                foodEntry.Food.Carbs,
+                foodEntry.Food.Carbohydrates,
                 foodEntry.Food.Fats,
-                foodEntry.Food.Calories
+                foodEntry.Food.Calories,
+                foodEntry.Meal.Date
             );
         }
     }

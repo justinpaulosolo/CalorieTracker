@@ -62,7 +62,7 @@ function MealFoodEntryForm() {
       date: currentDate,
       name: data.name,
       proteins: data.proteins,
-      carbs: data.carbohydrates,
+      carbohydrates: data.carbohydrates,
       fats: data.fats,
       calories: data.calories,
       quantity: 1,

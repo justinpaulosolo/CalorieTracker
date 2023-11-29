@@ -18,17 +18,15 @@ public static class EditMealEntry
 
         public DateTime Date { get; init; }
 
-        public string Name { get; init; } = default!;
+        public string FoodName { get; init; } = default!;
 
         public int Proteins { get; init; }
 
-        public int Carbs { get; init; }
+        public int Carbohydrates { get; init; }
 
         public int Fats { get; init; }
 
         public int Calories { get; init; }
-
-        public int Quantity { get; init; }
 
         public string UserId { get; set; } = default!;
     }
@@ -48,9 +46,9 @@ public static class EditMealEntry
             }
 
             var food = foodEntry.Food;
-            food.Name = request.Name;
+            food.Name = request.FoodName;
             food.Proteins = request.Proteins;
-            food.Carbs = request.Carbs;
+            food.Carbohydrates = request.Carbohydrates;
             food.Fats = request.Fats;
             food.Calories = request.Calories;
 
@@ -97,12 +95,11 @@ public class EditMealEntryEndpoint : ICarterModule
                 MealFoodEntryId = mealFoodEntryId,
                 MealType = request.MealType,
                 Date = request.Date,
-                Name = request.Name,
+                FoodName = request.FoodName,
                 Proteins = request.Proteins,
-                Carbs = request.Carbs,
+                Carbohydrates = request.Carbohydrates,
                 Fats = request.Fats,
                 Calories = request.Calories,
-                Quantity = request.Quantity,
                 UserId = userId
             };
 

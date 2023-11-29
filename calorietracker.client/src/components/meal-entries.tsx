@@ -72,7 +72,9 @@ function MealEntry({ mealType }: { mealType: string }) {
               <TableRow>
                 <TableHead className="font-medium">Name</TableHead>
                 <TableHead className="font-medium w-20">Proteins</TableHead>
-                <TableHead className="font-medium w-20">Carbs</TableHead>
+                <TableHead className="font-medium w-20">
+                  Carbohydrates
+                </TableHead>
                 <TableHead className="font-medium w-20">Fats</TableHead>
                 <TableHead className="font-medium w-20">Calories</TableHead>
               </TableRow>
@@ -82,7 +84,7 @@ function MealEntry({ mealType }: { mealType: string }) {
                 <TableRow key={entry.foodEntryId}>
                   <TableCell>{entry.foodName}</TableCell>
                   <TableCell>{entry.proteins}</TableCell>
-                  <TableCell>{entry.carbs}</TableCell>
+                  <TableCell>{entry.carbohydrates}</TableCell>
                   <TableCell>{entry.fats}</TableCell>
                   <TableCell>{entry.calories}</TableCell>
                   <TableCell className="w-20">
@@ -99,7 +101,9 @@ function MealEntry({ mealType }: { mealType: string }) {
                 <TableCell className="font-medium">
                   {data.totalProteins}
                 </TableCell>
-                <TableCell className="font-medium">{data.totalCarbs}</TableCell>
+                <TableCell className="font-medium">
+                  {data.totalCarbohydrates}
+                </TableCell>
                 <TableCell className="font-medium">{data.totalFats}</TableCell>
                 <TableCell className="font-medium">
                   {data.totalCalories}

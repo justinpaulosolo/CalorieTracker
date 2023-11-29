@@ -4,9 +4,9 @@ public record EditMealEntryRequest(
     int MealFoodEntryId,
     string MealType,
     DateTime Date,
-    string Name,
+    string FoodName,
     int Proteins,
-    int Carbs,
+    int Carbohydrates,
     int Fats,
     int Calories,
     int Quantity

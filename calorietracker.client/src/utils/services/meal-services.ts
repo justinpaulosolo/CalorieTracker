@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateMealEntry } from "../types";
+import { CreateMealEntry, EditFoodEntry } from "../types";
 import useCurrentDate from "../hooks/useCurrentDate";
 
 interface DeleteMealEntryVariables {
@@ -66,6 +66,39 @@ export function useGetMealsTotalMacrosByDate({ date }: { date: string }) {
       const response = await axios.get(`/api/meals/${date}/total-macros`);
       const data = response.data;
       return data;
+    },
+  });
+}
+
+export function useGetMealEntriesById({
+  foodEntryId,
+}: {
+  foodEntryId: number;
+}) {
+  return useQuery({
+    queryKey: ["meal-entry", foodEntryId],
+    queryFn: async () => {
+      const response = await axios.get(`/api/meals/${foodEntryId}`);
+      const data = response.data;
+      return data;
+    },
+  });
+}
+
+export function useEditMealEntry() {
+  const queryClient = useQueryClient();
+  return useMutation<void, unknown, EditFoodEntry>({
+    mutationFn: async ({ foodMealEntryId, ...mealEntry }) => {
+      const response = await axios.put(
+        `/api/meals/edit/${foodMealEntryId}`,
+        mealEntry
+      );
+      return response.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["meals", variables.date, variables.mealType],
+      });
     },
   });
 }

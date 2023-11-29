@@ -27,8 +27,8 @@ public static class GetMacroGoal
 
             var macroGoal = new GetMacroGoalResponse(
                 result.Id,
-                result.ProteinGoal,
-                result.CarbsGoal,
+                result.ProteinsGoal,
+                result.CarbohydratesGoal,
                 result.FatsGoal,
                 result.CaloriesGoal);
 

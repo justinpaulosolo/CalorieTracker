@@ -42,8 +42,8 @@ public static class CreateMacroGoal
             var macroGoal = new MacrosGoal()
             {
                 UserId = request.UserId,
-                ProteinGoal = request.ProteinGoal,
-                CarbsGoal = request.CarbsGoal,
+                ProteinsGoal = request.ProteinGoal,
+                CarbohydratesGoal = request.CarbsGoal,
                 FatsGoal = request.FatsGoal,
                 CaloriesGoal = request.CaloriesGoal,
             };

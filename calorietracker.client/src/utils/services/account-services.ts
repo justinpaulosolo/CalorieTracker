@@ -6,7 +6,7 @@ import axios from "axios";
 export function useRegisterUser() {
   return useMutation({
     mutationFn: async (user: RegisterFormInputs) => {
-      const response = await axios.post("api/account/register", user);
+      const response = await axios.post("/api/account/register", user);
       const data = response.data;
       return data;
     },
@@ -16,14 +16,14 @@ export function useRegisterUser() {
 export function useLoginUser() {
   return useMutation({
     mutationFn: (user: LoginFormInputs) =>
-      axios.post("api/account/login", user),
+      axios.post("/api/account/login", user),
   });
 }
 
 export function useLogoutUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => axios.post("api/account/manage/logout"),
+    mutationFn: () => axios.post("/api/account/manage/logout"),
     onSuccess: () => {
       queryClient.setQueryData(["user-info"], null);
     },

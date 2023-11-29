@@ -42,10 +42,11 @@ public static class GetMealEntriesByDateAndType
                 meal.Id,
                 meal.MealType,
                 meal.FoodEntries.Select(fe => new FoodEntryResponse(
+                    meal.MealType,
                     fe.FoodId,
                     fe.Food.Name,
                     fe.Food.Proteins,
-                    fe.Food.Carbs,
+                    fe.Food.Carbohydrates,
                     fe.Food.Fats,
                     fe.Food.Calories,
                     fe.Id
