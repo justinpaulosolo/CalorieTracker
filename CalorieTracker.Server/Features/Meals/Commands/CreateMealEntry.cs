@@ -18,7 +18,7 @@ public static class CreateMealEntry
 
         public DateTime Date { get; init; }
 
-        public string Name { get; init; } = default!;
+        public string FoodName { get; init; } = default!;
 
         public int Proteins { get; init; }
 
@@ -77,7 +77,7 @@ public static class CreateMealEntry
         private async Task<FoodItem> GetOrCreateFood(Command command, CancellationToken cancellationToken)
         {
             var existingFood = await dbContext.FoodItems.FirstOrDefaultAsync(f =>
-                f.Name == command.Name && f.Proteins == command.Proteins && f.Carbohydrates == command.Carbs &&
+                f.Name == command.FoodName && f.Proteins == command.Proteins && f.Carbohydrates == command.Carbs &&
                 f.Fats == command.Fats && f.Calories == command.Calories, cancellationToken: cancellationToken);
 
             if (existingFood != null)
@@ -87,7 +87,7 @@ public static class CreateMealEntry
 
             var food = new FoodItem
             {
-                Name = command.Name,
+                Name = command.FoodName,
                 Proteins = command.Proteins,
                 Carbohydrates = command.Carbs,
                 Fats = command.Fats,
@@ -114,7 +114,7 @@ public class CreateMealEntryEndpoint : ICarterModule
                 UserId = userId,
                 MealType = request.MealType,
                 Date = request.Date,
-                Name = request.Name,
+                FoodName = request.FoodName,
                 Proteins = request.Proteins,
                 Carbs = request.Carbohydrates,
                 Fats = request.Fats,

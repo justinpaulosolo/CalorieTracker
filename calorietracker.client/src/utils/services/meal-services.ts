@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateMealEntry, EditMealEntry } from "../types";
-import useCurrentDate from "../hooks/useCurrentDate";
 
 interface DeleteMealEntryVariables {
   id: number;
@@ -47,13 +46,12 @@ export function useGetMealEntriesByDateAndType({
 }
 
 export function useCreateMealEntry() {
-  const [currentDate] = useCurrentDate();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, CreateMealEntryVariables>({
     mutationFn: ({ mealEntry }) => axios.post("/api/meals", mealEntry),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["meals", currentDate, variables.mealType],
+        queryKey: ["meals", variables.mealEntry.date, variables.mealType],
       });
     },
   });

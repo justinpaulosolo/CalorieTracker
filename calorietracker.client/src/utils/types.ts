@@ -1,7 +1,7 @@
 export type CreateMealEntry = {
   mealType: string;
   date: string;
-  name: string;
+  foodName: string;
   proteins: number;
   carbohydrates: number;
   fats: number;
