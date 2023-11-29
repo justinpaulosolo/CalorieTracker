@@ -34,7 +34,7 @@ export function useGetUserInfo() {
   return useQuery({
     queryKey: ["user-info"],
     queryFn: async () => {
-      const response = await axios.get("api/account/manage/info");
+      const response = await axios.get("/api/account/manage/info");
       const data = response.data;
       return data;
     },
