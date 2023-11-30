@@ -33,7 +33,7 @@ public static class EndpointRouteBuilderExtension
     public static RouteGroupBuilder RegisterFoodDiaryEndpoints(
         this IEndpointRouteBuilder endpoints)
     {
-        var foodDiaryEndpoints = endpoints.MapGroup("/api/diary/");
+        var foodDiaryEndpoints = endpoints.MapGroup("/api/diary");
         foodDiaryEndpoints.WithTags("FoodDiary");
         foodDiaryEndpoints.WithOpenApi();
         foodDiaryEndpoints.RequireAuthorization();
