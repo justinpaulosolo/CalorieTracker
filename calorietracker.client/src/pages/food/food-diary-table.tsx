@@ -4,13 +4,15 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FoodDiary } from "@/utils/types";
+import { Food, FoodDiary } from "@/utils/types";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 
 type FoodDiaryTableProps = {
   data?: FoodDiary;
@@ -18,9 +20,28 @@ type FoodDiaryTableProps = {
   date?: string;
 };
 
-export default function FoodDiaryTable(props: FoodDiaryTableProps) {
-  const { data, title, date } = props;
-  console.log(data);
+function calculateTotal(foods: Food[], key: keyof Food) {
+  return foods.reduce((total, food) => total + Number(food[key]), 0);
+}
+
+export default function FoodDiaryTable({
+  data,
+  title,
+  date,
+}: FoodDiaryTableProps) {
+  const totalProtein = useMemo(
+    () => calculateTotal(data!.foods, "protein"),
+    [data]
+  );
+  const totalCarbs = useMemo(
+    () => calculateTotal(data!.foods, "carbs"),
+    [data]
+  );
+  const totalFat = useMemo(() => calculateTotal(data!.foods, "fat"), [data]);
+  const totalCalories = useMemo(
+    () => calculateTotal(data!.foods, "calories"),
+    [data]
+  );
   return (
     <Card>
       <CardHeader>
@@ -62,15 +83,15 @@ export default function FoodDiaryTable(props: FoodDiaryTableProps) {
               </TableRow>
             ))}
           </TableBody>
-          {/* <TableFooter>
+          <TableFooter className="bg-secondary text-black">
             <TableRow>
               <TableCell colSpan={1}>Total</TableCell>
-              <TableCell className="text-right">40</TableCell>
-              <TableCell className="text-right">60</TableCell>
-              <TableCell className="text-right">20</TableCell>
-              <TableCell className="text-right">1000</TableCell>
+              <TableCell className="text-right">{totalProtein}</TableCell>
+              <TableCell className="text-right">{totalCarbs}</TableCell>
+              <TableCell className="text-right">{totalFat}</TableCell>
+              <TableCell className="text-right">{totalCalories}</TableCell>
             </TableRow>
-          </TableFooter> */}
+          </TableFooter>
         </Table>
       </CardContent>
     </Card>
