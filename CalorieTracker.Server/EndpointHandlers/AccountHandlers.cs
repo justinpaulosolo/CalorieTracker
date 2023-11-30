@@ -13,7 +13,7 @@ public static class AccountHandlers
     {
         var user = new ApplicationUser
         {
-            UserName = registerUserDto.Email,
+            UserName = registerUserDto.Username,
             Email = registerUserDto.Email
         };
 
