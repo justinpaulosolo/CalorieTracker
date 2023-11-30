@@ -12,7 +12,7 @@ import {
 import { Food, FoodDiary } from "@/utils/types";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
-import { useCallback, useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type FoodDiaryTableProps = {
   data?: FoodDiary;
@@ -37,6 +46,10 @@ export default function FoodDiaryTable({
   title,
   date,
 }: FoodDiaryTableProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(
+    undefined
+  );
   const totalProtein = useMemo(
     () => calculateTotal(data?.foods || [], "protein"),
     [data]
@@ -54,13 +67,6 @@ export default function FoodDiaryTable({
     [data]
   );
 
-  const handleDelete = useCallback((foodId: number) => {
-    console.log(foodId, "delete");
-  }, []);
-
-  const handleEdit = useCallback((foodId: number) => {
-    console.log(foodId, "edit");
-  }, []);
   return (
     <Card>
       <CardHeader>
@@ -109,16 +115,45 @@ export default function FoodDiaryTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem onClick={() => handleEdit(food.foodId)}>
-                        Edit
-                      </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => handleDelete(food.foodId)}
+                        onSelect={() => {
+                          setSelectedFoodId(food.foodId);
+                          setShowDeleteDialog(true);
+                        }}
+                        className="text-red-600 cursor-pointer"
                       >
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  <AlertDialog
+                    open={showDeleteDialog}
+                    onOpenChange={setShowDeleteDialog}
+                  >
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you sure absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            console.log(selectedFoodId, "delete");
+                            setSelectedFoodId(undefined);
+                            setShowDeleteDialog(false);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}
