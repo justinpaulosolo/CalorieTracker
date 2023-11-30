@@ -1,12 +1,11 @@
-import { LoginFormInputs } from "@/pages/LoginPage";
-import { RegisterFormInputs } from "@/pages/RegisterPage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { Login, Register } from "../types";
 
 export function useRegisterUser() {
   return useMutation({
-    mutationFn: async (user: RegisterFormInputs) => {
-      const response = await axios.post("/api/account/register", user);
+    mutationFn: async (payload: Register) => {
+      const response = await axios.post("/api/account/register", payload);
       const data = response.data;
       return data;
     },
@@ -15,8 +14,7 @@ export function useRegisterUser() {
 
 export function useLoginUser() {
   return useMutation({
-    mutationFn: (user: LoginFormInputs) =>
-      axios.post("/api/account/login", user),
+    mutationFn: (payload: Login) => axios.post("/api/account/login", payload),
   });
 }
 
