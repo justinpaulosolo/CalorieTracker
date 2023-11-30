@@ -1,4 +1,6 @@
-﻿namespace CalorieTracker.Server.Extensions;
+﻿using CalorieTracker.Server.EndpointHandlers;
+
+namespace CalorieTracker.Server.Extensions;
 
 public static class EndpointRouteBuilderExtension
 {

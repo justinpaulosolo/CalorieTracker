@@ -13,14 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCreateFoodDiaryEntry } from "@/utils/services/food-diary-services";
-import { useTestingMutation } from "@/utils/services/testing-services";
 import { Icons } from "@/components/icons";
 
 const foodQuickAddFormSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  meal: z.number().nonnegative().int(),
+  mealTypeId: z.number().nonnegative().int(),
   foodName: z.string(),
   protein: z.coerce.number().int().min(0).max(999),
   carbs: z.coerce.number().int().min(0).max(999),
@@ -42,12 +41,13 @@ export default function FoodQuickAddForm() {
     date: string;
     meal: string;
   }>();
-  const { mutate, isPending } = useTestingMutation();
+  const { mutate, isPending } = useCreateFoodDiaryEntry();
+  const navigate = useNavigate();
 
   const form = useForm<FoodQuickAddFormValues>({
     resolver: zodResolver(foodQuickAddFormSchema),
     defaultValues: {
-      meal: MealType[meal as keyof typeof MealType],
+      mealTypeId: MealType[meal as keyof typeof MealType],
       foodName: "",
       protein: 0,
       carbs: 0,
@@ -59,7 +59,11 @@ export default function FoodQuickAddForm() {
 
   function onSubmit(values: FoodQuickAddFormValues) {
     console.log(values);
-    mutate();
+    mutate(values, {
+      onSuccess: () => {
+        navigate("/food/diary");
+      },
+    });
   }
 
   return (
@@ -70,7 +74,7 @@ export default function FoodQuickAddForm() {
       >
         <FormField
           control={form.control}
-          name="meal"
+          name="mealTypeId"
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between">

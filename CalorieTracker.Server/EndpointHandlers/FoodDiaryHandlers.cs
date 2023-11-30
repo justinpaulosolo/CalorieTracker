@@ -3,7 +3,7 @@ using CalorieTracker.Server.Data;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalorieTracker.Server;
+namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class FoodDiaryHandlers
 {
@@ -17,7 +17,7 @@ public static class FoodDiaryHandlers
         var diary = await applicationDbContext.Diaries
             .Include(d => d.FoodDiaries)
             .FirstOrDefaultAsync(d => d.UserId == userId
-                && d.Date == createFoodDiaryDto.Date);
+                                      && d.Date == createFoodDiaryDto.Date);
 
         if (diary == null)
         {
@@ -28,12 +28,13 @@ public static class FoodDiaryHandlers
                 FoodDiaries = new List<FoodDiary>()
             };
             await applicationDbContext.Diaries.AddAsync(diary);
+            await applicationDbContext.SaveChangesAsync();
         }
 
         var foodDiary = await applicationDbContext.FoodDiaries
             .FirstOrDefaultAsync(fd => fd.MealTypeId == createFoodDiaryDto.MealTypeId
-                && fd.Diary.UserId == userId
-                && fd.Diary.Date.Date == createFoodDiaryDto.Date.Date);
+                                       && fd.Diary.UserId == userId
+                                       && fd.Diary.Date.Date == createFoodDiaryDto.Date.Date);
 
         if (foodDiary == null)
         {
@@ -44,6 +45,7 @@ public static class FoodDiaryHandlers
                 Foods = new List<Food>()
             };
             await applicationDbContext.FoodDiaries.AddAsync(foodDiary);
+            await applicationDbContext.SaveChangesAsync();
         }
 
         var food = new Food
@@ -54,8 +56,9 @@ public static class FoodDiaryHandlers
             Fat = createFoodDiaryDto.Fat,
             Carbs = createFoodDiaryDto.Carbs
         };
-        foodDiary.Foods.Add(food);
 
+        foodDiary.Foods.Add(food);
+        await applicationDbContext.Foods.AddAsync(food);
         await applicationDbContext.SaveChangesAsync();
 
         return TypedResults.CreatedAtRoute(
@@ -63,5 +66,6 @@ public static class FoodDiaryHandlers
             "GetFoodDiary",
             new { foodDiaryId = foodDiary.FoodDiaryId });
     }
+
 
 }

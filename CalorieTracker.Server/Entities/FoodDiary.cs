@@ -9,5 +9,4 @@ public class FoodDiary
 
     // Navigation properties
     public Diary Diary { get; set; }
-    public Food Food { get; set; }
 }

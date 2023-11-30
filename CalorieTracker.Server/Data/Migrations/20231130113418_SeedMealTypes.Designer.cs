@@ -3,6 +3,7 @@ using System;
 using CalorieTracker.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130113418_SeedMealTypes")]
+    partial class SeedMealTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -244,12 +247,17 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.Property<int>("DiaryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("FoodId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MealTypeId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("FoodDiaryId");
 
                     b.HasIndex("DiaryId");
+
+                    b.HasIndex("FoodId");
 
                     b.ToTable("FoodDiaries");
                 });
@@ -475,7 +483,15 @@ namespace CalorieTracker.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CalorieTracker.Server.Food", "Food")
+                        .WithMany()
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Diary");
+
+                    b.Navigation("Food");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
