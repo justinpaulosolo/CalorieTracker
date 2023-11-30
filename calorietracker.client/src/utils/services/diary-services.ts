@@ -15,13 +15,12 @@ export function useGetFoodDiaryByDate(date: string) {
     queryKey: ["food-diary", date],
     queryFn: async () => {
       await new Promise(resolve => setTimeout(resolve, 500));
-
       const response = await axios.get(`/api/diary/${date}/food`);
       const data: Diary = response.data;
       return data;
     },
+    retry: false,
   });
-
   return {
     ...queryInfo,
     breakfast: useMemo(

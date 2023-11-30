@@ -30,18 +30,22 @@ export default function FoodDiaryTable({
   date,
 }: FoodDiaryTableProps) {
   const totalProtein = useMemo(
-    () => calculateTotal(data!.foods, "protein"),
+    () => calculateTotal(data?.foods || [], "protein"),
     [data]
   );
   const totalCarbs = useMemo(
-    () => calculateTotal(data!.foods, "carbs"),
+    () => calculateTotal(data?.foods || [], "carbs"),
     [data]
   );
-  const totalFat = useMemo(() => calculateTotal(data!.foods, "fat"), [data]);
+  const totalFat = useMemo(
+    () => calculateTotal(data?.foods || [], "fat"),
+    [data]
+  );
   const totalCalories = useMemo(
-    () => calculateTotal(data!.foods, "calories"),
+    () => calculateTotal(data?.foods || [], "calories"),
     [data]
   );
+
   return (
     <Card>
       <CardHeader>
