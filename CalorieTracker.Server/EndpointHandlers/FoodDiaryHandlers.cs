@@ -92,6 +92,7 @@ public static class FoodDiaryHandlers
             Foods = foodDiary.FoodDiaryEntries.Select(fde => new FoodDto
             {
                 FoodId = fde.Food.FoodId,
+                FoodDiaryEntryId = fde.FoodDiaryEntryId,
                 Name = fde.Food.Name,
                 Calories = fde.Food.Calories,
                 Protein = fde.Food.Protein,
@@ -131,6 +132,7 @@ public static class FoodDiaryHandlers
             Foods = foodDiary.FoodDiaryEntries.Select(f => new FoodDto
             {
                 FoodId = f.FoodId,
+                FoodDiaryEntryId = f.FoodDiaryEntryId,
                 Name = f.Food.Name,
                 Calories = f.Food.Calories,
                 Protein = f.Food.Protein,

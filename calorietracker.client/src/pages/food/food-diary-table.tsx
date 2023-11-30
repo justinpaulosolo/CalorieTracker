@@ -30,6 +30,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useDeleteFoodDiaryEntry } from "@/utils/services/food-diary-services";
+import { Icons } from "@/components/icons";
 
 type FoodDiaryTableProps = {
   data?: FoodDiary;
@@ -50,6 +52,7 @@ export default function FoodDiaryTable({
   const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(
     undefined
   );
+  const { mutate, isPending } = useDeleteFoodDiaryEntry();
   const totalProtein = useMemo(
     () => calculateTotal(data?.foods || [], "protein"),
     [data]
@@ -145,11 +148,16 @@ export default function FoodDiaryTable({
                           variant="destructive"
                           onClick={() => {
                             console.log(selectedFoodId, "delete");
+                            mutate(food.foodDiaryEntryId);
                             setSelectedFoodId(undefined);
                             setShowDeleteDialog(false);
                           }}
                         >
-                          Delete
+                          {isPending ? (
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            "Delete"
+                          )}
                         </Button>
                       </AlertDialogFooter>
                     </AlertDialogContent>

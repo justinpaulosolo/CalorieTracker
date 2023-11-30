@@ -37,6 +37,7 @@ public static class DiaryHandlers
             Foods = fd.FoodDiaryEntries.Select(f => new FoodDto
             {
                 FoodId = f.FoodId,
+                FoodDiaryEntryId = f.FoodDiaryEntryId,
                 Name = f.Food.Name,
                 Calories = f.Food.Calories,
                 Protein = f.Food.Protein,

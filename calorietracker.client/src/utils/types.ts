@@ -24,6 +24,7 @@ export type Diary = {
 
 export type Food = {
   foodId: number;
+  foodDiaryEntryId: number;
   name: string;
   protein: number;
   carbs: number;

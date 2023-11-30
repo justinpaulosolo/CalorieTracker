@@ -21,3 +21,16 @@ export function useGetFoodDiaryByDate(date: string) {
     queryFn: () => axios.get(`/api/diary/food/${date}`),
   });
 }
+
+export function useDeleteFoodDiaryEntry() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (foodDiaryEntryId: number) =>
+      axios.delete(`/api/food-diary-entry/${foodDiaryEntryId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["food-diary"],
+      });
+    },
+  });
+}
