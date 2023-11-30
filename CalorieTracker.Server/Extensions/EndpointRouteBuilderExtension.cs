@@ -44,6 +44,10 @@ public static class EndpointRouteBuilderExtension
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
 
+        foodDiaryEndpoints.MapGet("/date/{date}", FoodDiaryHandlers.GetFoodDiaryByDateAsync)
+            .WithSummary("Get a food diary entry by date")
+            .WithDescription("Retrieves a food diary entry for the current user by date");
+        
         return foodDiaryEndpoints;
     }
 

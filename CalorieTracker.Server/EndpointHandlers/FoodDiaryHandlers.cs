@@ -68,6 +68,22 @@ public static class FoodDiaryHandlers
             "GetFoodDiary",
             new { foodDiaryId = foodDiary.FoodDiaryId });
     }
+    
+    public static async Task<Ok<Diary>> GetFoodDiaryByDateAsync(
+        ApplicationDbContext applicationDbContext,
+        DateTime date,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var diary = await applicationDbContext.Diaries
+            .Include(d => d.FoodDiaries)
+            .ThenInclude(fd => fd.Foods)
+            .FirstOrDefaultAsync(d => d.UserId == userId
+                                      && d.Date.Date == date.Date);
+
+        return TypedResults.Ok(diary);
+    }
 
 
 }
