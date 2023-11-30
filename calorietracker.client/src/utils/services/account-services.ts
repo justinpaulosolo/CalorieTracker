@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Login, Register } from "../types";
+import { Login, Register, User } from "../types";
 
 export function useRegisterUser() {
   return useMutation({
@@ -21,19 +21,19 @@ export function useLoginUser() {
 export function useLogoutUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => axios.post("/api/account/manage/logout"),
+    mutationFn: () => axios.post("/api/account/logout"),
     onSuccess: () => {
-      queryClient.setQueryData(["user-info"], null);
+      queryClient.setQueryData(["user"], null);
     },
   });
 }
 
-export function useGetUserInfo() {
+export function useGetUserDetails() {
   return useQuery({
-    queryKey: ["user-info"],
+    queryKey: ["user"],
     queryFn: async () => {
-      const response = await axios.get("/api/account/manage/info");
-      const data = response.data;
+      const response = await axios.get("/api/account/user");
+      const data: User = response.data;
       return data;
     },
     refetchOnWindowFocus: false,

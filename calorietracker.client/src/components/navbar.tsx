@@ -14,12 +14,12 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar.tsx";
 import {
-  useGetUserInfo,
+  useGetUserDetails,
   useLogoutUser,
 } from "@/utils/services/account-services";
 
 export default function Navbar() {
-  const { data } = useGetUserInfo();
+  const { data } = useGetUserDetails();
   const logout = useLogoutUser();
 
   return (

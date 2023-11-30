@@ -9,6 +9,12 @@ export type Login = {
   password: string;
 };
 
+export type User = {
+  userId: string;
+  username: string;
+  email: string;
+};
+
 export type CreateMealEntry = {
   mealType: string;
   date: string;

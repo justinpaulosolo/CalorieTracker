@@ -1,16 +1,16 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import Navbar from "./navbar";
-import { useGetUserInfo } from "@/utils/services/account-services";
+import { useGetUserDetails } from "@/utils/services/account-services";
 
 function PrivateRoute() {
-  const { data, isLoading } = useGetUserInfo();
+  const { data: User, isLoading } = useGetUserDetails();
   const outlet = useOutlet();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
+  if (!User) {
     return <Navigate to="/login" replace />;
   }
 
