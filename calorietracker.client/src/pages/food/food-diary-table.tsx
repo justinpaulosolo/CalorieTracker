@@ -98,6 +98,7 @@ export default function FoodDiaryTable({
               <TableHead className="font-medium w-20 text-right">
                 Calories
               </TableHead>
+              <TableHead className="w-20"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
