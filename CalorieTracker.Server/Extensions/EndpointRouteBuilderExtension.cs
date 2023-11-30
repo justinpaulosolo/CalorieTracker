@@ -66,4 +66,18 @@ public static class EndpointRouteBuilderExtension
         return diaryEndpoints;
     }
 
+    public static RouteGroupBuilder RegisterFoodDiaryEntryEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
+    {
+        var foodDiaryEntryEndpoints = endpointRouteBuilder.MapGroup("/api/food-diary-entry");
+        foodDiaryEntryEndpoints.WithTags("FoodDiaryEntry");
+        foodDiaryEntryEndpoints.WithOpenApi();
+        foodDiaryEntryEndpoints.RequireAuthorization();
+        
+        foodDiaryEntryEndpoints.MapDelete("/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsync)
+            .WithSummary("Delete a food diary entry")
+            .WithDescription("Deletes a food diary entry for the current user by ID");
+        
+        return foodDiaryEntryEndpoints;
+    }
+
 }

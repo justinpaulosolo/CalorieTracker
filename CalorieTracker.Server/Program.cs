@@ -66,6 +66,7 @@ app.UseHttpsRedirection();
 app.RegisterAccountEndpoints();
 app.RegisterFoodDiaryEndpoints();
 app.RegisterDiaryEndpoints();
+app.RegisterFoodDiaryEntryEndpoints();
 
 app.MapCarter();
 
