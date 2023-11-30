@@ -14,6 +14,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { useParams } from "react-router-dom";
+import { useCreateFoodDiaryEntry } from "@/utils/services/food-diary-services";
+import { useTestingMutation } from "@/utils/services/testing-services";
+import { Icons } from "@/components/icons";
 
 const foodQuickAddFormSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -32,17 +35,16 @@ enum MealType {
   Snack = 4,
 }
 
-type FoodQuickAddFormSchema = z.infer<typeof foodQuickAddFormSchema>;
-
-let renderCount = 0;
+export type FoodQuickAddFormValues = z.infer<typeof foodQuickAddFormSchema>;
 
 export default function FoodQuickAddForm() {
   const { date, meal } = useParams<{
     date: string;
     meal: string;
   }>();
+  const { mutate, isPending } = useTestingMutation();
 
-  const form = useForm<FoodQuickAddFormSchema>({
+  const form = useForm<FoodQuickAddFormValues>({
     resolver: zodResolver(foodQuickAddFormSchema),
     defaultValues: {
       meal: MealType[meal as keyof typeof MealType],
@@ -55,15 +57,13 @@ export default function FoodQuickAddForm() {
     },
   });
 
-  function onSubmit(values: FoodQuickAddFormSchema) {
+  function onSubmit(values: FoodQuickAddFormValues) {
     console.log(values);
+    mutate();
   }
-
-  renderCount++;
 
   return (
     <Form {...form}>
-      <h1>{renderCount / 2}</h1>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-4"
@@ -102,6 +102,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <FormField
+          disabled={isPending}
           control={form.control}
           name="foodName"
           render={({ field }) => (
@@ -116,6 +117,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <FormField
+          disabled={isPending}
           control={form.control}
           name="protein"
           render={({ field }) => (
@@ -131,6 +133,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <FormField
+          disabled={isPending}
           control={form.control}
           name="carbs"
           render={({ field }) => (
@@ -146,6 +149,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <FormField
+          disabled={isPending}
           control={form.control}
           name="fat"
           render={({ field }) => (
@@ -161,6 +165,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <FormField
+          disabled={isPending}
           control={form.control}
           name="calories"
           render={({ field }) => (
@@ -175,7 +180,13 @@ export default function FoodQuickAddForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={isPending} type="submit">
+          {isPending ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </Form>
   );

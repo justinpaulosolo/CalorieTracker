@@ -22,9 +22,10 @@ export default function AddFoodEntryPage() {
       <TabsContent value="quickadd">
         <Card>
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>Food Diary</CardTitle>
             <CardDescription>
-              Make changes to your account here. Click save when you're done.
+              Add a food entry to your diary. You can add a new food or select
+              from your foods.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
