@@ -45,7 +45,6 @@ public static class EndpointRouteBuilderExtension
             .WithDescription("Creates a food diary entry for the current user");
         
         foodDiaryEndpoints.MapGet("/{foodDiaryId:int}", FoodDiaryHandlers.GetFoodDiaryByIdAsync)
-            .WithName("GetFoodDiaryByIdAsync")
             .WithSummary("Get a food diary entry by ID")
             .WithDescription("Retrieves a food diary entry for the current user by ID");
         
