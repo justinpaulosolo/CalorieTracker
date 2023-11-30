@@ -15,6 +15,29 @@ export type User = {
   email: string;
 };
 
+export type Diary = {
+  diaryId: number;
+  userId: string;
+  date: string;
+  foodDiaries: FoodDiary[];
+};
+
+export type Food = {
+  foodId: string;
+  name: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  calories: number;
+};
+
+export type FoodDiary = {
+  foodDiaryId: number;
+  diaryId: number;
+  mealTypeId: number;
+  foods: Food[];
+};
+
 export type CreateMealEntry = {
   mealType: string;
   date: string;

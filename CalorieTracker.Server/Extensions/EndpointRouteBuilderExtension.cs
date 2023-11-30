@@ -45,6 +45,7 @@ public static class EndpointRouteBuilderExtension
             .WithDescription("Creates a food diary entry for the current user");
         
         foodDiaryEndpoints.MapGet("/{foodDiaryId:int}", FoodDiaryHandlers.GetFoodDiaryByIdAsync)
+            .WithName("GetFoodDiaryByIdAsync")
             .WithSummary("Get a food diary entry by ID")
             .WithDescription("Retrieves a food diary entry for the current user by ID");
         
@@ -58,7 +59,7 @@ public static class EndpointRouteBuilderExtension
         diaryEndpoints.WithOpenApi();
         diaryEndpoints.RequireAuthorization();
         
-        diaryEndpoints.MapGet("/{date:datetime}", DiaryHandlers.GetFoodDiaryByDateAsync)
+        diaryEndpoints.MapGet("/{date:datetime}/food", DiaryHandlers.GetFoodDiaryByDateAsync)
             .WithSummary("Get a diary entry by date")
             .WithDescription("Retrieves a diary entry for the current user by date");
 
