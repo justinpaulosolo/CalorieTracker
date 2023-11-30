@@ -1,6 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Features.Meals.Services;
+using CalorieTracker.Server.Extensions;
 using Carter;
 using Microsoft.AspNetCore.Identity;
 
@@ -58,9 +59,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.RegisterFoodDiaryEndpoints();
 
 app.MapCarter();
 

@@ -10,6 +10,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<UserMeal> UserMeals { get; set; }
     public DbSet<FoodItem> FoodItems { get; set; }
     public DbSet<MealFoodEntry> MealFoodEntries { get; set; }
+
+
+    public DbSet<MealType> MealTypes { get; set; }
+    public DbSet<Diary> Diaries { get; set; }
+    public DbSet<FoodDiary> FoodDiaries { get; set; }
+    public DbSet<Food> Foods { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
