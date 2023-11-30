@@ -98,8 +98,8 @@ export default function FoodDiaryTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.foods.map((food: Food) => (
-              <TableRow key={food.foodId}>
+            {data?.foods.map((food: Food, index: number) => (
+              <TableRow key={`${food.foodId}-${index}`}>
                 <TableCell>{food.name}</TableCell>
                 <TableCell className="text-right">{food.protein}</TableCell>
                 <TableCell className="text-right">{food.carbs}</TableCell>

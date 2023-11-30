@@ -33,8 +33,11 @@ public static class FoodDiaryHandlers
             await applicationDbContext.Diaries.AddAsync(diary);
             await applicationDbContext.SaveChangesAsync();
         }
-
+        
         var foodDiary = await applicationDbContext.FoodDiaries
+            .Include(fd =>  fd.Diary)
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
             .FirstOrDefaultAsync(fd => fd.MealTypeId == createFoodDiaryDto.MealTypeId
                                        && fd.Diary.UserId == userId
                                        && fd.Diary.Date.Date == createFoodDiaryDto.Date.Date);
@@ -45,38 +48,55 @@ public static class FoodDiaryHandlers
             {
                 DiaryId = diary.DiaryId,
                 MealTypeId = createFoodDiaryDto.MealTypeId,
-                Foods = new List<Food>()
             };
             await applicationDbContext.FoodDiaries.AddAsync(foodDiary);
             await applicationDbContext.SaveChangesAsync();
         }
+        
+        const double epsilon = 0.00001;
+        
+        var food = await applicationDbContext.Foods
+            .FirstOrDefaultAsync(f => f.Name == createFoodDiaryDto.FoodName
+                                      && Math.Abs(f.Calories - createFoodDiaryDto.Calories) < epsilon
+                                      && Math.Abs(f.Protein - createFoodDiaryDto.Protein) < epsilon
+                                      && Math.Abs(f.Fat - createFoodDiaryDto.Fat) < epsilon
+                                      && Math.Abs(f.Carbs - createFoodDiaryDto.Carbs) < epsilon);
 
-        var food = new Food
+        if (food == null)
         {
-            Name = createFoodDiaryDto.FoodName,
-            Calories = createFoodDiaryDto.Calories,
-            Protein = createFoodDiaryDto.Protein,
-            Fat = createFoodDiaryDto.Fat,
-            Carbs = createFoodDiaryDto.Carbs
-        };
+            food = new Food
+            {
+                Name = createFoodDiaryDto.FoodName,
+                Calories = createFoodDiaryDto.Calories,
+                Protein = createFoodDiaryDto.Protein,
+                Fat = createFoodDiaryDto.Fat,
+                Carbs = createFoodDiaryDto.Carbs
+            };
+            await applicationDbContext.Foods.AddAsync(food);
+            await applicationDbContext.SaveChangesAsync();
+        }
 
-        foodDiary.Foods.Add(food);
-        await applicationDbContext.Foods.AddAsync(food);
+        var foodDiaryEntry = new FoodDiaryEntry
+        {
+            FoodDiaryId = foodDiary.FoodDiaryId,
+            FoodId = food.FoodId
+        };
+        await applicationDbContext.FoodDiaryEntries.AddAsync(foodDiaryEntry);
         await applicationDbContext.SaveChangesAsync();
 
         var foodDiaryDto = new FoodDiaryDto
         {
-            FoodDiaryId = foodDiary.FoodDiaryId,
+            FoodDiaryId =  foodDiary.FoodDiaryId,
             DiaryId = foodDiary.DiaryId,
             MealTypeId = foodDiary.MealTypeId,
-            Foods = foodDiary.Foods.Select(f => new FoodDto
+            Foods = foodDiary.FoodDiaryEntries.Select(fde => new FoodDto
             {
-                FoodId = f.FoodId,
-                Name = f.Name,
-                Calories = f.Calories,
-                Protein = f.Protein,
-                Fat = f.Fat,
-                Carbs = f.Carbs
+                FoodId = fde.Food.FoodId,
+                Name = fde.Food.Name,
+                Calories = fde.Food.Calories,
+                Protein = fde.Food.Protein,
+                Fat = fde.Food.Fat,
+                Carbs = fde.Food.Carbs
             }).ToList()
         };
         
@@ -94,7 +114,8 @@ public static class FoodDiaryHandlers
         var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var foodDiary = await applicationDbContext.FoodDiaries
-            .Include(fd => fd.Foods)
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
             .FirstOrDefaultAsync(fd => fd.FoodDiaryId == foodDiaryId && fd.Diary.UserId == userId);
 
         if (foodDiary == null)
@@ -107,14 +128,14 @@ public static class FoodDiaryHandlers
             FoodDiaryId = foodDiary.FoodDiaryId,
             DiaryId = foodDiary.DiaryId,
             MealTypeId = foodDiary.MealTypeId,
-            Foods = foodDiary.Foods.Select(f => new FoodDto
+            Foods = foodDiary.FoodDiaryEntries.Select(f => new FoodDto
             {
                 FoodId = f.FoodId,
-                Name = f.Name,
-                Calories = f.Calories,
-                Protein = f.Protein,
-                Fat = f.Fat,
-                Carbs = f.Carbs
+                Name = f.Food.Name,
+                Calories = f.Food.Calories,
+                Protein = f.Food.Protein,
+                Fat = f.Food.Fat,
+                Carbs = f.Food.Carbs
             }).ToList()
         };
 

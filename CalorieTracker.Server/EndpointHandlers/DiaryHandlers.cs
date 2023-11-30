@@ -19,7 +19,8 @@ public static class DiaryHandlers
 
         var diary = await applicationDbContext.Diaries
             .Include(d => d.FoodDiaries)
-            .ThenInclude(fd => fd.Foods)
+            .ThenInclude(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
             .FirstOrDefaultAsync(d => d.UserId == userId
                                       && d.Date.Date == date.Date);
 
@@ -33,14 +34,14 @@ public static class DiaryHandlers
             FoodDiaryId = fd.FoodDiaryId,
             DiaryId = fd.DiaryId,
             MealTypeId = fd.MealTypeId,
-            Foods = fd.Foods.Select(f => new FoodDto
+            Foods = fd.FoodDiaryEntries.Select(f => new FoodDto
             {
                 FoodId = f.FoodId,
-                Name = f.Name,
-                Calories = f.Calories,
-                Protein = f.Protein,
-                Fat = f.Fat,
-                Carbs = f.Carbs
+                Name = f.Food.Name,
+                Calories = f.Food.Calories,
+                Protein = f.Food.Protein,
+                Fat = f.Food.Fat,
+                Carbs = f.Food.Carbs
             }).ToList()
         }).ToList();
 
