@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models.Account;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
-namespace CalorieTracker.Server;
+namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class AccountHandlers
 {

@@ -1,6 +1,4 @@
-﻿using CalorieTracker.Server.Entities;
-
-namespace CalorieTracker.Server;
+﻿namespace CalorieTracker.Server.Entities;
 
 public class Diary
 {

@@ -1,4 +1,4 @@
-﻿namespace CalorieTracker.Server;
+﻿namespace CalorieTracker.Server.Models.Account;
 
 public class AccountDto
 {
