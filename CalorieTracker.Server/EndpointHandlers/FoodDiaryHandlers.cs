@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models.Food;
 using CalorieTracker.Server.Models.FoodDiary;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class FoodDiaryHandlers
 {
-    public static async Task<CreatedAtRoute<FoodDiary>> CreateFoodDiaryAsync(
+    public static async Task<CreatedAtRoute<FoodDiaryDto>> CreateFoodDiaryAsync(
         ApplicationDbContext applicationDbContext,
         CreateFoodDiaryDto createFoodDiaryDto,
         ClaimsPrincipal claimsPrincipal)
@@ -63,26 +64,61 @@ public static class FoodDiaryHandlers
         await applicationDbContext.Foods.AddAsync(food);
         await applicationDbContext.SaveChangesAsync();
 
+        var foodDiaryDto = new FoodDiaryDto
+        {
+            FoodDiaryId = foodDiary.FoodDiaryId,
+            DiaryId = foodDiary.DiaryId,
+            MealTypeId = foodDiary.MealTypeId,
+            Foods = foodDiary.Foods.Select(f => new FoodDto
+            {
+                FoodId = f.FoodId,
+                Name = f.Name,
+                Calories = f.Calories,
+                Protein = f.Protein,
+                Fat = f.Fat,
+                Carbs = f.Carbs
+            }).ToList()
+        };
+        
         return TypedResults.CreatedAtRoute(
-            foodDiary,
-            "GetFoodDiary",
+            foodDiaryDto,
+            "GetFoodDiaryByIdAsync",
             new { foodDiaryId = foodDiary.FoodDiaryId });
     }
     
-    public static async Task<Ok<Diary>> GetFoodDiaryByDateAsync(
+    public static async Task<Results<Ok<FoodDiaryDto>, NotFound>> GetFoodDiaryByIdAsync(
         ApplicationDbContext applicationDbContext,
-        DateTime date,
+        int foodDiaryId,
         ClaimsPrincipal claimsPrincipal)
     {
         var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var diary = await applicationDbContext.Diaries
-            .Include(d => d.FoodDiaries)
-            .ThenInclude(fd => fd.Foods)
-            .FirstOrDefaultAsync(d => d.UserId == userId
-                                      && d.Date.Date == date.Date);
+        var foodDiary = await applicationDbContext.FoodDiaries
+            .Include(fd => fd.Foods)
+            .FirstOrDefaultAsync(fd => fd.FoodDiaryId == foodDiaryId && fd.Diary.UserId == userId);
 
-        return TypedResults.Ok(diary);
+        if (foodDiary == null)
+        {
+            return TypedResults.NotFound();
+        }
+
+        var foodDiaryDto = new FoodDiaryDto
+        {
+            FoodDiaryId = foodDiary.FoodDiaryId,
+            DiaryId = foodDiary.DiaryId,
+            MealTypeId = foodDiary.MealTypeId,
+            Foods = foodDiary.Foods.Select(f => new FoodDto
+            {
+                FoodId = f.FoodId,
+                Name = f.Name,
+                Calories = f.Calories,
+                Protein = f.Protein,
+                Fat = f.Fat,
+                Carbs = f.Carbs
+            }).ToList()
+        };
+
+        return TypedResults.Ok(foodDiaryDto);
     }
 
 

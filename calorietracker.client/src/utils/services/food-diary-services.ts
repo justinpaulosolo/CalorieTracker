@@ -1,5 +1,5 @@
 import { FoodQuickAddFormValues } from "@/pages/food/forms/food-quick-add-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 export function useCreateFoodDiaryEntry() {
@@ -12,5 +12,12 @@ export function useCreateFoodDiaryEntry() {
         queryKey: ["food-diary"],
       });
     },
+  });
+}
+
+export function useGetFoodDiaryByDate(date: string) {
+  return useQuery({
+    queryKey: ["food-diary", date],
+    queryFn: () => axios.get(`/api/diary/food/${date}`),
   });
 }

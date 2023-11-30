@@ -35,20 +35,35 @@ public static class EndpointRouteBuilderExtension
     public static RouteGroupBuilder RegisterFoodDiaryEndpoints(
         this IEndpointRouteBuilder endpoints)
     {
-        var foodDiaryEndpoints = endpoints.MapGroup("/api/diary");
+        var foodDiaryEndpoints = endpoints.MapGroup("/api/diary/food");
         foodDiaryEndpoints.WithTags("FoodDiary");
         foodDiaryEndpoints.WithOpenApi();
         foodDiaryEndpoints.RequireAuthorization();
 
-        foodDiaryEndpoints.MapPost("/food", FoodDiaryHandlers.CreateFoodDiaryAsync)
+        foodDiaryEndpoints.MapPost("/", FoodDiaryHandlers.CreateFoodDiaryAsync)
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
-
-        foodDiaryEndpoints.MapGet("/date/{date}", FoodDiaryHandlers.GetFoodDiaryByDateAsync)
-            .WithSummary("Get a food diary entry by date")
-            .WithDescription("Retrieves a food diary entry for the current user by date");
+        
+        foodDiaryEndpoints.MapGet("/{foodDiaryId:int}", FoodDiaryHandlers.GetFoodDiaryByIdAsync)
+            .WithName("GetFoodDiaryByIdAsync")
+            .WithSummary("Get a food diary entry by ID")
+            .WithDescription("Retrieves a food diary entry for the current user by ID");
         
         return foodDiaryEndpoints;
+    }
+
+    public static RouteGroupBuilder RegisterDiaryEndpoints(this IEndpointRouteBuilder endpoints)
+    {
+        var diaryEndpoints = endpoints.MapGroup("/api/diary");
+        diaryEndpoints.WithTags("Diary");
+        diaryEndpoints.WithOpenApi();
+        diaryEndpoints.RequireAuthorization();
+        
+        diaryEndpoints.MapGet("/{date:datetime}", DiaryHandlers.GetFoodDiaryByDateAsync)
+            .WithSummary("Get a diary entry by date")
+            .WithDescription("Retrieves a diary entry for the current user by date");
+
+        return diaryEndpoints;
     }
 
 }
