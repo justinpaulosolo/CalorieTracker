@@ -10,14 +10,22 @@ public static class EndpointRouteBuilderExtension
         accountEndpoints.WithOpenApi();
 
         accountEndpoints.MapPost("/register", AccountHandlers.RegisterAsync)
-            .WithTags("Account")
             .WithSummary("Register a new user")
             .WithDescription("Registers a new user in the system");
 
         accountEndpoints.MapPost("/login", AccountHandlers.LoginAsync)
-            .WithTags("Account")
             .WithSummary("Login a user")
             .WithDescription("Logs in a user in the system");
+        
+        accountEndpoints.MapPost("/logout", AccountHandlers.LogoutAsync)
+            .RequireAuthorization()
+            .WithSummary("Logout a user")
+            .WithDescription("Logs out a user in the system");
+
+        accountEndpoints.MapGet("/user", AccountHandlers.GetUserDetails)
+            .RequireAuthorization()
+            .WithSummary("Get user details")
+            .WithDescription("Gets the details of the current user");
 
         return accountEndpoints;
     }
@@ -31,7 +39,6 @@ public static class EndpointRouteBuilderExtension
         foodDiaryEndpoints.RequireAuthorization();
 
         foodDiaryEndpoints.MapPost("/food", FoodDiaryHandlers.CreateFoodDiaryAsync)
-            .WithTags("FoodDiary")
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
 

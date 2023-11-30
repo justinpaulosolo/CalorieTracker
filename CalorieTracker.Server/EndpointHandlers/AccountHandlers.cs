@@ -1,4 +1,5 @@
-﻿using CalorieTracker.Server.Entities;
+﻿using System.Security.Claims;
+using CalorieTracker.Server.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
@@ -39,6 +40,30 @@ public static class AccountHandlers
         }
 
         var user = await userManager.FindByNameAsync(loginDto.UserName);
+
+        return TypedResults.Ok(new AccountDto
+        {
+            UserId = user!.Id,
+            UserName = user.UserName!,
+            Email = user.Email!
+        });
+    }
+
+    public static async Task<Ok> LogoutAsync(
+        SignInManager<ApplicationUser> signInManager)
+    {
+        await signInManager.SignOutAsync();
+
+        return TypedResults.Ok();
+    }
+
+    public static async Task<Ok<AccountDto>> GetUserDetails(
+        UserManager<ApplicationUser> userManager,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = await userManager.FindByIdAsync(userId!);
 
         return TypedResults.Ok(new AccountDto
         {
