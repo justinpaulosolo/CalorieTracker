@@ -2,37 +2,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form.tsx";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCreateFoodDiaryEntry } from "@/utils/services/food-diary-services";
+import { useCreateFoodDiaryEntry } from "@/utils/services/diary-services";
 import { Icons } from "@/components/icons";
+import { CreateFoodDiaryEntryDto } from "@/utils/services/diary-services.ts";
 
 const foodQuickAddFormSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  mealTypeId: z.number().nonnegative().int(),
+  meal: z.string(),
   foodName: z.string(),
   protein: z.coerce.number().int().min(0).max(999),
   carbs: z.coerce.number().int().min(0).max(999),
   fat: z.coerce.number().int().min(0).max(999),
-  calories: z.coerce.number().int().min(0).max(9999),
+  calories: z.coerce.number().int().min(0).max(9999)
 });
-
-enum MealType {
-  Breakfast = 1,
-  Lunch = 2,
-  Dinner = 3,
-  Snack = 4,
-}
 
 export type FoodQuickAddFormValues = z.infer<typeof foodQuickAddFormSchema>;
 
@@ -41,28 +28,35 @@ export default function FoodQuickAddForm() {
     date: string;
     meal: string;
   }>();
-  const { mutate, isPending } = useCreateFoodDiaryEntry();
+  const { mutate, isPending } = useCreateFoodDiaryEntry({ date, meal });
   const navigate = useNavigate();
 
   const form = useForm<FoodQuickAddFormValues>({
     resolver: zodResolver(foodQuickAddFormSchema),
     defaultValues: {
-      mealTypeId: MealType[meal as keyof typeof MealType],
+      meal: meal,
       foodName: "",
       protein: 0,
       carbs: 0,
       fat: 0,
       calories: 0,
-      date: date,
-    },
+      date: date
+    }
   });
 
   function onSubmit(values: FoodQuickAddFormValues) {
     console.log(values);
-    mutate(values, {
+    const createFoodDiaryEntryDto: CreateFoodDiaryEntryDto = {
+      foodName: values.foodName,
+      protein: values.protein,
+      carbs: values.carbs,
+      fat: values.fat,
+      calories: values.calories
+    };
+    mutate(createFoodDiaryEntryDto, {
       onSuccess: () => {
         navigate("/food/diary");
-      },
+      }
     });
   }
 
@@ -74,7 +68,7 @@ export default function FoodQuickAddForm() {
       >
         <FormField
           control={form.control}
-          name="mealTypeId"
+          name="meal"
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between">

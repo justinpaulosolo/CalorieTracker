@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Diary } from "../types";
 import { useMemo } from "react";
@@ -7,8 +7,35 @@ const MEAL_TYPE_IDS = {
   BREAKFAST: 1,
   LUNCH: 2,
   DINNER: 3,
-  SNACKS: 4,
+  SNACKS: 4
 };
+
+export interface CreateFoodDiaryEntryDto {
+  foodName: string,
+  protein: number,
+  carbs: number,
+  fat: number,
+  calories: number,
+}
+
+export function useCreateFoodDiaryEntry({ date, meal }: { date?: string, meal?: string }) {
+  const queryClient = useQueryClient();
+
+  if (!date || !meal) {
+    throw new Error("Date and meal must be provided");
+  }
+
+  return useMutation({
+    mutationFn: (foodDiaryEntry: CreateFoodDiaryEntryDto) =>
+      axios.post(`/api/diary/${date}/food/${meal}`, foodDiaryEntry),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["food-diary"]
+      });
+    }
+  });
+}
+
 
 export function useGetFoodDiaryByDate(date: string) {
   const queryInfo = useQuery({
@@ -19,7 +46,7 @@ export function useGetFoodDiaryByDate(date: string) {
       const data: Diary = response.data;
       return data;
     },
-    retry: false,
+    retry: false
   });
   return {
     ...queryInfo,
@@ -50,6 +77,6 @@ export function useGetFoodDiaryByDate(date: string) {
           diary => diary.mealTypeId === MEAL_TYPE_IDS.SNACKS
         ),
       [queryInfo.data]
-    ),
+    )
   };
 }
