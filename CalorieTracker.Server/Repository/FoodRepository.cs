@@ -24,14 +24,15 @@ public class FoodRepository : IFoodRepository
         return await _applicationDbContext.Foods.FirstOrDefaultAsync(f => f.Name == name);
     }
 
-    public async Task<Food?> GetFoodByNameAndNutrientsAsync(string name, string calories, string protein, string carbs, string fat)
+    public async Task<Food?> GetFoodByNameAndNutrientsAsync(string name, double calories, double protein, double carbs,
+        double fat)
     {
         return await _applicationDbContext.Foods.FirstOrDefaultAsync(
             f => f.Name == name
-            && Math.Abs(f.Calories - double.Parse(calories)) < Tolerance
-            && Math.Abs(f.Protein - double.Parse(protein)) < Tolerance
-            && Math.Abs(f.Carbs - double.Parse(carbs)) < Tolerance
-            && Math.Abs(f.Fat - double.Parse(fat)) < Tolerance);
+            && Math.Abs(f.Calories - calories) < Tolerance
+            && Math.Abs(f.Protein - protein) < Tolerance
+            && Math.Abs(f.Carbs - carbs) < Tolerance
+            && Math.Abs(f.Fat - fat) < Tolerance);
     }
 
     public async Task<Food> CreateFoodAsync(Food food)
