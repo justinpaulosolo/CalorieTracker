@@ -7,6 +7,7 @@ namespace CalorieTracker.Server.Repository;
 public class FoodRepository : IFoodRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
+    private const double Tolerance = 0.00001;
 
     public FoodRepository(ApplicationDbContext applicationDbContext)
     {
@@ -21,6 +22,16 @@ public class FoodRepository : IFoodRepository
     public async Task<Food?> GetFoodByNameAsync(string name)
     {
         return await _applicationDbContext.Foods.FirstOrDefaultAsync(f => f.Name == name);
+    }
+
+    public async Task<Food?> GetFoodByNameAndNutrientsAsync(string name, string calories, string protein, string carbs, string fat)
+    {
+        return await _applicationDbContext.Foods.FirstOrDefaultAsync(
+            f => f.Name == name
+            && Math.Abs(f.Calories - double.Parse(calories)) < Tolerance
+            && Math.Abs(f.Protein - double.Parse(protein)) < Tolerance
+            && Math.Abs(f.Carbs - double.Parse(carbs)) < Tolerance
+            && Math.Abs(f.Fat - double.Parse(fat)) < Tolerance);
     }
 
     public async Task<Food> CreateFoodAsync(Food food)
