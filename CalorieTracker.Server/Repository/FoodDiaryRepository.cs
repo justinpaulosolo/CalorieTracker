@@ -26,7 +26,18 @@ public class FoodDiaryRepository : IFoodDiaryRepository
         return await _applicationDbContext.FoodDiaries
             .Include(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
-            .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == date.Date && fd.Diary.UserId == userId);
+            .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == date.Date
+                                    && fd.Diary.UserId == userId);
+    }
+
+    public async Task<FoodDiary?> GetFoodDiaryByDateAndMealTypeAsync(DateTime date, int mealType, string userId)
+    {
+        return await _applicationDbContext.FoodDiaries
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == date.Date
+                                    && fd.MealTypeId == mealType
+                                    && fd.Diary.UserId == userId);
     }
 
     public async Task<FoodDiary> CreateFoodDiaryAsync(FoodDiary foodDiary)
