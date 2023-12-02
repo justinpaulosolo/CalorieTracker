@@ -1,14 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Food, FoodDiary } from "@/utils/types";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Link } from "react-router-dom";
@@ -18,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -28,7 +20,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { useDeleteFoodDiaryEntry } from "@/utils/services/food-diary-services";
 import { Icons } from "@/components/icons";
@@ -36,39 +28,31 @@ import { Icons } from "@/components/icons";
 type FoodDiaryTableProps = {
   data?: FoodDiary;
   title: string;
-  date?: string;
+  date: string;
 };
 
-function calculateTotal(foods: Food[], key: keyof Food) {
-  return foods.reduce((total, food) => total + Number(food[key]), 0);
-}
+const KEYS: Record<string, keyof Food> = {
+  PROTEIN: "protein",
+  CARBS: "carbs",
+  FAT: "fat",
+  CALORIES: "calories"
+};
 
-export default function FoodDiaryTable({
-  data,
-  title,
-  date,
-}: FoodDiaryTableProps) {
+const calculateTotal = (foods: Food[], key: keyof Food) => {
+  return foods.reduce((total, food) => total + Number(food[key]), 0);
+};
+
+export default function FoodDiaryTable({ data, title, date }: FoodDiaryTableProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(
     undefined
   );
   const { mutate, isPending } = useDeleteFoodDiaryEntry();
-  const totalProtein = useMemo(
-    () => calculateTotal(data?.foods || [], "protein"),
-    [data]
-  );
-  const totalCarbs = useMemo(
-    () => calculateTotal(data?.foods || [], "carbs"),
-    [data]
-  );
-  const totalFat = useMemo(
-    () => calculateTotal(data?.foods || [], "fat"),
-    [data]
-  );
-  const totalCalories = useMemo(
-    () => calculateTotal(data?.foods || [], "calories"),
-    [data]
-  );
+
+  const totalProtein = useMemo(() => calculateTotal(data?.foods || [], KEYS.PROTEIN), [data]);
+  const totalCarbs = useMemo(() => calculateTotal(data?.foods || [], KEYS.CARBS), [data]);
+  const totalFat = useMemo(() => calculateTotal(data?.foods || [], KEYS.FAT), [data]);
+  const totalCalories = useMemo(() => calculateTotal(data?.foods || [], KEYS.CALORIES), [data]);
 
   return (
     <Card>
