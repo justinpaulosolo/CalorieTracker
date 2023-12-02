@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models.FoodDiaryEntry;
+using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,31 @@ namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class FoodDiaryEntryHandlers
 {
+    public static async Task<Results<Ok<int>, BadRequest<string>>> CreateFoodDiaryEntryAsync(
+        IFoodDiaryEntryService foodDiaryEntryService,
+        CreateFoodDiaryEntryDto createFoodDiaryEntryDto,
+        DateTime date,
+        string meal,
+        ClaimsPrincipal claimsPrincipal,
+        ILogger logger)
+    {
+        try
+        {
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var foodDiaryEntryId = await foodDiaryEntryService.CreateFoodDiaryEntryAsync(createFoodDiaryEntryDto,
+                date,
+                meal,
+                userId!);
+            
+            return TypedResults.Ok(foodDiaryEntryId);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating food diary entry");
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
+    
     public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsync(
         ApplicationDbContext applicationDbContext,
         int foodDiaryEntryId,
