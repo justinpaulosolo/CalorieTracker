@@ -28,6 +28,7 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
     public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, DateTime date,
         string meal, string userId)
     {
+        // Todo: Refactor to maybe use UnitOfWork
         var diary = await _diaryRepository.GetDiaryByDateAsync(date, userId);
 
         if (diary == null)
@@ -48,7 +49,7 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
             throw new ArgumentException($"Invalid meal type: {meal}.");
         }
         
-        var foodDiary = await _foodDiaryRepository.GetFoodDiaryByDateAndMealTypeAsync(createFoodDiaryEntryDto.Date,
+        var foodDiary = await _foodDiaryRepository.GetFoodDiaryByDateAndMealTypeAsync(date,
             mealType.MealTypeId,
             diary.UserId);
         
@@ -91,5 +92,17 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
         });
 
         return foodDiaryEntryEntity.FoodDiaryEntryId;
+    }
+
+    public async Task<bool> DeleteFoodDiaryEntryByIdAsync(int foodDiaryEntryId, string userId)
+    {
+        var foodDiaryEntry = await _foodDiaryEntryRepository.GetFoodDiaryEntryByIdAsync(foodDiaryEntryId);
+        
+        if (foodDiaryEntry == null)
+        {
+            return false;
+        }
+        
+        return await _foodDiaryEntryRepository.DeleteFoodDiaryEntryAsync(foodDiaryEntry);
     }
 }

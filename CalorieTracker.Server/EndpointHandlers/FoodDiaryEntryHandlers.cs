@@ -35,7 +35,28 @@ public static class FoodDiaryEntryHandlers
             return TypedResults.BadRequest(ex.Message);
         }
     }
-    
+
+    public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsyncV2(
+        IFoodDiaryEntryService foodDiaryEntryService,
+        int foodDiaryEntryId,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        try
+        {
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isDeleted = await foodDiaryEntryService.DeleteFoodDiaryEntryByIdAsync(foodDiaryEntryId, userId!);
+            if (!isDeleted)
+            {
+                return TypedResults.NotFound();
+            }
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.NotFound();
+        }
+    }
+
     public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsync(
         ApplicationDbContext applicationDbContext,
         int foodDiaryEntryId,

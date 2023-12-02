@@ -41,9 +41,11 @@ public class FoodDiaryEntryRepository : IFoodDiaryEntryRepository
         return foodDiaryEntry;
     }
 
-    public async Task DeleteFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry)
-    {
-        _applicationDbContext.FoodDiaryEntries.Remove(foodDiaryEntry);
-        await _applicationDbContext.SaveChangesAsync();
+    public async Task<bool> DeleteFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry)
+    { 
+        _applicationDbContext.FoodDiaryEntries.Remove(foodDiaryEntry); 
+        var result = await _applicationDbContext.SaveChangesAsync();
+        
+        return result > 0;
     }
 }

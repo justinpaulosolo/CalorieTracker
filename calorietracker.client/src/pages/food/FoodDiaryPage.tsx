@@ -4,19 +4,22 @@ import FoodDiaryTableSkeleton from "./food-diary-table-skeleton";
 import { DatePickerDemo } from "@/components/date-picker";
 import { useState } from "react";
 import { format } from "date-fns";
+import { FoodDiary } from "@/utils/types.ts";
 
 export default function FoodDiaryPage() {
   const [date, setDate] = useState(new Date());
   const { breakfast, lunch, dinner, snacks, isLoading } = useGetFoodDiaryByDate(
     format(date, "yyyy-MM-dd")
-  );
+  ) as { breakfast?: FoodDiary; lunch?: FoodDiary; dinner?: FoodDiary; snacks?: FoodDiary; isLoading: boolean };
 
   const meals = [
     { title: "Breakfast", data: breakfast },
     { title: "Lunch", data: lunch },
     { title: "Dinner", data: dinner },
-    { title: "Snacks", data: snacks },
+    { title: "Snacks", data: snacks }
   ];
+
+  console.log(breakfast, "page");
 
   return (
     <div className="flex flex-col space-y-4">

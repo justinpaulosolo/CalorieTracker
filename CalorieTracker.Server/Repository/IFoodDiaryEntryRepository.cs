@@ -8,5 +8,5 @@ public interface IFoodDiaryEntryRepository
     public Task<FoodDiaryEntry?> GetFoodDiaryEntryByFoodDiaryIdAsync(int foodDiaryId);
     public Task<FoodDiaryEntry> CreateFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry);
     public Task<FoodDiaryEntry> UpdateFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry);
-    public Task DeleteFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry);
+    public Task<bool> DeleteFoodDiaryEntryAsync(FoodDiaryEntry foodDiaryEntry);
 }

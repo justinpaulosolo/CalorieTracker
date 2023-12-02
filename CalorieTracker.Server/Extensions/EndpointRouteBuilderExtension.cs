@@ -75,7 +75,7 @@ public static class EndpointRouteBuilderExtension
         foodDiaryEntryEndpoints.WithOpenApi();
         foodDiaryEntryEndpoints.RequireAuthorization();
         
-        foodDiaryEntryEndpoints.MapDelete("/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsync)
+        foodDiaryEntryEndpoints.MapDelete("/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsyncV2)
             .WithSummary("Delete a food diary entry")
             .WithDescription("Deletes a food diary entry for the current user by ID");
         

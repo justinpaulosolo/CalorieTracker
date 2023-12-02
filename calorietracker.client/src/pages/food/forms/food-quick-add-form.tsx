@@ -84,10 +84,10 @@ export default function FoodQuickAddForm() {
                         )}
                         {...field}
                       >
-                        <option value={1}>Breakfast</option>
-                        <option value={2}>Lunch</option>
-                        <option value={3}>Dinner</option>
-                        <option value={4}>Snack</option>
+                        <option value={"Breakfast"}>Breakfast</option>
+                        <option value={"Lunch"}>Lunch</option>
+                        <option value={"Dinner"}>Dinner</option>
+                        <option value={"Snacks"}>Snack</option>
                       </select>
                       <input type="hidden" name="meal" value={field.value} />
                     </>
