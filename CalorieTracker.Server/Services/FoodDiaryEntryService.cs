@@ -35,7 +35,7 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
             diary = new Diary
             {
                 UserId = userId,
-                Date = createFoodDiaryEntryDto.Date,
+                Date = date,
                 FoodDiaries = new List<FoodDiary>()
             };
             await _diaryRepository.CreateDiaryAsync(diary);
@@ -57,7 +57,7 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
             foodDiary = await _foodDiaryRepository.CreateFoodDiaryAsync(new FoodDiary
             {
                 DiaryId = diary.DiaryId,
-                MealTypeId = createFoodDiaryEntryDto.MealTypeId,
+                MealTypeId = mealType.MealTypeId,
                 FoodDiaryEntries = new List<FoodDiaryEntry>()
             });
         }
