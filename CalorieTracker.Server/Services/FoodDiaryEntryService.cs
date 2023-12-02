@@ -10,18 +10,25 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
     private readonly IFoodDiaryRepository _foodDiaryRepository;
     private readonly IDiaryRepository _diaryRepository;
     private readonly IFoodRepository _foodRepository;
+    private readonly IMealTypeRepository _mealTypeRepository;
 
-    public FoodDiaryEntryService(IFoodDiaryEntryRepository foodDiaryEntryRepository, IFoodDiaryRepository foodDiaryRepository, IDiaryRepository diaryRepository, IFoodRepository foodRepository)
+    public FoodDiaryEntryService(IFoodDiaryEntryRepository foodDiaryEntryRepository,
+        IFoodDiaryRepository foodDiaryRepository,
+        IDiaryRepository diaryRepository,
+        IFoodRepository foodRepository,
+        IMealTypeRepository mealTypeRepository)
     {
         _foodDiaryEntryRepository = foodDiaryEntryRepository;
         _foodDiaryRepository = foodDiaryRepository;
         _diaryRepository = diaryRepository;
         _foodRepository = foodRepository;
+        _mealTypeRepository = mealTypeRepository;
     }
 
-    public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, string userId)
+    public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, DateTime date,
+        string meal, string userId)
     {
-        var diary = await _diaryRepository.GetDiaryByDateAsync(createFoodDiaryEntryDto.Date, userId);
+        var diary = await _diaryRepository.GetDiaryByDateAsync(date, userId);
 
         if (diary == null)
         {
@@ -34,8 +41,15 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
             await _diaryRepository.CreateDiaryAsync(diary);
         }
         
+        var mealType = await _mealTypeRepository.GetMealTypeByNameAsync(meal);
+        
+        if (mealType == null)
+        {
+            throw new ArgumentException($"Invalid meal type: {meal}.");
+        }
+        
         var foodDiary = await _foodDiaryRepository.GetFoodDiaryByDateAndMealTypeAsync(createFoodDiaryEntryDto.Date,
-            createFoodDiaryEntryDto.MealTypeId,
+            mealType.MealTypeId,
             diary.UserId);
         
         if (foodDiary == null)

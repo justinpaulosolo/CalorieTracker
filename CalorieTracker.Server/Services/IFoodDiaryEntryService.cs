@@ -4,5 +4,5 @@ namespace CalorieTracker.Server.Services;
 
 public interface IFoodDiaryEntryService
 {
-    public Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, string userId);
+    public Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, DateTime date, string meal, string userId);
 }
