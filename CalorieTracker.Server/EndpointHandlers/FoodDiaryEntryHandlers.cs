@@ -15,8 +15,8 @@ public static class FoodDiaryEntryHandlers
         CreateFoodDiaryEntryDto createFoodDiaryEntryDto,
         DateTime date,
         string meal,
-        ClaimsPrincipal claimsPrincipal,
-        ILogger logger)
+        ClaimsPrincipal claimsPrincipal
+        )
     {
         try
         {
@@ -30,7 +30,8 @@ public static class FoodDiaryEntryHandlers
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error creating food diary entry");
+            // TODO: implement logger
+            //logger.LogError(ex, "Error creating food diary entry");
             return TypedResults.BadRequest(ex.Message);
         }
     }
