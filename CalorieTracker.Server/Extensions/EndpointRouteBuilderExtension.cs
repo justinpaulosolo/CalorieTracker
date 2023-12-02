@@ -4,10 +4,9 @@ namespace CalorieTracker.Server.Extensions;
 
 public static class EndpointRouteBuilderExtension
 {
-    public static RouteGroupBuilder RegisterAccountEndpoints(
-        this IEndpointRouteBuilder endpointRouteBuilder)
+    public static RouteGroupBuilder RegisterAccountEndpoints(this IEndpointRouteBuilder builder)
     {
-        var accountEndpoints = endpointRouteBuilder.MapGroup("/api/account");
+        var accountEndpoints = builder.MapGroup("/api/account");
         accountEndpoints.WithTags("Account");
         accountEndpoints.WithOpenApi();
 
@@ -32,10 +31,9 @@ public static class EndpointRouteBuilderExtension
         return accountEndpoints;
     }
 
-    public static RouteGroupBuilder RegisterFoodDiaryEndpoints(
-        this IEndpointRouteBuilder endpoints)
+    public static RouteGroupBuilder RegisterFoodDiaryEndpoints(this IEndpointRouteBuilder builder)
     {
-        var foodDiaryEndpoints = endpoints.MapGroup("/api/diary/food");
+        var foodDiaryEndpoints = builder.MapGroup("/api/diary/food");
         foodDiaryEndpoints.WithTags("FoodDiary");
         foodDiaryEndpoints.WithOpenApi();
         foodDiaryEndpoints.RequireAuthorization();
@@ -52,9 +50,9 @@ public static class EndpointRouteBuilderExtension
         return foodDiaryEndpoints;
     }
 
-    public static RouteGroupBuilder RegisterDiaryEndpoints(this IEndpointRouteBuilder endpoints)
+    public static RouteGroupBuilder RegisterDiaryEndpoints(this IEndpointRouteBuilder builder)
     {
-        var diaryEndpoints = endpoints.MapGroup("/api/diary");
+        var diaryEndpoints = builder.MapGroup("/api/diary");
         diaryEndpoints.WithTags("Diary");
         diaryEndpoints.WithOpenApi();
         diaryEndpoints.RequireAuthorization();
@@ -66,9 +64,9 @@ public static class EndpointRouteBuilderExtension
         return diaryEndpoints;
     }
 
-    public static RouteGroupBuilder RegisterFoodDiaryEntryEndpoints(this IEndpointRouteBuilder endpointRouteBuilder)
+    public static RouteGroupBuilder RegisterFoodDiaryEntryEndpoints(this IEndpointRouteBuilder builder)
     {
-        var foodDiaryEntryEndpoints = endpointRouteBuilder.MapGroup("/api/food-diary-entry");
+        var foodDiaryEntryEndpoints = builder.MapGroup("/api/food-diary-entry");
         foodDiaryEntryEndpoints.WithTags("FoodDiaryEntry");
         foodDiaryEntryEndpoints.WithOpenApi();
         foodDiaryEntryEndpoints.RequireAuthorization();

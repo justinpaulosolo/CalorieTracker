@@ -143,6 +143,4 @@ public static class FoodDiaryHandlers
 
         return TypedResults.Ok(foodDiaryDto);
     }
-
-
 }
