@@ -1,18 +1,10 @@
-import CreateMealEntryForm from "@/components/create-meal-entry-from";
-import MealEntry from "@/components/meal-entries";
-import TotalMacros from "@/components/total-macros";
-
-function AppPage() {
-  const mealTypes = ["Breakfast", "Lunch", "Dinner", "Other"];
+export default function AppPage() {
   return (
     <div className="fle flex-col space-y-4">
-      <CreateMealEntryForm />
-      <TotalMacros />
-      {mealTypes.map(mealType => (
-        <MealEntry key={mealType} mealType={mealType} />
-      ))}
+      <h1>
+        Welcome to the app!
+      </h1>
     </div>
   );
 }
 
-export default AppPage;
