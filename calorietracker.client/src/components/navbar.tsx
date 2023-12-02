@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { Banana, User } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Banana, UserIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,8 +19,16 @@ import {
 } from "@/utils/services/account-services";
 
 export default function Navbar() {
-  const { data } = useGetUserDetails();
+  const { data : User   } = useGetUserDetails();
   const logout = useLogoutUser();
+  const navigate = useNavigate();
+
+  const handleNavigateToSettings = () => navigate("/settings/account");
+
+  const handleLogout = async () => {
+    await logout.mutateAsync();
+    navigate("/login");
+  }
 
   return (
     <header className="bg-background">
@@ -35,7 +43,7 @@ export default function Navbar() {
               <Avatar className="h-10 w-10">
                 <AvatarImage />
                 <AvatarFallback>
-                  <User />
+                  <UserIcon />
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -43,20 +51,20 @@ export default function Navbar() {
           <DropdownMenuContent className="w-48" align="end" forceMount>
             <div className="flex items-center justify-start gap-2 p-2">
               <div className="flex flex-col space-y-1 leading-none">
-                <p className="font-medium">{data.username}</p>
+                <p className="font-medium">{User?.username}</p>
                 <p className="w-[200px] truncate text-sm text-muted-foreground">
-                  {data.email}
+                  {User?.email}
                 </p>
               </div>
             </div>
-            <DropdownMenuItem>
-              <Link to="/settings/goals">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem
-              onSelect={() => logout.mutate()}
+              onClick={handleNavigateToSettings}
               className="cursor-pointer"
             >
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
               Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -64,4 +72,5 @@ export default function Navbar() {
       </div>
     </header>
   );
+
 }
