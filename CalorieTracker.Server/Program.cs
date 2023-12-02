@@ -42,6 +42,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddTransient<IFoodDiaryEntryService, FoodDiaryEntryService>();
+builder.Services.AddTransient<IDiaryService, DiaryService>();
 
 builder.Services.AddScoped<IMealTypeRepository, MealTypeRepository>();
 builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
