@@ -44,15 +44,25 @@ const calculateTotal = (foods: Food[], key: keyof Food) => {
 
 export default function FoodDiaryTable({ data, title, date }: FoodDiaryTableProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(undefined);
   const { mutate, isPending } = useDeleteFoodDiaryEntry();
 
   const totalProtein = useMemo(() => calculateTotal(data?.foods || [], KEYS.PROTEIN), [data]);
   const totalCarbs = useMemo(() => calculateTotal(data?.foods || [], KEYS.CARBS), [data]);
   const totalFat = useMemo(() => calculateTotal(data?.foods || [], KEYS.FAT), [data]);
   const totalCalories = useMemo(() => calculateTotal(data?.foods || [], KEYS.CALORIES), [data]);
+
+  const handleOnDeleteClick = (foodId: number) => {
+    setSelectedFoodId(foodId);
+    setShowDeleteDialog(true);
+  };
+
+  const handleOnDeleteConfirm = () => {
+    if (!selectedFoodId) return;
+    mutate(selectedFoodId);
+    setSelectedFoodId(undefined);
+    setShowDeleteDialog(false);
+  };
 
   return (
     <Card>
@@ -104,10 +114,7 @@ export default function FoodDiaryTable({ data, title, date }: FoodDiaryTableProp
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem
-                        onSelect={() => {
-                          setSelectedFoodId(food.foodId);
-                          setShowDeleteDialog(true);
-                        }}
+                        onClick={() => handleOnDeleteClick(food.foodId)}
                         className="text-red-600 cursor-pointer"
                       >
                         Delete
@@ -131,12 +138,7 @@ export default function FoodDiaryTable({ data, title, date }: FoodDiaryTableProp
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <Button
                           variant="destructive"
-                          onClick={() => {
-                            console.log(selectedFoodId, "delete");
-                            mutate(food.foodDiaryEntryId);
-                            setSelectedFoodId(undefined);
-                            setShowDeleteDialog(false);
-                          }}
+                          onClick={handleOnDeleteConfirm}
                         >
                           {isPending ? (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
