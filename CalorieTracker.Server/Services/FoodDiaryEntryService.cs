@@ -1,0 +1,81 @@
+using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models.FoodDiaryEntry;
+using CalorieTracker.Server.Repository;
+
+namespace CalorieTracker.Server.Services;
+
+public class FoodDiaryEntryService : IFoodDiaryEntryService
+{
+    private readonly IFoodDiaryEntryRepository _foodDiaryEntryRepository;
+    private readonly IFoodDiaryRepository _foodDiaryRepository;
+    private readonly IDiaryRepository _diaryRepository;
+    private readonly IFoodRepository _foodRepository;
+
+    public FoodDiaryEntryService(IFoodDiaryEntryRepository foodDiaryEntryRepository, IFoodDiaryRepository foodDiaryRepository, IDiaryRepository diaryRepository, IFoodRepository foodRepository)
+    {
+        _foodDiaryEntryRepository = foodDiaryEntryRepository;
+        _foodDiaryRepository = foodDiaryRepository;
+        _diaryRepository = diaryRepository;
+        _foodRepository = foodRepository;
+    }
+
+    public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, string userId)
+    {
+        var diary = await _diaryRepository.GetDiaryByDateAsync(createFoodDiaryEntryDto.Date, userId);
+
+        if (diary == null)
+        {
+            diary = new Diary
+            {
+                UserId = userId,
+                Date = createFoodDiaryEntryDto.Date,
+                FoodDiaries = new List<FoodDiary>()
+            };
+            await _diaryRepository.CreateDiaryAsync(diary);
+        }
+        
+        var foodDiary = await _foodDiaryRepository.GetFoodDiaryByDateAndMealTypeAsync(createFoodDiaryEntryDto.Date,
+            createFoodDiaryEntryDto.MealTypeId,
+            diary.UserId);
+        
+        if (foodDiary == null)
+        {
+            foodDiary = await _foodDiaryRepository.CreateFoodDiaryAsync(new FoodDiary
+            {
+                DiaryId = diary.DiaryId,
+                MealTypeId = createFoodDiaryEntryDto.MealTypeId,
+                FoodDiaryEntries = new List<FoodDiaryEntry>()
+            });
+        }
+
+        var food = await _foodRepository.GetFoodByNameAndNutrientsAsync(
+            createFoodDiaryEntryDto.FoodName,
+            createFoodDiaryEntryDto.Calories,
+            createFoodDiaryEntryDto.Protein,
+            createFoodDiaryEntryDto.Carbs,
+            createFoodDiaryEntryDto.Fat
+        );
+
+        if (food == null)
+        {
+            food = new Food()
+            {
+                Name = createFoodDiaryEntryDto.FoodName,
+                Calories = createFoodDiaryEntryDto.Calories,
+                Protein = createFoodDiaryEntryDto.Protein,
+                Fat = createFoodDiaryEntryDto.Fat,
+                Carbs = createFoodDiaryEntryDto.Carbs
+            };
+            
+            await _foodRepository.CreateFoodAsync(food);
+        }
+
+        var foodDiaryEntryEntity = await _foodDiaryEntryRepository.CreateFoodDiaryEntryAsync(new FoodDiaryEntry
+        {
+            FoodId = food.FoodId,
+            FoodDiaryId = foodDiary.FoodDiaryId,
+        });
+
+        return foodDiaryEntryEntity.FoodDiaryEntryId;
+    }
+}
