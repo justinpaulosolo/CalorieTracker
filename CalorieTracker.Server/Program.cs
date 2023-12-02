@@ -3,6 +3,7 @@ using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Features.Meals.Services;
 using CalorieTracker.Server.Extensions;
 using CalorieTracker.Server.Repository;
+using CalorieTracker.Server.Services;
 using Carter;
 using Microsoft.AspNetCore.Identity;
 
@@ -40,6 +41,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddTransient<IFoodDiaryEntryService, FoodDiaryEntryService>();
+
+builder.Services.AddScoped<IMealTypeRepository, MealTypeRepository>();
 builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
 builder.Services.AddScoped<IFoodDiaryRepository, FoodDiaryRepository>();
 builder.Services.AddScoped<IFoodDiaryEntryRepository, FoodDiaryEntryRepository>();
