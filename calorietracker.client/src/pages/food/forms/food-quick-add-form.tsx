@@ -54,9 +54,7 @@ export default function FoodQuickAddForm() {
       calories: values.calories
     };
     mutate(createFoodDiaryEntryDto, {
-      onSuccess: () => {
-        navigate("/food/diary");
-      }
+      onSuccess: () => navigate("/food/diary")
     });
   }
 

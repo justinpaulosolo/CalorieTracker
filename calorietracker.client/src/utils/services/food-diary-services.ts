@@ -8,17 +8,17 @@ export function useCreateFoodDiaryEntry() {
     mutationFn: (foodDiaryEntry: FoodQuickAddFormValues) =>
       axios.post("/api/diary/food", foodDiaryEntry),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["food-diary"],
+      return queryClient.invalidateQueries({
+        queryKey: ["food-diary"]
       });
-    },
+    }
   });
 }
 
 export function useGetFoodDiaryByDate(date: string) {
   return useQuery({
     queryKey: ["food-diary", date],
-    queryFn: () => axios.get(`/api/diary/food/${date}`),
+    queryFn: () => axios.get(`/api/diary/food/${date}`)
   });
 }
 
@@ -29,8 +29,8 @@ export function useDeleteFoodDiaryEntry() {
       axios.delete(`/api/food-diary-entry/${foodDiaryEntryId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["food-diary"],
+        queryKey: ["food-diary"]
       });
-    },
+    }
   });
 }
