@@ -29,7 +29,7 @@ export function useCreateFoodDiaryEntry({ date, meal }: { date?: string, meal?: 
     mutationFn: (foodDiaryEntry: CreateFoodDiaryEntryDto) =>
       axios.post(`/api/diary/${date}/food/${meal}`, foodDiaryEntry),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      return queryClient.invalidateQueries({
         queryKey: ["food-diary"]
       });
     }
@@ -49,7 +49,7 @@ export function useGetFoodDiaryByDate(date: string) {
     retry: false
   });
   return {
-    ...queryInfo,
+    isLoading: queryInfo.isLoading,
     breakfast: useMemo(
       () =>
         queryInfo.data?.foodDiaries.find(

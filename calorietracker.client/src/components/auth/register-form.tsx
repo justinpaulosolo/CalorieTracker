@@ -1,43 +1,35 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRegisterUser } from "@/utils/services/account-services";
 import { useNavigate } from "react-router-dom";
-import { Register } from "@/utils/types";
-
-const registerFormSchema = z.object({
-  email: z.string().email(),
-  username: z.string(),
-  password: z.string().min(10),
-});
-
-type RegisterFormInputs = z.infer<typeof registerFormSchema>;
+import { RegisterUser } from "@/utils/types.ts";
+import { registerFormSchema } from "@/utils/schemas.ts";
 
 export default function RegisterForm() {
-  const mutate = useRegisterUser();
+  const registerUser = useRegisterUser();
   const navigate = useNavigate();
-  const form = useForm<RegisterFormInputs>({
+
+  const form = useForm<RegisterUser>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: "",
       username: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
-  function onSubmit(values: Register) {
-    mutate.mutate(values, { onSuccess: () => navigate("/login") });
+  function onSubmit(values: RegisterUser) {
+    registerUser.mutate(values, {
+      onSuccess: () => {
+        navigate("/login");
+      }
+    });
   }
+
+  // Todo: Fix for styling
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

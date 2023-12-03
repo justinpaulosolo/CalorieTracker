@@ -1,8 +1,7 @@
-export type Register = {
-  username: string;
-  email: string;
-  password: string;
-};
+import * as z from "zod";
+import { registerFormSchema } from "@/utils/schemas.ts";
+
+export type RegisterUser = z.infer<typeof registerFormSchema>
 
 export type Login = {
   username: string;
