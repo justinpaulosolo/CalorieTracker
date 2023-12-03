@@ -21,7 +21,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
     if (builder.Environment.IsDevelopment())
     {
-        options.User.RequireUniqueEmail = false;
+        options.User.RequireUniqueEmail = true;
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;
         options.Password.RequireNonAlphanumeric = false;
