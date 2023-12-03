@@ -23,7 +23,7 @@ export default function LoginForm() {
   function onSubmit(values: LoginUser) {
     // Todo: Show some error when login fails
     loginUser.mutate(values, {
-      onSuccess: () => navigate("/", { replace: true })
+      onSuccess: () => navigate("/")
     });
   }
 

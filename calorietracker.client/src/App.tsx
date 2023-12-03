@@ -13,8 +13,8 @@ import AddFoodEntryPage from "@/pages/food/AddFoodEntryPage";
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<AppPage />} />
         <Route path="/food" element={<FoodDiary />} />

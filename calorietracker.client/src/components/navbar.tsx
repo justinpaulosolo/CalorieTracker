@@ -5,30 +5,23 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar.tsx";
-import {
-  useGetUserDetails,
-  useLogoutUser,
-} from "@/utils/services/account-services";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
+import { useGetUserDetails } from "@/hooks/useGetUserDetails.ts";
+import { useLogoutUser } from "@/hooks/useLogoutUser.ts";
 
 export default function Navbar() {
-  const { data : User   } = useGetUserDetails();
-  const logout = useLogoutUser();
+  const { data: User } = useGetUserDetails();
+  const logoutUser = useLogoutUser();
   const navigate = useNavigate();
 
   const handleNavigateToSettings = () => navigate("/settings/account");
 
   const handleLogout = async () => {
-    await logout.mutateAsync();
-    navigate("/login");
-  }
+    await logoutUser.mutateAsync();
+  };
 
   return (
     <header className="bg-background">
