@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRegisterUser } from "@/utils/services/account-services";
 import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "@/utils/types.ts";
 import { registerFormSchema } from "@/utils/schemas.ts";
+import { useRegisterUser } from "@/hooks/useRegisterUser.ts";
 
 export default function RegisterForm() {
   const registerUser = useRegisterUser();
@@ -23,13 +23,11 @@ export default function RegisterForm() {
 
   function onSubmit(values: RegisterUser) {
     registerUser.mutate(values, {
-      onSuccess: () => {
-        navigate("/login");
-      }
+      onSuccess: () => navigate("/")
     });
   }
 
-  // Todo: Fix for styling
+  // Todo: Fix register form styling
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

@@ -1,46 +1,33 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useLoginUser } from "@/utils/services/account-services";
 import { useNavigate } from "react-router-dom";
-import { Login } from "@/utils/types";
-
-const loginFormSchema = z.object({
-  username: z.string(),
-  password: z.string().min(10),
-});
-
-type LoginFormInputs = z.infer<typeof loginFormSchema>;
+import { LoginUser } from "@/utils/types.ts";
+import { loginFormSchema } from "@/utils/schemas.ts";
+import { useLoginUser } from "@/hooks/useLoginUser.ts";
 
 export default function LoginForm() {
   const loginUser = useLoginUser();
   const navigate = useNavigate();
 
-  const form = useForm<LoginFormInputs>({
+  const form = useForm<LoginUser>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
-  function onSubmit(values: Login) {
+  function onSubmit(values: LoginUser) {
+    // Todo: Show some error when login fails
     loginUser.mutate(values, {
-      onSuccess: () => navigate("/", { replace: true }),
-      onError: error => console.error(error),
+      onSuccess: () => navigate("/", { replace: true })
     });
   }
 
+  // Todo: Fix login form styling
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
