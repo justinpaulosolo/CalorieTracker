@@ -72,7 +72,7 @@ const FoodRow = ({ food, onDeleteClick }: {
 
 const FoodDiaryTable: React.FC<FoodDiaryTableProps> = ({ data, title, date }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [selectedFoodId, setSelectedFoodId] = useState<number | undefined>(undefined);
+  const [selectedFoodDiaryEntryId, setSelectedFoodDiaryEntryId] = useState<number | undefined>(undefined);
   const { mutate, isPending } = useDeleteFoodDiaryEntry();
 
   const totalProtein = calculateTotal(data?.foods || [], KEYS.PROTEIN);
@@ -81,15 +81,14 @@ const FoodDiaryTable: React.FC<FoodDiaryTableProps> = ({ data, title, date }) =>
   const totalCalories = calculateTotal(data?.foods || [], KEYS.CALORIES);
 
   const handleOnDeleteClick = (foodDiaryEntryId: number) => {
-    setSelectedFoodId(foodDiaryEntryId);
-    console.log(foodDiaryEntryId);
+    setSelectedFoodDiaryEntryId(foodDiaryEntryId);
     setShowDeleteDialog(true);
   };
 
   const handleOnDeleteConfirm = () => {
-    if (!selectedFoodId) return;
-    mutate(selectedFoodId);
-    setSelectedFoodId(undefined);
+    if (!selectedFoodDiaryEntryId) return;
+    mutate(selectedFoodDiaryEntryId);
+    setSelectedFoodDiaryEntryId(undefined);
     setShowDeleteDialog(false);
   };
 
