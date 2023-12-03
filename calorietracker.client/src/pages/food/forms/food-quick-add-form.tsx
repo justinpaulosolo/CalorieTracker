@@ -177,11 +177,7 @@ export default function FoodQuickAddForm() {
           )}
         />
         <Button disabled={isPending} type="submit">
-          {isPending ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            "Submit"
-          )}
+          {isPending ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : "Submit"}
         </Button>
       </form>
     </Form>
