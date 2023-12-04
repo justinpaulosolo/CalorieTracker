@@ -31,25 +31,6 @@ public static class EndpointRouteBuilderExtension
         return accountEndpoints;
     }
 
-    public static RouteGroupBuilder RegisterFoodDiaryEndpoints(this IEndpointRouteBuilder builder)
-    {
-        var foodDiaryEndpoints = builder.MapGroup("/api/diary/food");
-        foodDiaryEndpoints.WithTags("FoodDiary");
-        foodDiaryEndpoints.WithOpenApi();
-        foodDiaryEndpoints.RequireAuthorization();
-
-        foodDiaryEndpoints.MapPost("/", FoodDiaryHandlers.CreateFoodDiaryAsync)
-            .WithSummary("Create a food diary entry")
-            .WithDescription("Creates a food diary entry for the current user");
-        
-        foodDiaryEndpoints.MapGet("/{foodDiaryId:int}", FoodDiaryHandlers.GetFoodDiaryByIdAsync)
-            .WithName("GetFoodDiaryByIdAsync")
-            .WithSummary("Get a food diary entry by ID")
-            .WithDescription("Retrieves a food diary entry for the current user by ID");
-        
-        return foodDiaryEndpoints;
-    }
-
     public static RouteGroupBuilder RegisterDiaryEndpoints(this IEndpointRouteBuilder builder)
     {
         var diaryEndpoints = builder.MapGroup("/api/diary");
