@@ -6,8 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
 
-var connectionString = builder.Configuration.GetConnectionString("Sqlite");
-builder.Services.AddSqlite<ApplicationDbContext>(connectionString);
+builder.Services.AddSqlite<ApplicationDbContext>(builder.Configuration.GetConnectionString("Sqlite"));
 
 builder.Services.ConfigureIdentity(builder.Environment);
 builder.Services.RegisterServices();
