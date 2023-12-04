@@ -9,6 +9,6 @@ export const registerFormSchema = z.object({
 
 // Todo: match login validation with backend
 export const loginFormSchema = z.object({
-  username: z.string().min(0),
-  password: z.string().min(0)
+  username: z.string({ required_error: "Username is required" }),
+  password: z.string({ required_error: "Password is required" })
 });
