@@ -19,7 +19,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { DotsHorizontalIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Icons } from "@/components/icons";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Food, FoodDiary } from "@/utils/types";
@@ -56,6 +56,7 @@ const FoodRow = ({ food, onDeleteClick }: {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open menu</span>
+            <DotsHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -114,7 +115,8 @@ const FoodDiaryTable: React.FC<FoodDiaryTableProps> = ({ data, title, date }) =>
               <TableHead className="font-medium w-20 text-right">Carbs</TableHead>
               <TableHead className="font-medium w-20 text-right">Fat</TableHead>
               <TableHead className="font-medium w-20 text-right">Calories</TableHead>
-              <TableHead className="w-20"></TableHead>
+              <TableHead className="w-20">
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
