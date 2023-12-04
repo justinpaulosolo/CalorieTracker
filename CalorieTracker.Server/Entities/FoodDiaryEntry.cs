@@ -7,6 +7,6 @@ public class FoodDiaryEntry
     public int FoodId { get; set; }
     
     // Navigation Properties
-    public FoodDiary FoodDiary { get; set; }
-    public Food Food { get; set; }
+    public FoodDiary FoodDiary { get; set; } = null!;
+    public Food Food { get; set; } = null!;
 }

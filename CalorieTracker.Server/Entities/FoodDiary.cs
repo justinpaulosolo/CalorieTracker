@@ -5,8 +5,8 @@ public class FoodDiary
     public int FoodDiaryId { get; set; }
     public int DiaryId { get; set; }
     public int MealTypeId { get; set; }
-    public ICollection<FoodDiaryEntry> FoodDiaryEntries { get; set; }
+    public ICollection<FoodDiaryEntry> FoodDiaryEntries { get; set; } = new List<FoodDiaryEntry>();
 
     // Navigation properties
-    public Diary Diary { get; set; }
+    public Diary Diary { get; set; } = null!;
 }

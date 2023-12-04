@@ -8,5 +8,5 @@ public class MacrosGoal
     public int CarbohydratesGoal { get; set; }
     public int FatsGoal { get; set; }
     public int CaloriesGoal { get; set; }
-    public ApplicationUser User { get; set; }
+    public ApplicationUser User { get; set; } = null!;
 }
