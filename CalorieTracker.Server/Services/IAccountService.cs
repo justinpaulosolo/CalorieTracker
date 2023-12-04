@@ -6,7 +6,7 @@ namespace CalorieTracker.Server.Services;
 public interface IAccountService
 {
     public Task<(IdentityResult, string?)> RegisterUserAsync(RegisterDto registerUserDto);
-    public Task<SignInResult> LoginUserAsync(LoginDto loginDto);
+    public Task<(SignInResult, AccountDto?)> LoginUserAsync(LoginDto loginDto);
     public Task<string> GetUserIdAsyncByUserName(string userName);
     public Task<AccountDto> GetUserDetailsByIdAsync(string userId);
     public Task<AccountDto> GetUserDetailsByUserNameAsync(string userName);

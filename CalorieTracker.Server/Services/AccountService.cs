@@ -28,9 +28,21 @@ public class AccountService : IAccountService
         return  (result, user.Id);
     }
 
-    public async Task<SignInResult> LoginUserAsync(LoginDto loginDto)
+    public async Task<(SignInResult, AccountDto?)> LoginUserAsync(LoginDto loginDto)
     {
-        return await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, true, false);
+        var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, true, false);
+        
+        if (!result.Succeeded) return (result, null);
+        
+        var user = await _userManager.FindByNameAsync(loginDto.UserName);
+        
+        return (result, new AccountDto
+        {
+            UserId = user!.Id,
+            UserName = user.UserName!,
+            Email = user.Email!
+        });
+
     }
 
     public async Task<string> GetUserIdAsyncByUserName(string userName)

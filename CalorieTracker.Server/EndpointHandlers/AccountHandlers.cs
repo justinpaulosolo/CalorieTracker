@@ -30,26 +30,31 @@ public static class AccountHandlers
         }
     }
 
-    public static async Task<Results<Ok<AccountDto>, BadRequest<SignInResult>>> LoginAsync(
-        SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager,
+    public static async Task<Results<Ok<AccountDto>, BadRequest<SignInResult>, ProblemHttpResult>> LoginAsync(
+        IAccountService accountService,
         LoginDto loginDto)
     {
-        var result = await signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, true, false);
-
-        if (!result.Succeeded)
+        try
         {
-            return TypedResults.BadRequest(result);
+            var (signInResult, user) = await accountService.LoginUserAsync(loginDto);
+
+            if (!signInResult.Succeeded)
+            {
+                return TypedResults.BadRequest(signInResult);
+            }
+
+            return TypedResults.Ok(new AccountDto
+            {
+                UserId = user!.UserId,
+                UserName = user.UserName!,
+                Email = user.Email!
+            });
+
         }
-
-        var user = await userManager.FindByNameAsync(loginDto.UserName);
-
-        return TypedResults.Ok(new AccountDto
+        catch (Exception ex)
         {
-            UserId = user!.Id,
-            UserName = user.UserName!,
-            Email = user.Email!
-        });
+            return TypedResults.Problem(ex.Message);
+        }
     }
 
     public static async Task<Ok> LogoutAsync(
