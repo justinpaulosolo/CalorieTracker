@@ -3,7 +3,6 @@ using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Extensions;
 using CalorieTracker.Server.Repository;
 using CalorieTracker.Server.Services;
-using Carter;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,12 +49,8 @@ builder.Services.AddScoped<IFoodDiaryRepository, FoodDiaryRepository>();
 builder.Services.AddScoped<IFoodDiaryEntryRepository, FoodDiaryEntryRepository>();
 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 
-builder.Services.AddMediatR(configuration =>
-    configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly));
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCarter();
 
 var app = builder.Build();
 
@@ -76,8 +71,6 @@ app.RegisterAccountEndpoints();
 app.RegisterFoodDiaryEndpoints();
 app.RegisterDiaryEndpoints();
 app.RegisterFoodDiaryEntryEndpoints();
-
-app.MapCarter();
 
 app.MapFallbackToFile("/index.html");
 
