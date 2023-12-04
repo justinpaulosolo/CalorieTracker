@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models.Account;
 using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -46,8 +45,8 @@ public static class AccountHandlers
             return TypedResults.Ok(new AccountDto
             {
                 UserId = user!.UserId,
-                UserName = user.UserName!,
-                Email = user.Email!
+                UserName = user.UserName,
+                Email = user.Email
             });
 
         }
@@ -75,9 +74,9 @@ public static class AccountHandlers
 
         return TypedResults.Ok(new AccountDto
         {
-            UserId = user!.UserId,
-            UserName = user.UserName!,
-            Email = user.Email!
+            UserId = user.UserId,
+            UserName = user.UserName,
+            Email = user.Email
         });
     }
 }
