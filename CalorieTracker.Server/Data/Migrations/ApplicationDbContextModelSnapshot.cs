@@ -205,28 +205,6 @@ namespace CalorieTracker.Server.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Entities.SavedFoodItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SavedFoodItems");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -379,7 +357,7 @@ namespace CalorieTracker.Server.Data.Migrations
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiaryEntry", b =>
                 {
-                    b.HasOne("CalorieTracker.Server.Entities.FoodDiary", "FoodDiary")
+                    b.HasOne("CalorieTracker.Server.Entities.FoodDiary", null)
                         .WithMany("FoodDiaryEntries")
                         .HasForeignKey("FoodDiaryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -392,27 +370,6 @@ namespace CalorieTracker.Server.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Food");
-
-                    b.Navigation("FoodDiary");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.SavedFoodItem", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.Entities.Food", "Food")
-                        .WithMany()
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CalorieTracker.Server.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Food");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

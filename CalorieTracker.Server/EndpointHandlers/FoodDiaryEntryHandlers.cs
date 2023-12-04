@@ -94,8 +94,7 @@ public static class FoodDiaryEntryHandlers
 
     private static async Task<bool> IsFoodUsedElsewhere(ApplicationDbContext applicationDbContext, Food food)
     {
-        return await applicationDbContext.FoodDiaryEntries.AnyAsync(fde => fde.FoodId == food.FoodId)
-               || await applicationDbContext.SavedFoodItems.AnyAsync(uf => uf.FoodId == food.FoodId);
+        return await applicationDbContext.FoodDiaryEntries.AnyAsync(fde => fde.FoodId == food.FoodId);
     }
 
     private static async Task RemoveFood(ApplicationDbContext applicationDbContext, Food food)

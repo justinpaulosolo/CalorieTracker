@@ -11,34 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231130121819_RemoveFoodNavigationProperty")]
-    partial class RemoveFoodNavigationProperty
+    [Migration("20231204135903_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
-
-            modelBuilder.Entity("CalorieTracker.Server.Diary", b =>
-                {
-                    b.Property<int>("DiaryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("DiaryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Diaries");
-                });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.ApplicationUser", b =>
                 {
@@ -104,109 +84,27 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodItem", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.Diary", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Calories")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Carbohydrates")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Fat")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Protein")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FoodItems");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.MacrosGoal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CaloriesGoal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CarbohydratesGoal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FatsGoal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProteinsGoal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("MacrosGoals");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.MealFoodEntry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MealId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FoodId");
-
-                    b.HasIndex("MealId");
-
-                    b.ToTable("MealFoodEntries");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.UserMeal", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<int>("DiaryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("MealType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("DiaryId");
 
-                    b.ToTable("UserMeals");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Diaries");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Food", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.Food", b =>
                 {
                     b.Property<int>("FoodId")
                         .ValueGeneratedOnAdd()
@@ -221,9 +119,6 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.Property<double>("Fat")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("FoodDiaryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -233,12 +128,10 @@ namespace CalorieTracker.Server.Data.Migrations
 
                     b.HasKey("FoodId");
 
-                    b.HasIndex("FoodDiaryId");
-
                     b.ToTable("Foods");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.FoodDiary", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiary", b =>
                 {
                     b.Property<int>("FoodDiaryId")
                         .ValueGeneratedOnAdd()
@@ -257,7 +150,28 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.ToTable("FoodDiaries");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.MealType", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiaryEntry", b =>
+                {
+                    b.Property<int>("FoodDiaryEntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FoodDiaryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FoodId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("FoodDiaryEntryId");
+
+                    b.HasIndex("FoodDiaryId");
+
+                    b.HasIndex("FoodId");
+
+                    b.ToTable("FoodDiaryEntries");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Server.Entities.MealType", b =>
                 {
                     b.Property<int>("MealTypeId")
                         .ValueGeneratedOnAdd()
@@ -422,7 +336,7 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Diary", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.Diary", b =>
                 {
                     b.HasOne("CalorieTracker.Server.Entities.ApplicationUser", "User")
                         .WithMany()
@@ -433,52 +347,32 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Entities.MacrosGoal", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiary", b =>
                 {
-                    b.HasOne("CalorieTracker.Server.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.MealFoodEntry", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.Entities.FoodItem", "Food")
-                        .WithMany()
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CalorieTracker.Server.Entities.UserMeal", "Meal")
-                        .WithMany("FoodEntries")
-                        .HasForeignKey("MealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Food");
-
-                    b.Navigation("Meal");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Food", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.FoodDiary", null)
-                        .WithMany("Foods")
-                        .HasForeignKey("FoodDiaryId");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.FoodDiary", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.Diary", "Diary")
+                    b.HasOne("CalorieTracker.Server.Entities.Diary", "Diary")
                         .WithMany("FoodDiaries")
                         .HasForeignKey("DiaryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Diary");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiaryEntry", b =>
+                {
+                    b.HasOne("CalorieTracker.Server.Entities.FoodDiary", null)
+                        .WithMany("FoodDiaryEntries")
+                        .HasForeignKey("FoodDiaryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CalorieTracker.Server.Entities.Food", "Food")
+                        .WithMany()
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Food");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -532,19 +426,14 @@ namespace CalorieTracker.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Diary", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.Diary", b =>
                 {
                     b.Navigation("FoodDiaries");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Entities.UserMeal", b =>
+            modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiary", b =>
                 {
-                    b.Navigation("FoodEntries");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.FoodDiary", b =>
-                {
-                    b.Navigation("Foods");
+                    b.Navigation("FoodDiaryEntries");
                 });
 #pragma warning restore 612, 618
         }
