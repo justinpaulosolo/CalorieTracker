@@ -58,27 +58,26 @@ public static class AccountHandlers
     }
 
     public static async Task<Ok> LogoutAsync(
-        SignInManager<ApplicationUser> signInManager)
+        IAccountService accountService)
     {
-        await signInManager.SignOutAsync();
+        await accountService.LogoutUserAsync();
 
         return TypedResults.Ok();
     }
 
     public static async Task<Ok<AccountDto>> GetUserDetails(
-        UserManager<ApplicationUser> userManager,
+        IAccountService accountService,
         ClaimsPrincipal claimsPrincipal)
     {
         var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var user = await userManager.FindByIdAsync(userId!);
+        var user = await accountService.GetUserDetailsByIdAsync(userId!);
 
         return TypedResults.Ok(new AccountDto
         {
-            UserId = user!.Id,
+            UserId = user!.UserId,
             UserName = user.UserName!,
             Email = user.Email!
         });
     }
-
 }
