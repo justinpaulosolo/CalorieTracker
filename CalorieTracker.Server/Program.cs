@@ -1,6 +1,5 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Features.Meals.Services;
 using CalorieTracker.Server.Extensions;
 using CalorieTracker.Server.Repository;
 using CalorieTracker.Server.Services;
@@ -49,8 +48,6 @@ builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
 builder.Services.AddScoped<IFoodDiaryRepository, FoodDiaryRepository>();
 builder.Services.AddScoped<IFoodDiaryEntryRepository, FoodDiaryEntryRepository>();
 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
-
-builder.Services.AddSingleton<IMealMacrosCalculator, MealMacrosCalculator>();
 
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly));
