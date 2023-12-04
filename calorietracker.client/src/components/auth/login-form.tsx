@@ -30,7 +30,7 @@ export default function LoginForm() {
   // Todo: Fix login form styling
   return (
     <Form {...form}>
-      <form className="flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="flex flex-col space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="username"

@@ -10,14 +10,12 @@ export default function LoginPage() {
         </h1>
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className="grid grid-6">
-          <LoginForm />
-          <div className="text-sm font-semibold tracking-tight text-foreground/80 ">
-            <Link to="/register">
-              Don't have an account?
-              <span className="text-primary"> Sign up</span>
-            </Link>
-          </div>
+        <LoginForm />
+        <div className="text-sm font-semibold tracking-tight text-foreground/80 ">
+          <Link to="/register">
+            Don't have an account?
+            <span className="text-primary"> Sign up</span>
+          </Link>
         </div>
       </div>
     </div>

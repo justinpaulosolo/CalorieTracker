@@ -10,14 +10,12 @@ function RegisterPage() {
         </h1>
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className="grid grid-6">
-          <RegisterForm />
-          <div className="text-sm font-semibold tracking-tight text-foreground/80 ">
-            <Link to="/login">
-              Already have an account?
-              <span className="text-primary"> Sign In</span>
-            </Link>
-          </div>
+        <RegisterForm />
+        <div className="text-sm font-semibold tracking-tight text-foreground/80 ">
+          <Link to="/login">
+            Already have an account?
+            <span className="text-primary"> Sign In</span>
+          </Link>
         </div>
       </div>
     </div>
