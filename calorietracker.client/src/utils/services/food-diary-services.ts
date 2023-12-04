@@ -26,7 +26,7 @@ export function useDeleteFoodDiaryEntry() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (foodDiaryEntryId: number) =>
-      axios.delete(`/api/food-diary-entry/${foodDiaryEntryId}`),
+      axios.delete(`/api/diary/food/${foodDiaryEntryId}`),
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ["food-diary"]

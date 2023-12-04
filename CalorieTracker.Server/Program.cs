@@ -1,6 +1,6 @@
 using CalorieTracker.Server.Data;
+using CalorieTracker.Server.Endpoints;
 using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Extensions;
 using CalorieTracker.Server.Repository;
 using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Identity;
@@ -67,9 +67,8 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
-app.RegisterAccountEndpoints();
-app.RegisterDiaryEndpoints();
-app.RegisterFoodDiaryEntryEndpoints();
+app.MapDiaryEndpoints();
+app.MapAccountEndpoints();
 
 app.MapFallbackToFile("/index.html");
 
