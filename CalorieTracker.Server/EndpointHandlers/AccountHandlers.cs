@@ -9,7 +9,7 @@ namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class AccountHandlers
 {
-    public static async Task<Results<Ok<string>, BadRequest<IdentityResult>, BadRequest<string>>> RegisterAsync(
+    public static async Task<Results<Ok<string>, BadRequest<IdentityResult>, ProblemHttpResult>> RegisterAsync(
         IAccountService accountService,
         RegisterDto registerUserDto)
     {
@@ -26,7 +26,7 @@ public static class AccountHandlers
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.Problem(ex.Message);
         }
     }
 
