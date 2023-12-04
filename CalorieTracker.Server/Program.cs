@@ -1,8 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Endpoints;
 using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Repository;
-using CalorieTracker.Server.Services;
+using CalorieTracker.Server.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,15 +38,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-builder.Services.AddTransient<IFoodDiaryEntryService, FoodDiaryEntryService>();
-builder.Services.AddTransient<IDiaryService, DiaryService>();
-builder.Services.AddTransient<IAccountService, AccountService>();
-
-builder.Services.AddScoped<IMealTypeRepository, MealTypeRepository>();
-builder.Services.AddScoped<IDiaryRepository, DiaryRepository>();
-builder.Services.AddScoped<IFoodDiaryRepository, FoodDiaryRepository>();
-builder.Services.AddScoped<IFoodDiaryEntryRepository, FoodDiaryEntryRepository>();
-builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+builder.Services.RegisterServices();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
