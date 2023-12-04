@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models.Account;
+using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,24 +9,25 @@ namespace CalorieTracker.Server.EndpointHandlers;
 
 public static class AccountHandlers
 {
-    public static async Task<Results<Ok<string>, BadRequest<IdentityResult>>> RegisterAsync(
-        UserManager<ApplicationUser> userManager,
+    public static async Task<Results<Ok<string>, BadRequest<IdentityResult>, BadRequest<string>>> RegisterAsync(
+        IAccountService accountService,
         RegisterDto registerUserDto)
     {
-        var user = new ApplicationUser
+        try
         {
-            UserName = registerUserDto.Username,
-            Email = registerUserDto.Email
-        };
+            var(identityResult, userId) = await accountService.RegisterUserAsync(registerUserDto);
 
-        var result = await userManager.CreateAsync(user, registerUserDto.Password);
+            if (!identityResult.Succeeded)
+            {
+                return TypedResults.BadRequest(identityResult);
+            }
 
-        if (!result.Succeeded)
-        {
-            return TypedResults.BadRequest(result);
+            return TypedResults.Ok(userId);
         }
-
-        return TypedResults.Ok(user.Id);
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 
     public static async Task<Results<Ok<AccountDto>, BadRequest<SignInResult>>> LoginAsync(
