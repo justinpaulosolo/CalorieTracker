@@ -75,3 +75,10 @@ export enum MealEntryTypeEnums {
   Dinner = "Dinner",
   Other = "Other",
 }
+
+export type Nutrition = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
