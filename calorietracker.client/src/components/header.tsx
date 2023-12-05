@@ -17,7 +17,7 @@ import { useGetUserDetails } from "@/hooks/useGetUserDetails.ts";
 import { useLogoutUser } from "@/hooks/useLogoutUser.ts";
 import { cn } from "@/lib/utils.ts";
 
-export default function Navbar() {
+export default function Header() {
   const { data: User } = useGetUserDetails();
   const logoutUser = useLogoutUser();
   const navigate = useNavigate();

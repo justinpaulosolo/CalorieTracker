@@ -1,5 +1,5 @@
 import { Navigate, useOutlet } from "react-router-dom";
-import Navbar from "./navbar";
+import Header from "./header.tsx";
 import { useGetUserDetails } from "@/hooks/useGetUserDetails.ts";
 
 function PrivateRoute() {
@@ -20,7 +20,7 @@ function PrivateRoute() {
 
   return (
     <div className="h-screen flex flex-col space-y-6">
-      <Navbar />
+      <Header />
       <div className="container max-w-5xl">
         <main>{outlet}</main>
       </div>
