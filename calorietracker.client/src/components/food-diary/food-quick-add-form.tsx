@@ -1,15 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@/components/ui/button.tsx";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { cn } from "@/lib/utils.ts";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCreateFoodDiaryEntry } from "@/utils/services/diary-services";
-import { Icons } from "@/components/icons";
-import { CreateFoodDiaryEntryDto } from "@/utils/services/diary-services.ts";
+import {
+  CreateFoodDiaryEntryDto,
+  useCreateFoodDiaryEntry,
+} from "@/utils/services/diary-services.ts";
+import { Icons } from "@/components/icons.tsx";
 
 const foodQuickAddFormSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -18,7 +27,7 @@ const foodQuickAddFormSchema = z.object({
   protein: z.coerce.number().int().min(0).max(999),
   carbs: z.coerce.number().int().min(0).max(999),
   fat: z.coerce.number().int().min(0).max(999),
-  calories: z.coerce.number().int().min(0).max(9999)
+  calories: z.coerce.number().int().min(0).max(9999),
 });
 
 export type FoodQuickAddFormValues = z.infer<typeof foodQuickAddFormSchema>;
@@ -28,7 +37,7 @@ export default function FoodQuickAddForm() {
     date: string;
     meal: string;
   }>();
-  const { mutate, isPending } = useCreateFoodDiaryEntry({ date, meal });
+  const { mutateAsync, isPending } = useCreateFoodDiaryEntry({ date, meal });
   const navigate = useNavigate();
 
   const form = useForm<FoodQuickAddFormValues>({
@@ -40,24 +49,25 @@ export default function FoodQuickAddForm() {
       carbs: 0,
       fat: 0,
       calories: 0,
-      date: date
-    }
+      date: date,
+    },
   });
 
-  function onSubmit(values: FoodQuickAddFormValues) {
+  async function onSubmit(values: FoodQuickAddFormValues) {
     console.log(values);
     const createFoodDiaryEntryDto: CreateFoodDiaryEntryDto = {
       foodName: values.foodName,
       protein: values.protein,
       carbs: values.carbs,
       fat: values.fat,
-      calories: values.calories
+      calories: values.calories,
     };
-    mutate(createFoodDiaryEntryDto, {
-      onSuccess: () => navigate("/food/diary")
+    await mutateAsync(createFoodDiaryEntryDto, {
+      onSuccess: () => navigate("/food-diary/detailed"),
     });
   }
 
+  console.log(date, meal);
   return (
     <Form {...form}>
       <form
@@ -78,7 +88,7 @@ export default function FoodQuickAddForm() {
                         disabled
                         className={cn(
                           buttonVariants({ variant: "outline" }),
-                          "w-[200px] appearance-none bg-transparent font-normal"
+                          "w-[200px] appearance-none bg-transparent font-normal",
                         )}
                         {...field}
                       >
@@ -177,7 +187,11 @@ export default function FoodQuickAddForm() {
           )}
         />
         <Button disabled={isPending} type="submit">
-          {isPending ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : "Submit"}
+          {isPending ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </Form>

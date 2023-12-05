@@ -1,4 +1,4 @@
-import { FoodQuickAddFormValues } from "@/pages/food/forms/food-quick-add-form";
+import { FoodQuickAddFormValues } from "@/components/food-diary/food-quick-add-form.tsx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -9,16 +9,16 @@ export function useCreateFoodDiaryEntry() {
       axios.post("/api/diary/food", foodDiaryEntry),
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ["food-diary"]
+        queryKey: ["food-diary"],
       });
-    }
+    },
   });
 }
 
 export function useGetFoodDiaryByDate(date: string) {
   return useQuery({
     queryKey: ["food-diary", date],
-    queryFn: () => axios.get(`/api/diary/food/${date}`)
+    queryFn: () => axios.get(`/api/diary/food/${date}`),
   });
 }
 
@@ -29,8 +29,8 @@ export function useDeleteFoodDiaryEntry() {
       axios.delete(`/api/diary/food/${foodDiaryEntryId}`),
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ["food-diary"]
+        queryKey: ["food-diary"],
       });
-    }
+    },
   });
 }

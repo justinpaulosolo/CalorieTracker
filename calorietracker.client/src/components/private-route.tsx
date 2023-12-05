@@ -15,15 +15,13 @@ function PrivateRoute() {
   }
 
   if (!User) {
-    return (
-      <Navigate to="/login" />
-    );
+    return <Navigate to="/login" />;
   }
 
   return (
     <div className="h-screen flex flex-col space-y-6">
       <Navbar />
-      <div className="container max-w-4xl">
+      <div className="container max-w-5xl">
         <main>{outlet}</main>
       </div>
     </div>
