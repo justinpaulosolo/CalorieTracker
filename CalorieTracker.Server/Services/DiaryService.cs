@@ -12,7 +12,12 @@ public class DiaryService : IDiaryService
         _diaryRepository = diaryRepository;
     }
 
-    public async Task<Diary?> GetDiaryByUserIdAndDateAsync(string userId, DateTime date)
+    public async Task<int?> GetDiaryIdByDateAsync(DateTime date, string userId)
+    {
+        return await _diaryRepository.GetDiaryIdByDateAsync(date, userId);
+    }
+
+    public async Task<Diary?> GetDiaryByUserIdAndDateAsync(DateTime date, string userId)
     {
         return await _diaryRepository.GetDiaryByDateAsync(date, userId);
     }

@@ -17,7 +17,7 @@ public static class DiaryHandlers
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var diary = await diaryService.GetDiaryByUserIdAndDateAsync(userId!, date);
+            var diary = await diaryService.GetDiaryByUserIdAndDateAsync(date, userId!);
             if (diary == null)
             {
                 return TypedResults.NotFound("Not found");

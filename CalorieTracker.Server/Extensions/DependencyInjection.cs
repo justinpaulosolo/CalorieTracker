@@ -7,6 +7,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
+        services.AddTransient<IFoodDiaryService, FoodDiaryService>();
         services.AddTransient<IFoodDiaryEntryService, FoodDiaryEntryService>();
         services.AddTransient<IDiaryService, DiaryService>();
         services.AddTransient<IAccountService, AccountService>();

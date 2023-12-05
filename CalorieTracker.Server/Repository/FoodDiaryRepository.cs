@@ -21,6 +21,15 @@ public class FoodDiaryRepository : IFoodDiaryRepository
             .FirstOrDefaultAsync(fd => fd.FoodDiaryId == foodDiaryId);
     }
 
+    public Task<List<FoodDiary>> GetFoodDiariesByDiaryId(int dairyId)
+    {
+        return _applicationDbContext.FoodDiaries
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .Where(fd => fd.DiaryId == dairyId)
+            .ToListAsync();
+    }
+
     public async Task<FoodDiary?> GetFoodDiaryByDateAsync(DateTime date, string userId)
     {
         return await _applicationDbContext.FoodDiaries

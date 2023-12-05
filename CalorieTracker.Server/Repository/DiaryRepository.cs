@@ -22,6 +22,14 @@ public class DiaryRepository : IDiaryRepository
             .FirstOrDefaultAsync(d => d.DiaryId == diaryId);
     }
 
+    public async Task<int?> GetDiaryIdByDateAsync(DateTime date, string userId)
+    {
+        return await _dbContext.Diaries
+            .Where(d => d.UserId == userId && d.Date.Date == date.Date)
+            .Select(d => d.DiaryId)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<Diary?> GetDiaryByDateAsync(DateTime date, string userId)
     {
         return await _dbContext.Diaries
@@ -31,6 +39,17 @@ public class DiaryRepository : IDiaryRepository
             .FirstOrDefaultAsync(d => d.Date.Date == date.Date && d.UserId == userId);
     }
 
+    public async Task<int?> GetFoodDiaryIdByDateAsync(DateTime date, string userId)
+    {
+        var foodDiaryId = await _dbContext.Diaries
+            .Where(d => d.UserId == userId && d.Date.Date == date.Date)
+            .SelectMany(d => d.FoodDiaries)
+            .Select(fd => fd.FoodDiaryId)
+            .FirstOrDefaultAsync();
+
+        return foodDiaryId > 0 ? foodDiaryId : null;
+    }
+    
     public async Task<Diary> CreateDiaryAsync(Diary diary)
     {
         await _dbContext.Diaries.AddAsync(diary);

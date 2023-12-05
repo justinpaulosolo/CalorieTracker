@@ -4,5 +4,6 @@ namespace CalorieTracker.Server.Services;
 
 public interface IDiaryService
 {
-    public Task<Diary?> GetDiaryByUserIdAndDateAsync(string userId, DateTime date);
+    public Task<int?> GetDiaryIdByDateAsync(DateTime date, string userId);
+    public Task<Diary?> GetDiaryByUserIdAndDateAsync(DateTime date, string userId);
 }

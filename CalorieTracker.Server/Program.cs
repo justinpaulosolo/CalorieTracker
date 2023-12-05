@@ -31,6 +31,7 @@ app.UseHttpsRedirection();
 
 app.MapDiaryEndpoints();
 app.MapAccountEndpoints();
+app.MapNutritionEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

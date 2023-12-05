@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models;
 using CalorieTracker.Server.Models.Food;
 using CalorieTracker.Server.Models.FoodDiary;
+using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
