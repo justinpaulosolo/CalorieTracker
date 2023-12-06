@@ -82,3 +82,16 @@ export type Nutrition = {
   carbs: number;
   fat: number;
 };
+
+export type DiaryFood = {
+  foodId: number;
+  name: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  calories: number;
+};
+
+export type GetDiaryFoodsResponse = {
+  data: DiaryFood[];
+};

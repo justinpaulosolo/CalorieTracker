@@ -22,6 +22,10 @@ public static class DiaryEndpoints
         diaryEndpoints.MapDelete("/food/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsyncV2)
             .WithSummary("Delete a food diary entry")
             .WithDescription("Deletes a food diary entry for the current user by ID");
+        
+        diaryEndpoints.MapGet("/foods/{date:datetime}", FoodDiaryEntryHandlers.GetDiaryFoodsEntriesAsync)
+            .WithSummary("Get diary foods by date")
+            .WithDescription("Retrieves diary foods for the current user by date");
 
         return diaryEndpoints;
     }

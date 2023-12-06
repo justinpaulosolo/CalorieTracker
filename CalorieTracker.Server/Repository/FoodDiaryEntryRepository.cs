@@ -13,6 +13,16 @@ public class FoodDiaryEntryRepository : IFoodDiaryEntryRepository
         _applicationDbContext = applicationDbContext;
     }
 
+    public async Task<List<Food>> GetFoodsByDiaryIdAsync(int diaryId)
+    {
+        var foodEntries = await _applicationDbContext.FoodDiaryEntries
+            .Where(entry => entry.FoodDiary.DiaryId == diaryId)
+            .Select(entry => entry.Food)
+            .ToListAsync();
+
+        return foodEntries;
+    }
+
     public async Task<FoodDiaryEntry?> GetFoodDiaryEntryByIdAsync(int foodDiaryEntryId)
     {
         return await _applicationDbContext.FoodDiaryEntries

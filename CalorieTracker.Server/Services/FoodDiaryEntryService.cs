@@ -94,6 +94,18 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
         return foodDiaryEntryEntity.FoodDiaryEntryId;
     }
 
+    public async Task<List<Food>> GetDiaryFoodsByDate(DateTime date, string userId)
+    {
+        var diaryId = await _diaryRepository.GetDiaryIdByDateAsync(date, userId);
+        
+        if (diaryId == null)
+        {
+            return [];
+        }
+        
+        return await _foodDiaryEntryRepository.GetFoodsByDiaryIdAsync(diaryId.Value);
+    }
+
     public async Task<bool> DeleteFoodDiaryEntryByIdAsync(int foodDiaryEntryId, string userId)
     {
         var foodDiaryEntry = await _foodDiaryEntryRepository.GetFoodDiaryEntryByIdAsync(foodDiaryEntryId);
