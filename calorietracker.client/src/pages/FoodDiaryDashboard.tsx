@@ -5,9 +5,12 @@ import RecentFoodEntriesCard from "@/components/recent-food-entries-card.tsx";
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
+import FoodQuickAddForm from "@/components/food-diary/food-quick-add-form.tsx";
+import { Link } from "react-router-dom";
 
 function FoodDiaryDashboard() {
   const [date, setDate] = useState(new Date());
@@ -21,16 +24,31 @@ function FoodDiaryDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <NutritionInfoCard date={date} />
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 items-start">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Test Card</CardTitle>
+            <CardTitle>Add Food Diary Entry</CardTitle>
           </CardHeader>
           <CardContent>
-            <h1>Place Holder</h1>
+            <FoodQuickAddForm date={date} />
           </CardContent>
         </Card>
-        <RecentFoodEntriesCard date={date} />
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Recent Food Diary Entries</CardTitle>
+          </CardHeader>
+          <CardContent className="">
+            <RecentFoodEntriesCard date={date} />
+          </CardContent>
+          <CardFooter className="mt-auto">
+            <Link
+              to="/food-diary/detailed"
+              className="text-sm underline underline-offset-4"
+            >
+              View detailed food diary
+            </Link>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

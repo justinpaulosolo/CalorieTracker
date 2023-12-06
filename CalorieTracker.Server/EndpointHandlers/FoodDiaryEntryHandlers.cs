@@ -32,8 +32,6 @@ public static class FoodDiaryEntryHandlers
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreateFoodDiaryEntryAsync(
         IFoodDiaryEntryService foodDiaryEntryService,
         CreateFoodDiaryEntryDto createFoodDiaryEntryDto,
-        DateTime date,
-        string meal,
         ClaimsPrincipal claimsPrincipal
         )
     {
@@ -41,8 +39,8 @@ public static class FoodDiaryEntryHandlers
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             var foodDiaryEntryId = await foodDiaryEntryService.CreateFoodDiaryEntryAsync(createFoodDiaryEntryDto,
-                date,
-                meal,
+                createFoodDiaryEntryDto.Date,
+                createFoodDiaryEntryDto.Meal,
                 userId!);
             
             return TypedResults.Ok(foodDiaryEntryId);

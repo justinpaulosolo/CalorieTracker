@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button, buttonVariants } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Form,
   FormControl,
@@ -11,14 +11,20 @@ import {
   FormMessage,
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import { cn } from "@/lib/utils.ts";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { useNavigate, useParams } from "react-router-dom";
 import {
   CreateFoodDiaryEntryDto,
   useCreateFoodDiaryEntry,
 } from "@/utils/services/diary-services.ts";
 import { Icons } from "@/components/icons.tsx";
+import { format } from "date-fns";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
+import { useParams } from "react-router-dom";
 
 const foodQuickAddFormSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -32,24 +38,34 @@ const foodQuickAddFormSchema = z.object({
 
 export type FoodQuickAddFormValues = z.infer<typeof foodQuickAddFormSchema>;
 
-export default function FoodQuickAddForm() {
-  const { date, meal } = useParams<{
-    date: string;
-    meal: string;
+interface FoodQuickAddFormProps {
+  date?: Date;
+  onSuccessfulSubmit?: () => void;
+}
+
+export default function FoodQuickAddForm({
+  date: dateProp,
+  onSuccessfulSubmit,
+}: FoodQuickAddFormProps) {
+  const { date: dateParam, meal: mealParam } = useParams<{
+    date?: string;
+    meal?: string;
   }>();
-  const { mutateAsync, isPending } = useCreateFoodDiaryEntry({ date, meal });
-  const navigate = useNavigate();
+
+  const { mutateAsync, isPending } = useCreateFoodDiaryEntry(
+    dateParam ?? format(dateProp!, "yyyy-MM-dd"),
+  );
 
   const form = useForm<FoodQuickAddFormValues>({
     resolver: zodResolver(foodQuickAddFormSchema),
     defaultValues: {
-      meal: meal,
+      meal: mealParam ?? "",
       foodName: "",
       protein: 0,
       carbs: 0,
       fat: 0,
       calories: 0,
-      date: date,
+      date: dateParam ?? format(dateProp!, "yyyy-MM-dd"),
     },
   });
 
@@ -61,13 +77,17 @@ export default function FoodQuickAddForm() {
       carbs: values.carbs,
       fat: values.fat,
       calories: values.calories,
+      meal: values.meal,
+      date: values.date,
     };
     await mutateAsync(createFoodDiaryEntryDto, {
-      onSuccess: () => navigate("/food-diary/detailed"),
+      onSuccess: () => {
+        form.reset();
+        return onSuccessfulSubmit;
+      },
     });
   }
 
-  console.log(date, meal);
   return (
     <Form {...form}>
       <form
@@ -79,30 +99,20 @@ export default function FoodQuickAddForm() {
           name="meal"
           render={({ field }) => (
             <FormItem>
-              <div className="flex justify-between">
-                <FormLabel>Meal</FormLabel>
-                <div className="relative w-max">
-                  <FormControl>
-                    <>
-                      <select
-                        disabled
-                        className={cn(
-                          buttonVariants({ variant: "outline" }),
-                          "w-[200px] appearance-none bg-transparent font-normal",
-                        )}
-                        {...field}
-                      >
-                        <option value={"Breakfast"}>Breakfast</option>
-                        <option value={"Lunch"}>Lunch</option>
-                        <option value={"Dinner"}>Dinner</option>
-                        <option value={"Snacks"}>Snack</option>
-                      </select>
-                      <input type="hidden" name="meal" value={field.value} />
-                    </>
-                  </FormControl>
-                  <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
-                </div>
-              </div>
+              <FormLabel>Email</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a meal" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="Breakfast">Breakfast</SelectItem>
+                  <SelectItem value="Lunch">Lunch</SelectItem>
+                  <SelectItem value="Dinner">Dinner</SelectItem>
+                  <SelectItem value="Snacks">Snack</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

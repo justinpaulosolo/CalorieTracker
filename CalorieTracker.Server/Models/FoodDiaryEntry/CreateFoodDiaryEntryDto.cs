@@ -2,7 +2,7 @@ namespace CalorieTracker.Server.Models.FoodDiaryEntry;
 
 public class CreateFoodDiaryEntryDto
 {
-    public int MealTypeId { get; set; }
+    public string Meal { get; set; } = default!;
     public DateTime Date { get; set; }
     public string FoodName { get; set;} = default!;
     public double Calories { get; set; }

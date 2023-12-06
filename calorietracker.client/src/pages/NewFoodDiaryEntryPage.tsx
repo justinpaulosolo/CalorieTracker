@@ -16,8 +16,10 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 import FoodQuickAddForm from "../components/food-diary/food-quick-add-form.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function NewFoodDiaryEntryPage() {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center">
       <Tabs defaultValue="quickadd" className="w-[500px]">
@@ -35,7 +37,9 @@ export default function NewFoodDiaryEntryPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <FoodQuickAddForm />
+              <FoodQuickAddForm
+                onSuccessfulSubmit={() => navigate("/food-diary/detailed")}
+              />
             </CardContent>
           </Card>
         </TabsContent>

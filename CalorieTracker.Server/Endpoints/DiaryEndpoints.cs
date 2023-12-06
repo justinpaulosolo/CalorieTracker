@@ -15,7 +15,7 @@ public static class DiaryEndpoints
             .WithSummary("Get a diary entry by date")
             .WithDescription("Retrieves a diary entry for the current user by date");
         
-        diaryEndpoints.MapPost("/{date:datetime}/food/{meal}", FoodDiaryEntryHandlers.CreateFoodDiaryEntryAsync)
+        diaryEndpoints.MapPost("/food", FoodDiaryEntryHandlers.CreateFoodDiaryEntryAsync)
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
         

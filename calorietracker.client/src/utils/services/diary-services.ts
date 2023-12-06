@@ -7,35 +7,36 @@ const MEAL_TYPE_IDS = {
   BREAKFAST: 1,
   LUNCH: 2,
   DINNER: 3,
-  SNACKS: 4
+  SNACKS: 4,
 };
 
 export interface CreateFoodDiaryEntryDto {
-  foodName: string,
-  protein: number,
-  carbs: number,
-  fat: number,
-  calories: number,
+  foodName: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  calories: number;
+  meal: string;
+  date: string;
 }
 
-export function useCreateFoodDiaryEntry({ date, meal }: { date?: string, meal?: string }) {
+export function useCreateFoodDiaryEntry(date: string) {
   const queryClient = useQueryClient();
-
-  if (!date || !meal) {
-    throw new Error("Date and meal must be provided");
-  }
-
+  console.log(date, "service");
   return useMutation({
     mutationFn: (foodDiaryEntry: CreateFoodDiaryEntryDto) =>
-      axios.post(`/api/diary/${date}/food/${meal}`, foodDiaryEntry),
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ["food-diary"]
-      });
-    }
+      axios.post("/api/diary/food", foodDiaryEntry),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["diary-foods", date],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["nutrition", date],
+        }),
+      ]),
   });
 }
-
 
 export function useGetFoodDiaryByDate(date: string) {
   const queryInfo = useQuery({
@@ -46,37 +47,37 @@ export function useGetFoodDiaryByDate(date: string) {
       const data: Diary = response.data;
       return data;
     },
-    retry: false
+    retry: false,
   });
   return {
     isLoading: queryInfo.isLoading,
     breakfast: useMemo(
       () =>
         queryInfo.data?.foodDiaries.find(
-          diary => diary.mealTypeId === MEAL_TYPE_IDS.BREAKFAST
+          diary => diary.mealTypeId === MEAL_TYPE_IDS.BREAKFAST,
         ),
-      [queryInfo.data]
+      [queryInfo.data],
     ),
     lunch: useMemo(
       () =>
         queryInfo.data?.foodDiaries.find(
-          diary => diary.mealTypeId === MEAL_TYPE_IDS.LUNCH
+          diary => diary.mealTypeId === MEAL_TYPE_IDS.LUNCH,
         ),
-      [queryInfo.data]
+      [queryInfo.data],
     ),
     dinner: useMemo(
       () =>
         queryInfo.data?.foodDiaries.find(
-          diary => diary.mealTypeId === MEAL_TYPE_IDS.DINNER
+          diary => diary.mealTypeId === MEAL_TYPE_IDS.DINNER,
         ),
-      [queryInfo.data]
+      [queryInfo.data],
     ),
     snacks: useMemo(
       () =>
         queryInfo.data?.foodDiaries.find(
-          diary => diary.mealTypeId === MEAL_TYPE_IDS.SNACKS
+          diary => diary.mealTypeId === MEAL_TYPE_IDS.SNACKS,
         ),
-      [queryInfo.data]
-    )
+      [queryInfo.data],
+    ),
   };
 }
