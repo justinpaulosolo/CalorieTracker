@@ -24,8 +24,8 @@ function FoodDiaryDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <NutritionInfoCard date={date} />
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 items-start">
-        <Card className="col-span-4">
+      <div className="grid gap-4 grid-cols-6 items-start">
+        <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Add Food Diary Entry</CardTitle>
           </CardHeader>
@@ -37,7 +37,7 @@ function FoodDiaryDashboard() {
           <CardHeader>
             <CardTitle>Recent Food Diary Entries</CardTitle>
           </CardHeader>
-          <CardContent className="">
+          <CardContent>
             <RecentFoodEntriesCard date={date} />
           </CardContent>
           <CardFooter className="mt-auto">
