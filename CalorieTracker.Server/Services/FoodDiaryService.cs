@@ -95,6 +95,19 @@ public class FoodDiaryService : IFoodDiaryService
         return foodDiaryEntry.FoodDiaryEntryId;
     }
 
+    public async Task<List<Food>> GetDiaryFoodsByDate(DateTime date, string userId)
+    {
+        var diary = await _dbContext.Diaries
+            .Include(d => d.FoodDiaries)
+            .ThenInclude(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .FirstOrDefaultAsync(d => d.Date.Date == date && d.UserId == userId);
+
+        if (diary == null) return new List<Food>();
+        var foods = diary.FoodDiaries.SelectMany(fd => fd.FoodDiaryEntries.Select(fde => fde.Food)).ToList();
+        return foods;
+    }
+
     public async Task<FoodDiary?> GetFoodDiaryByIdAsync(int foodDiaryEntryId)
     {
         return await _foodDiaryRepository.GetFoodDiaryByIdAsync(foodDiaryEntryId);

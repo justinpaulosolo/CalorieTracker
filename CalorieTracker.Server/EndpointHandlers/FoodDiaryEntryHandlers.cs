@@ -12,13 +12,14 @@ public static class FoodDiaryEntryHandlers
 {
     public static async Task<Ok<FoodEntriesResponseDto>> GetDiaryFoodsEntriesAsync(
         IFoodDiaryEntryService foodDiaryEntryService,
+        IFoodDiaryService foodDiaryService,
         DateTime date,
         ClaimsPrincipal claimsPrincipal)
     {
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var foodEntries = await foodDiaryEntryService.GetDiaryFoodsByDate(date, userId!);
+            var foodEntries = await foodDiaryService.GetDiaryFoodsByDate(date, userId!);
             var responseDto = new FoodEntriesResponseDto { Data = foodEntries };
             return TypedResults.Ok(responseDto);
         }
