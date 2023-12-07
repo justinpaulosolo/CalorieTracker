@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Banana, UserIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,13 +15,14 @@ import {
 } from "@/components/ui/avatar.tsx";
 import { useGetUserDetails } from "@/hooks/useGetUserDetails.ts";
 import { useLogoutUser } from "@/hooks/useLogoutUser.ts";
-import { cn } from "@/lib/utils.ts";
+import {Navigation} from "@/components/navigation.tsx";
+
 
 export default function Header() {
   const { data: User } = useGetUserDetails();
   const logoutUser = useLogoutUser();
   const navigate = useNavigate();
-  const pathName = useLocation();
+  //const pathName = useLocation();
 
   const handleNavigateToSettings = () => navigate("/settings/account");
 
@@ -38,28 +39,7 @@ export default function Header() {
             <span className="font-bold">Crispy Happiness</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
-              to="/food-diary"
-              className={cn(
-                "transition-colors hover:text-foreground/80",
-                pathName.pathname === "/food-diary"
-                  ? "text-foreground"
-                  : "text-foreground/60",
-              )}
-            >
-              Food
-            </Link>
-            <Link
-              to="/exercise-diary"
-              className={cn(
-                "transition-colors hover:text-foreground/80",
-                pathName.pathname === "/exercise/diary"
-                  ? "text-foreground"
-                  : "text-foreground/60",
-              )}
-            >
-              Exercise
-            </Link>
+            <Navigation />
           </nav>
         </div>
         <div className="flex flex-1 items-center space-x-2 justify-end">
