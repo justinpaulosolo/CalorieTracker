@@ -19,7 +19,7 @@ public static class DiaryEndpoints
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
         
-        diaryEndpoints.MapDelete("/food/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsyncV2)
+        diaryEndpoints.MapDelete("/food/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsync)
             .WithSummary("Delete a food diary entry")
             .WithDescription("Deletes a food diary entry for the current user by ID");
         

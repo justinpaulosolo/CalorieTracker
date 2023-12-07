@@ -106,6 +106,70 @@ public class FoodDiaryEntryService : IFoodDiaryEntryService
         return await _foodDiaryEntryRepository.GetFoodsByDiaryIdAsync(diaryId.Value);
     }
 
+    public async Task<int> UpdateFoodDiaryEntryAsync(UpdateFoodDiaryEntryDto updateFoodDiaryEntryDto, int foodDiaryEntryId, string userId)
+    {
+        var mealType = await _mealTypeRepository.GetMealTypeByNameAsync(updateFoodDiaryEntryDto.Meal);
+        
+        var foodDiaryEntry = await _foodDiaryEntryRepository.GetFoodDiaryEntryByIdAsync(foodDiaryEntryId);
+        
+        var diary = await _diaryRepository.GetDiaryByDateAsync(updateFoodDiaryEntryDto.Date, userId);
+        
+        if (diary == null)
+        {
+            diary = new Diary
+            {
+                UserId = userId,
+                Date = updateFoodDiaryEntryDto.Date,
+                FoodDiaries = new List<FoodDiary>()
+            };
+            await _diaryRepository.CreateDiaryAsync(diary);
+        }
+        
+        var foodDiary = await _foodDiaryRepository.GetFoodDiaryByDateAndMealTypeAsync(updateFoodDiaryEntryDto.Date,
+            mealType!.MealTypeId, userId);
+        
+        if (foodDiary == null)
+        {
+            foodDiary = await _foodDiaryRepository.CreateFoodDiaryAsync(new FoodDiary
+            {
+                DiaryId = diary.DiaryId,
+                MealTypeId = mealType.MealTypeId,
+                FoodDiaryEntries = new List<FoodDiaryEntry>()
+            });
+        }
+        
+        var food = await _foodRepository.GetFoodByNameAndNutrientsAsync(
+            updateFoodDiaryEntryDto.Name,
+            updateFoodDiaryEntryDto.Calories,
+            updateFoodDiaryEntryDto.Protein,
+            updateFoodDiaryEntryDto.Carbs,
+            updateFoodDiaryEntryDto.Fat
+        );
+
+        if (food == null)
+        {
+            var newFood = new Food()
+            {
+                Name = updateFoodDiaryEntryDto.Name,
+                Calories = updateFoodDiaryEntryDto.Calories,
+                Protein = updateFoodDiaryEntryDto.Protein,
+                Fat = updateFoodDiaryEntryDto.Fat,
+                Carbs = updateFoodDiaryEntryDto.Carbs
+            };
+            await _foodRepository.CreateFoodAsync(newFood);
+            
+            
+        }
+        
+        
+        
+        
+        var meal =  await _mealTypeRepository.GetMealTypeByNameAsync(updateFoodDiaryEntryDto.Meal);
+        
+        
+        throw new NotImplementedException();
+    }
+
     public async Task<bool> DeleteFoodDiaryEntryByIdAsync(int foodDiaryEntryId, string userId)
     {
         var foodDiaryEntry = await _foodDiaryEntryRepository.GetFoodDiaryEntryByIdAsync(foodDiaryEntryId);

@@ -31,6 +31,7 @@ public static class FoodDiaryEntryHandlers
     }
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreateFoodDiaryEntryAsync(
         IFoodDiaryEntryService foodDiaryEntryService,
+        IFoodDiaryService foodDiaryService,
         CreateFoodDiaryEntryDto createFoodDiaryEntryDto,
         ClaimsPrincipal claimsPrincipal
         )
@@ -38,11 +39,7 @@ public static class FoodDiaryEntryHandlers
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var foodDiaryEntryId = await foodDiaryEntryService.CreateFoodDiaryEntryAsync(createFoodDiaryEntryDto,
-                createFoodDiaryEntryDto.Date,
-                createFoodDiaryEntryDto.Meal,
-                userId!);
-            
+            var foodDiaryEntryId = await foodDiaryService.CreateFoodDiaryEntryAsync(createFoodDiaryEntryDto, userId!);
             return TypedResults.Ok(foodDiaryEntryId);
         }
         catch (Exception ex)
@@ -53,7 +50,7 @@ public static class FoodDiaryEntryHandlers
         }
     }
 
-    public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsyncV2(
+    public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsync(
         IFoodDiaryEntryService foodDiaryEntryService,
         int foodDiaryEntryId,
         ClaimsPrincipal claimsPrincipal)
@@ -73,50 +70,12 @@ public static class FoodDiaryEntryHandlers
             return TypedResults.NotFound();
         }
     }
-
-    public static async Task<Results<NoContent, NotFound>> DeleteFoodDiaryEntryAsync(
-        ApplicationDbContext applicationDbContext,
-        int foodDiaryEntryId,
+    
+    public static Task<Results<Ok<string>, BadRequest<string>>> UpdateFoodDiaryEntryAsync(
+        IFoodDiaryEntryService foodDiaryEntryService,
+        UpdateFoodDiaryEntryDto updateFoodDiaryEntryDto,
         ClaimsPrincipal claimsPrincipal)
     {
-        var foodDiaryEntry = await GetFoodDiaryEntry(applicationDbContext, foodDiaryEntryId);
-
-        if (foodDiaryEntry == null)
-        {
-            return TypedResults.NotFound();
-        }
-
-        await RemoveFoodDiaryEntry(applicationDbContext, foodDiaryEntry);
-
-        if (!await IsFoodUsedElsewhere(applicationDbContext, foodDiaryEntry.Food))
-        {
-            await RemoveFood(applicationDbContext, foodDiaryEntry.Food);
-        }
-
-        return TypedResults.NoContent();
-    }
-
-    private static async Task<FoodDiaryEntry?> GetFoodDiaryEntry(ApplicationDbContext applicationDbContext, int foodDiaryEntryId)
-    {
-        return await applicationDbContext.FoodDiaryEntries
-            .Include(fde => fde.Food)
-            .FirstOrDefaultAsync(fde => fde.FoodDiaryEntryId == foodDiaryEntryId);
-    }
-
-    private static async Task RemoveFoodDiaryEntry(ApplicationDbContext applicationDbContext, FoodDiaryEntry foodDiaryEntry)
-    {
-        applicationDbContext.FoodDiaryEntries.Remove(foodDiaryEntry);
-        await applicationDbContext.SaveChangesAsync();
-    }
-
-    private static async Task<bool> IsFoodUsedElsewhere(ApplicationDbContext applicationDbContext, Food food)
-    {
-        return await applicationDbContext.FoodDiaryEntries.AnyAsync(fde => fde.FoodId == food.FoodId);
-    }
-
-    private static async Task RemoveFood(ApplicationDbContext applicationDbContext, Food food)
-    {
-        applicationDbContext.Foods.Remove(food);
-        await applicationDbContext.SaveChangesAsync();
+        throw new NotImplementedException();
     }
 }
