@@ -1,7 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "@/utils/types.ts";
@@ -17,20 +24,32 @@ export default function RegisterForm() {
     defaultValues: {
       email: "",
       username: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
-  function onSubmit(values: RegisterUser) {
-    registerUser.mutate(values, {
-      onSuccess: () => navigate("/")
+  async function onSubmit(values: RegisterUser) {
+    await registerUser.mutateAsync(values, {
+      onSuccess: () => navigate("/"),
+      onError: () => {
+        const formError = {
+          type: "server",
+          message: "Username or email already taken",
+        };
+
+        form.setError("email", formError);
+        form.setError("username", formError);
+      },
     });
   }
 
   // Todo: Fix register form styling
   return (
     <Form {...form}>
-      <form className="flex flex-col space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col space-y-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="email"
