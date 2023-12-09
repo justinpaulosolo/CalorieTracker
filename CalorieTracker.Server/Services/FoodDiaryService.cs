@@ -95,6 +95,32 @@ public class FoodDiaryService : IFoodDiaryService
         return foodDiaryEntry.FoodDiaryEntryId;
     }
 
+    public async Task<bool> DeleteFoodDiaryEntryByIdAsync(int foodDiaryEntryId, string userId)
+    {
+        var foodDiaryEntry = await _dbContext.FoodDiaryEntries
+            .Include(fde => fde.Food)
+            .FirstOrDefaultAsync(fde => fde.FoodDiaryEntryId == foodDiaryEntryId);
+
+        if (foodDiaryEntry == null)
+        {
+            return false;
+        }
+
+        _dbContext.FoodDiaryEntries.Remove(foodDiaryEntry);
+        var result = await _dbContext.SaveChangesAsync();
+
+        return result > 0;
+    }
+
+    public async Task<Diary?> GetFoodDiaryByDateAsync(DateTime date, string userId)
+    {
+        return await _dbContext.Diaries
+            .Include(d => d.FoodDiaries)
+            .ThenInclude(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .FirstOrDefaultAsync(d => d.Date.Date == date.Date && d.UserId == userId);
+    }
+
     public async Task<List<Food>> GetDiaryFoodsByDate(DateTime date, string userId)
     {
         var diary = await _dbContext.Diaries
@@ -108,20 +134,14 @@ public class FoodDiaryService : IFoodDiaryService
         return foods;
     }
 
-    public async Task<FoodDiary?> GetFoodDiaryByIdAsync(int foodDiaryEntryId)
-    {
-        return await _foodDiaryRepository.GetFoodDiaryByIdAsync(foodDiaryEntryId);
-    }
-
-    public Task<int?> GetFoodDiaryIdByDateAsync(DateTime date, string userId)
-    {
-        return _diaryRepository.GetFoodDiaryIdByDateAsync(date, userId);
-    }
-
     public async Task<NutritionInfo?> GetNutritionInfoAsync(int diaryId)
     {
-        var foodDiaries = await _foodDiaryRepository.GetFoodDiariesByDiaryId(diaryId);
-    
+        var foodDiaries = await _dbContext.FoodDiaries
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .Where(fd => fd.DiaryId == diaryId)
+            .ToListAsync();
+        
         var nutritionInfo = new NutritionInfo();
 
         if (foodDiaries.Count == 0) return nutritionInfo;
@@ -134,26 +154,5 @@ public class FoodDiaryService : IFoodDiaryService
         }
 
         return nutritionInfo;
-    }
-
-    public async Task<FoodDiary> CreateFoodDiaryAsync(CreateFoodDiaryDto foodDiaryDto)
-    {
-        var foodDiary = new FoodDiary
-        {
-            FoodDiaryId = foodDiaryDto.FoodDiaryId,
-            DiaryId = foodDiaryDto.DiaryId,
-            MealTypeId = foodDiaryDto.MealTypeId
-        };
-        return await _foodDiaryRepository.CreateFoodDiaryAsync(foodDiary);
-    }
-
-    public Task<FoodDiary> UpdateFoodDiaryAsync(UpdateFoodDiaryDto foodDiary)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteFoodDiaryAsync(FoodDiary foodDiary)
-    {
-        throw new NotImplementedException();
     }
 }
