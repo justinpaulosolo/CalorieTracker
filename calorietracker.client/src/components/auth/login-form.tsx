@@ -1,7 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { LoginUser } from "@/utils/types.ts";
@@ -16,29 +23,42 @@ export default function LoginForm() {
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
   function onSubmit(values: LoginUser) {
     // Todo: Show some error when login fails
     loginUser.mutate(values, {
-      onSuccess: () => navigate("/")
+      onSuccess: () => navigate("/"),
+      onError: error => {
+        const formError = {
+          type: "server",
+          message: "Invalid username or password",
+        };
+
+        form.setError("username", formError);
+        form.setError("password", formError);
+        console.log(error);
+      },
     });
   }
 
   // Todo: Fix login form styling
   return (
     <Form {...form}>
-      <form className="flex flex-col space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col space-y-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input required placeholder="Username" {...field} />
+                <Input required {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -51,13 +71,15 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input required placeholder="Password" type="password" {...field} />
+                <Input required type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={!form.formState.isValid} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
