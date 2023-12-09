@@ -1,35 +1,17 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models;
-using CalorieTracker.Server.Models.FoodDiary;
 using CalorieTracker.Server.Models.FoodDiaryEntry;
-using CalorieTracker.Server.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Services;
 
-public class FoodDiaryService : IFoodDiaryService
+public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryService
 {
-    private readonly ApplicationDbContext _dbContext;
-    private readonly IFoodDiaryRepository _foodDiaryRepository;
-    private readonly IDiaryRepository _diaryRepository;
-    private readonly IMealTypeRepository _mealTypeRepository;
-
-    public FoodDiaryService(IFoodDiaryRepository foodDiaryRepository,
-        IDiaryRepository diaryRepository,
-        IMealTypeRepository mealTypeRepository,
-        ApplicationDbContext dbContext)
-    {
-        _foodDiaryRepository = foodDiaryRepository;
-        _diaryRepository = diaryRepository;
-        _mealTypeRepository = mealTypeRepository;
-        _dbContext = dbContext;
-    }
-
     public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, string userId)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        var diary = await _dbContext.Diaries
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+        var diary = await dbContext.Diaries
             .Include(d => d.FoodDiaries)
             .ThenInclude(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
@@ -43,14 +25,14 @@ public class FoodDiaryService : IFoodDiaryService
                 Date = createFoodDiaryEntryDto.Date,
                 FoodDiaries = new List<FoodDiary>()
             };
-            await _dbContext.Diaries.AddAsync(diary);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.Diaries.AddAsync(diary);
+            await dbContext.SaveChangesAsync();
         }
         
-        var mealType = await _dbContext.MealTypes.FirstOrDefaultAsync(mt => mt.Name == createFoodDiaryEntryDto.Meal);
+        var mealType = await dbContext.MealTypes.FirstOrDefaultAsync(mt => mt.Name == createFoodDiaryEntryDto.Meal);
         
         
-        var foodDiary = await _dbContext.FoodDiaries
+        var foodDiary = await dbContext.FoodDiaries
             .Include(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
             .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == createFoodDiaryEntryDto.Date
@@ -65,8 +47,8 @@ public class FoodDiaryService : IFoodDiaryService
                 MealTypeId = mealType!.MealTypeId,
                 FoodDiaryEntries = new List<FoodDiaryEntry>()
             };
-            await _dbContext.FoodDiaries.AddAsync(foodDiary);
-            await _dbContext.SaveChangesAsync();
+            await dbContext.FoodDiaries.AddAsync(foodDiary);
+            await dbContext.SaveChangesAsync();
         }
 
         var food = new Food
@@ -78,8 +60,8 @@ public class FoodDiaryService : IFoodDiaryService
             Calories = createFoodDiaryEntryDto.Calories
         };
         
-        await _dbContext.Foods.AddAsync(food);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.Foods.AddAsync(food);
+        await dbContext.SaveChangesAsync();
         
         var foodDiaryEntry = new FoodDiaryEntry
         {
@@ -87,8 +69,8 @@ public class FoodDiaryService : IFoodDiaryService
             FoodId = food.FoodId,
         };
         
-        await _dbContext.FoodDiaryEntries.AddAsync(foodDiaryEntry);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.FoodDiaryEntries.AddAsync(foodDiaryEntry);
+        await dbContext.SaveChangesAsync();
         
         await transaction.CommitAsync();
         
@@ -97,7 +79,7 @@ public class FoodDiaryService : IFoodDiaryService
 
     public async Task<bool> DeleteFoodDiaryEntryByIdAsync(int foodDiaryEntryId, string userId)
     {
-        var foodDiaryEntry = await _dbContext.FoodDiaryEntries
+        var foodDiaryEntry = await dbContext.FoodDiaryEntries
             .Include(fde => fde.Food)
             .FirstOrDefaultAsync(fde => fde.FoodDiaryEntryId == foodDiaryEntryId);
 
@@ -106,15 +88,15 @@ public class FoodDiaryService : IFoodDiaryService
             return false;
         }
 
-        _dbContext.FoodDiaryEntries.Remove(foodDiaryEntry);
-        var result = await _dbContext.SaveChangesAsync();
+        dbContext.FoodDiaryEntries.Remove(foodDiaryEntry);
+        var result = await dbContext.SaveChangesAsync();
 
         return result > 0;
     }
 
     public async Task<Diary?> GetFoodDiaryByDateAsync(DateTime date, string userId)
     {
-        return await _dbContext.Diaries
+        return await dbContext.Diaries
             .Include(d => d.FoodDiaries)
             .ThenInclude(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
@@ -123,7 +105,7 @@ public class FoodDiaryService : IFoodDiaryService
 
     public async Task<List<Food>> GetDiaryFoodsByDate(DateTime date, string userId)
     {
-        var diary = await _dbContext.Diaries
+        var diary = await dbContext.Diaries
             .Include(d => d.FoodDiaries)
             .ThenInclude(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
@@ -136,7 +118,7 @@ public class FoodDiaryService : IFoodDiaryService
 
     public async Task<NutritionInfo?> GetNutritionInfoAsync(int diaryId)
     {
-        var foodDiaries = await _dbContext.FoodDiaries
+        var foodDiaries = await dbContext.FoodDiaries
             .Include(fd => fd.FoodDiaryEntries)
             .ThenInclude(fde => fde.Food)
             .Where(fd => fd.DiaryId == diaryId)

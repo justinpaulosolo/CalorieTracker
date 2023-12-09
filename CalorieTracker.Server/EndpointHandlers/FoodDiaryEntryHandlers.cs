@@ -11,7 +11,6 @@ namespace CalorieTracker.Server.EndpointHandlers;
 public static class FoodDiaryEntryHandlers
 {
     public static async Task<Ok<FoodEntriesResponseDto>> GetDiaryFoodsEntriesAsync(
-        IFoodDiaryEntryService foodDiaryEntryService,
         IFoodDiaryService foodDiaryService,
         DateTime date,
         ClaimsPrincipal claimsPrincipal)
@@ -31,7 +30,6 @@ public static class FoodDiaryEntryHandlers
         }
     }
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreateFoodDiaryEntryAsync(
-        IFoodDiaryEntryService foodDiaryEntryService,
         IFoodDiaryService foodDiaryService,
         CreateFoodDiaryEntryDto createFoodDiaryEntryDto,
         ClaimsPrincipal claimsPrincipal
@@ -70,13 +68,5 @@ public static class FoodDiaryEntryHandlers
         {
             return TypedResults.NotFound();
         }
-    }
-    
-    public static Task<Results<Ok<string>, BadRequest<string>>> UpdateFoodDiaryEntryAsync(
-        IFoodDiaryEntryService foodDiaryEntryService,
-        UpdateFoodDiaryEntryDto updateFoodDiaryEntryDto,
-        ClaimsPrincipal claimsPrincipal)
-    {
-        throw new NotImplementedException();
     }
 }

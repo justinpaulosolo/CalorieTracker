@@ -1,6 +1,5 @@
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models;
-using CalorieTracker.Server.Models.FoodDiary;
 using CalorieTracker.Server.Models.FoodDiaryEntry;
 
 namespace CalorieTracker.Server.Services;

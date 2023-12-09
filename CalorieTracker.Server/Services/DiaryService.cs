@@ -1,24 +1,15 @@
-using CalorieTracker.Server.Entities;
-using CalorieTracker.Server.Repository;
+using CalorieTracker.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Services;
 
-public class DiaryService : IDiaryService
+public class DiaryService(ApplicationDbContext dbContext) : IDiaryService
 {
-    private readonly IDiaryRepository _diaryRepository;
-
-    public DiaryService(IDiaryRepository diaryRepository)
-    {
-        _diaryRepository = diaryRepository;
-    }
-
     public async Task<int?> GetDiaryIdByDateAsync(DateTime date, string userId)
     {
-        return await _diaryRepository.GetDiaryIdByDateAsync(date, userId);
-    }
-
-    public async Task<Diary?> GetDiaryByUserIdAndDateAsync(DateTime date, string userId)
-    {
-        return await _diaryRepository.GetDiaryByDateAsync(date, userId);
+        return await dbContext.Diaries
+            .Where(d => d.UserId == userId && d.Date.Date == date.Date)
+            .Select(d => d.DiaryId)
+            .FirstOrDefaultAsync();
     }
 }
