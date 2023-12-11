@@ -19,6 +19,14 @@ public static class DiaryEndpoints
             .WithSummary("Create a food diary entry")
             .WithDescription("Creates a food diary entry for the current user");
         
+        diaryEndpoints.MapPut("/food/edit/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.UpdateFoodDiaryEntryAsync)
+            .WithSummary("Update a food diary entry")
+            .WithDescription("Updates a food diary entry for the current user");
+        
+        diaryEndpoints.MapGet("/food/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.GetFoodDiaryEntryByIdAsync)
+            .WithSummary("Get a food diary entry by ID")
+            .WithDescription("Retrieves a food diary entry for the current user by ID");
+        
         diaryEndpoints.MapDelete("/food/{foodDiaryEntryId:int}", FoodDiaryEntryHandlers.DeleteFoodDiaryEntryAsync)
             .WithSummary("Delete a food diary entry")
             .WithDescription("Deletes a food diary entry for the current user by ID");

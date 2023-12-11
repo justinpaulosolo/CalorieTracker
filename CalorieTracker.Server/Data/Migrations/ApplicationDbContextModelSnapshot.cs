@@ -144,6 +144,8 @@ namespace CalorieTracker.Server.Data.Migrations
 
                     b.HasIndex("DiaryId");
 
+                    b.HasIndex("MealTypeId");
+
                     b.ToTable("FoodDiaries");
                 });
 
@@ -201,7 +203,7 @@ namespace CalorieTracker.Server.Data.Migrations
                         new
                         {
                             MealTypeId = 4,
-                            Name = "Snack"
+                            Name = "Snacks"
                         });
                 });
 
@@ -352,12 +354,20 @@ namespace CalorieTracker.Server.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CalorieTracker.Server.Entities.MealType", "MealType")
+                        .WithMany()
+                        .HasForeignKey("MealTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Diary");
+
+                    b.Navigation("MealType");
                 });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiaryEntry", b =>
                 {
-                    b.HasOne("CalorieTracker.Server.Entities.FoodDiary", null)
+                    b.HasOne("CalorieTracker.Server.Entities.FoodDiary", "FoodDiary")
                         .WithMany("FoodDiaryEntries")
                         .HasForeignKey("FoodDiaryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -370,6 +380,8 @@ namespace CalorieTracker.Server.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Food");
+
+                    b.Navigation("FoodDiary");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

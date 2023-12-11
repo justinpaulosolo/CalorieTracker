@@ -22,7 +22,6 @@ export interface CreateFoodDiaryEntryDto {
 
 export function useCreateFoodDiaryEntry(date: string) {
   const queryClient = useQueryClient();
-  console.log(date, "service");
   return useMutation({
     mutationFn: (foodDiaryEntry: CreateFoodDiaryEntryDto) =>
       axios.post("/api/diary/food", foodDiaryEntry),

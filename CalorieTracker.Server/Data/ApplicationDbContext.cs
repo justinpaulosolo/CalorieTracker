@@ -22,7 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new MealType { MealTypeId = 1, Name = "Breakfast" },
             new MealType { MealTypeId = 2, Name = "Lunch" },
             new MealType { MealTypeId = 3, Name = "Dinner" },
-            new MealType { MealTypeId = 4, Name = "Snack" }
+            new MealType { MealTypeId = 4, Name = "Snacks" }
         );
     }
 }

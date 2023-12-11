@@ -8,6 +8,7 @@ import GoalSettingsPage from "./pages/settings/GoalSettingsPage";
 import FoodDiaryDashboard from "@/pages/FoodDiaryDashboard.tsx";
 import DetailedFoodDiaryPage from "@/pages/DetailedFoodDiaryPage.tsx";
 import NewFoodDiaryEntryPage from "@/pages/NewFoodDiaryEntryPage.tsx";
+import UpdateMealEntryPage from "@/pages/UpdateMealEntryPage.tsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Navigate to="/food-diary" replace />} />
         <Route path="/food-diary" element={<FoodDiaryDashboard />} />
+        <Route path="food-diary/entry/:id" element={<UpdateMealEntryPage />} />
         <Route
           path="/food-diary/detailed"
           element={<DetailedFoodDiaryPage />}

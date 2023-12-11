@@ -1,14 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { RegisterUser } from "@/utils/types.ts";
@@ -24,26 +17,27 @@ export default function RegisterForm() {
     defaultValues: {
       email: "",
       username: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   async function onSubmit(values: RegisterUser) {
+    // Todo: Navigate to login page after successful registration not working, Error showing despite successful registration
     await registerUser.mutateAsync(values, {
       onSuccess: () => navigate("/"),
       onError: () => {
         const formError = {
           type: "server",
-          message: "Username or email already taken",
+          message: "Username or email already taken"
         };
 
         form.setError("email", formError);
         form.setError("username", formError);
-      },
+      }
     });
   }
 
-  // Todo: Fix register form styling
+  // Todo: Fix register forms styling
   return (
     <Form {...form}>
       <form

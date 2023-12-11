@@ -20,7 +20,7 @@ export default function RecentFoodEntriesCard({ date }: { date: Date }) {
         </div>
       ) : (
         Foods?.data.map(food => (
-          <RecentFoodEntry key={food.foodId} food={food} />
+          <RecentFoodEntry key={food.foodId} food={food} date={date} />
         ))
       )}
     </div>

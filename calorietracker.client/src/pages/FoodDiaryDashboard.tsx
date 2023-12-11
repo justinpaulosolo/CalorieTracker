@@ -1,25 +1,16 @@
-import NutritionInfoCard from "@/components/nutrition-info-card.tsx";
 import { useState } from "react";
-import { DatePickerDemo } from "@/components/date-picker.tsx";
-import RecentFoodEntriesCard from "@/components/recent-food-entries-card.tsx";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.tsx";
-import FoodQuickAddForm from "@/components/food-diary/food-quick-add-form.tsx";
 import { Link } from "react-router-dom";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import NutritionInfoCard from "@/components/nutrition-info-card.tsx";
+import RecentFoodEntriesCard from "@/components/recent-food-entries-card.tsx";
+import FoodDiaryEntryQuickAddForm from "@/components/food-diary/forms/food-diary-entry-quick-add-form.tsx";
 
 function FoodDiaryDashboard() {
-  const [date, setDate] = useState(new Date());
-  console.log(date);
+  const [date] = useState(new Date());
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex justify-between">
         <h1 className="font-bold text-2xl">Food Diary Dashboard</h1>
-        <DatePickerDemo date={date} setDate={setDate} />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <NutritionInfoCard date={date} />
@@ -30,14 +21,14 @@ function FoodDiaryDashboard() {
             <CardTitle>Add Food Diary Entry</CardTitle>
           </CardHeader>
           <CardContent>
-            <FoodQuickAddForm date={date} />
+            <FoodDiaryEntryQuickAddForm date={date} />
           </CardContent>
         </Card>
-        <Card className="col-span-3">
+        <Card className="col-span-3 p-0">
           <CardHeader>
             <CardTitle>Recent Food Diary Entries</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3">
             <RecentFoodEntriesCard date={date} />
           </CardContent>
           <CardFooter className="mt-auto">

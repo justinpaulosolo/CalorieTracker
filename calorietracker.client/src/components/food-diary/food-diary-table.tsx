@@ -8,57 +8,44 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 import { DotsHorizontalIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Icons } from "@/components/icons.tsx";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
-import { Food, FoodDiary } from "@/utils/types.ts";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
+import { FoodDiary, FoodDiaryEntry } from "@/utils/types.ts";
 
 type FoodDiaryTableProps = {
   data?: FoodDiary;
   title: string;
-  date: string;
+  date: Date;
 };
 
-const KEYS: Record<string, keyof Food> = {
+const KEYS: Record<string, keyof FoodDiaryEntry> = {
   PROTEIN: "protein",
   CARBS: "carbs",
   FAT: "fat",
-  CALORIES: "calories",
+  CALORIES: "calories"
 };
 
-const calculateTotal = (foods: Food[], key: keyof Food) => {
+const calculateTotal = (foods: FoodDiaryEntry[], key: keyof FoodDiaryEntry) => {
   return foods.reduce((total, food) => total + Number(food[key]), 0);
 };
 
 const FoodRow = ({
-  food,
-  onDeleteClick,
-}: {
-  food: Food;
+                   food,
+                   onDeleteClick
+                 }: {
+  food: FoodDiaryEntry;
   onDeleteClick: (foodId: number) => void;
 }) => {
   return (
@@ -79,7 +66,7 @@ const FoodRow = ({
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => onDeleteClick(food.foodDiaryEntryId)}
+              onClick={() => onDeleteClick(food.foodDiaryEntryId!)}
               className="text-red-600 cursor-pointer"
             >
               Delete
@@ -92,10 +79,10 @@ const FoodRow = ({
 };
 
 const FoodDiaryTable: React.FC<FoodDiaryTableProps> = ({
-  data,
-  title,
-  date,
-}) => {
+                                                         data,
+                                                         title,
+                                                         date
+                                                       }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedFoodDiaryEntryId, setSelectedFoodDiaryEntryId] = useState<
     number | undefined
@@ -124,7 +111,7 @@ const FoodDiaryTable: React.FC<FoodDiaryTableProps> = ({
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle>{title}</CardTitle>
-          <Link to={`/food-diary/detailed/new/${date!.split("T")[0]}/${title}`}>
+          <Link to={`/food-diary/detailed/new/${date}/${title}`}>
             <Button variant="default">
               <PlusCircledIcon className="mr-2 h-4 w-4" />
               Add Food

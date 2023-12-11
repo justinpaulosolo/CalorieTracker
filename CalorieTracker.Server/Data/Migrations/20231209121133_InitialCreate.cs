@@ -226,6 +226,12 @@ namespace CalorieTracker.Server.Data.Migrations
                         principalTable: "Diaries",
                         principalColumn: "DiaryId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FoodDiaries_MealTypes_MealTypeId",
+                        column: x => x.MealTypeId,
+                        principalTable: "MealTypes",
+                        principalColumn: "MealTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,7 +268,7 @@ namespace CalorieTracker.Server.Data.Migrations
                     { 1, "Breakfast" },
                     { 2, "Lunch" },
                     { 3, "Dinner" },
-                    { 4, "Snack" }
+                    { 4, "Snacks" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -313,6 +319,11 @@ namespace CalorieTracker.Server.Data.Migrations
                 column: "DiaryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FoodDiaries_MealTypeId",
+                table: "FoodDiaries",
+                column: "MealTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FoodDiaryEntries_FoodDiaryId",
                 table: "FoodDiaryEntries",
                 column: "FoodDiaryId");
@@ -345,9 +356,6 @@ namespace CalorieTracker.Server.Data.Migrations
                 name: "FoodDiaryEntries");
 
             migrationBuilder.DropTable(
-                name: "MealTypes");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -358,6 +366,9 @@ namespace CalorieTracker.Server.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Diaries");
+
+            migrationBuilder.DropTable(
+                name: "MealTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

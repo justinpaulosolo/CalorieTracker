@@ -3,7 +3,9 @@ namespace CalorieTracker.Server.Models.Food;
 public class FoodDto
 {
     public int FoodId { get; set; }
-    public int FoodDiaryEntryId { get; set; }
+    public string? Meal { get; set; } = default!;
+    public DateTime? Date { get; set; }
+    public int? FoodDiaryEntryId { get; set; }
     public string Name { get; set; } = null!;
     public double Protein { get; set; }
     public double Carbs { get; set; }

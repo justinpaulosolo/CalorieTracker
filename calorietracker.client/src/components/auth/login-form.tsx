@@ -1,14 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { LoginUser } from "@/utils/types.ts";
@@ -23,8 +16,8 @@ export default function LoginForm() {
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       username: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   function onSubmit(values: LoginUser) {
@@ -34,17 +27,17 @@ export default function LoginForm() {
       onError: error => {
         const formError = {
           type: "server",
-          message: "Invalid username or password",
+          message: "Invalid username or password"
         };
 
         form.setError("username", formError);
         form.setError("password", formError);
         console.log(error);
-      },
+      }
     });
   }
 
-  // Todo: Fix login form styling
+  // Todo: Fix login forms styling
   return (
     <Form {...form}>
       <form

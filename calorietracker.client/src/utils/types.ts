@@ -18,9 +18,11 @@ export type Diary = {
   foodDiaries: FoodDiary[];
 };
 
-export type Food = {
+export type FoodDiaryEntry = {
+  date: string;
+  meal?: string;
   foodId: number;
-  foodDiaryEntryId: number;
+  foodDiaryEntryId?: number;
   name: string;
   protein: number;
   carbs: number;
@@ -32,7 +34,7 @@ export type FoodDiary = {
   foodDiaryId: number;
   diaryId: number;
   mealTypeId: number;
-  foods: Food[];
+  foods: FoodDiaryEntry[];
 };
 
 export type CreateMealEntry = {
@@ -69,12 +71,7 @@ export type EditMealEntry = {
   date: string;
 };
 
-export enum MealEntryTypeEnums {
-  Breakfast = "Breakfast",
-  Lunch = "Lunch",
-  Dinner = "Dinner",
-  Other = "Other",
-}
+export type MealType = "Breakfast" | "Lunch" | "Dinner" | "Snacks";
 
 export type Nutrition = {
   calories: number;
@@ -83,15 +80,16 @@ export type Nutrition = {
   fat: number;
 };
 
-export type DiaryFood = {
-  foodId: number;
+export type GetDiaryFoodsResponse = {
+  data: FoodDiaryEntry[];
+};
+
+export type UpdateFoodDiaryEntryDto = {
+  meal: string;
+  date: string;
   name: string;
   protein: number;
   carbs: number;
   fat: number;
   calories: number;
-};
-
-export type GetDiaryFoodsResponse = {
-  data: DiaryFood[];
 };

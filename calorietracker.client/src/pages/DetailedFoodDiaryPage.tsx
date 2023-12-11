@@ -39,7 +39,7 @@ export default function DetailedFoodDiaryPage() {
             key={meal.title}
             title={meal.title}
             data={meal.data}
-            date={format(date, "yyyy-MM-dd")}
+            date={date}
           />
         ),
       )}

@@ -10,6 +10,7 @@ public class FoodDiary
     public ICollection<FoodDiaryEntry> FoodDiaryEntries { get; set; } = new List<FoodDiaryEntry>();
 
     public Diary Diary { get; set; } = null!;
+    public MealType MealType { get; set; } = null!;
 
     public NutritionInfo CalculateNutrition()
     {

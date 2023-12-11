@@ -68,28 +68,13 @@ export function useGetMealsTotalMacrosByDate({ date }: { date: string }) {
   });
 }
 
-export function useGetMealEntriesById({
-  foodEntryId,
-}: {
-  foodEntryId: number;
-}) {
-  return useQuery({
-    queryKey: ["meal-entry", foodEntryId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/meals/${foodEntryId}`);
-      const data = response.data;
-      return data;
-    },
-  });
-}
-
 export function useEditMealEntry() {
   const queryClient = useQueryClient();
   return useMutation<void, unknown, EditMealEntry>({
     mutationFn: async ({ foodMealEntryId, ...mealEntry }) => {
       const response = await axios.put(
         `/api/meals/edit/${foodMealEntryId}`,
-        mealEntry
+        mealEntry,
       );
       return response.data;
     },

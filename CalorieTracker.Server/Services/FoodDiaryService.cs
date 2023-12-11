@@ -1,6 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models;
+using CalorieTracker.Server.Models.Food;
 using CalorieTracker.Server.Models.FoodDiaryEntry;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,57 +12,16 @@ public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryServic
     public async Task<int> CreateFoodDiaryEntryAsync(CreateFoodDiaryEntryDto createFoodDiaryEntryDto, string userId)
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
-        var diary = await dbContext.Diaries
-            .Include(d => d.FoodDiaries)
-            .ThenInclude(fd => fd.FoodDiaryEntries)
-            .ThenInclude(fde => fde.Food)
-            .FirstOrDefaultAsync(d => d.Date.Date == createFoodDiaryEntryDto.Date && d.UserId == userId);
+        
+        var diary = await GetOrCreateDiaryByDate(createFoodDiaryEntryDto.Date, userId);
+        
+        var mealType = await GetMealByName(createFoodDiaryEntryDto.Meal);
+        
+        var foodDiary = await GetOrCreateFoodDiary(createFoodDiaryEntryDto.Date, userId, mealType, diary);
+        
+        var food = await CreateFood(createFoodDiaryEntryDto.FoodName, createFoodDiaryEntryDto.Protein,
+            createFoodDiaryEntryDto.Carbs, createFoodDiaryEntryDto.Fat, createFoodDiaryEntryDto.Calories);
 
-        if (diary == null)
-        {
-            diary = new Diary
-            {
-                UserId = userId,
-                Date = createFoodDiaryEntryDto.Date,
-                FoodDiaries = new List<FoodDiary>()
-            };
-            await dbContext.Diaries.AddAsync(diary);
-            await dbContext.SaveChangesAsync();
-        }
-        
-        var mealType = await dbContext.MealTypes.FirstOrDefaultAsync(mt => mt.Name == createFoodDiaryEntryDto.Meal);
-        
-        
-        var foodDiary = await dbContext.FoodDiaries
-            .Include(fd => fd.FoodDiaryEntries)
-            .ThenInclude(fde => fde.Food)
-            .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == createFoodDiaryEntryDto.Date
-                                    && fd.MealTypeId == mealType!.MealTypeId
-                                    && fd.Diary.UserId == userId);
-
-        if (foodDiary == null)
-        {
-            foodDiary = new FoodDiary
-            {
-                DiaryId = diary.DiaryId,
-                MealTypeId = mealType!.MealTypeId,
-                FoodDiaryEntries = new List<FoodDiaryEntry>()
-            };
-            await dbContext.FoodDiaries.AddAsync(foodDiary);
-            await dbContext.SaveChangesAsync();
-        }
-
-        var food = new Food
-        {
-            Name = createFoodDiaryEntryDto.FoodName,
-            Protein = createFoodDiaryEntryDto.Protein,
-            Carbs = createFoodDiaryEntryDto.Carbs,
-            Fat = createFoodDiaryEntryDto.Fat,
-            Calories = createFoodDiaryEntryDto.Calories
-        };
-        
-        await dbContext.Foods.AddAsync(food);
-        await dbContext.SaveChangesAsync();
         
         var foodDiaryEntry = new FoodDiaryEntry
         {
@@ -74,6 +34,38 @@ public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryServic
         
         await transaction.CommitAsync();
         
+        return foodDiaryEntry.FoodDiaryEntryId;
+    }
+
+    public async Task<int> UpdateFoodDiaryEntryAsync(UpdateFoodDiaryEntryDto updateFoodDiaryEntryDto, int foodDiaryEntryId, string userId)
+    {
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+         
+        var diary = await GetOrCreateDiaryByDate(updateFoodDiaryEntryDto.Date, userId);
+
+        var mealType = await GetMealByName(updateFoodDiaryEntryDto.Meal);
+        
+        var foodDiary = await GetOrCreateFoodDiary(updateFoodDiaryEntryDto.Date, userId, mealType, diary);
+        
+        var foodDiaryEntry = await dbContext.FoodDiaryEntries
+            .Include(fde => fde.Food)
+            .FirstAsync(fde => fde.FoodDiaryEntryId == foodDiaryEntryId);
+
+        foodDiaryEntry.FoodDiaryId = foodDiary.FoodDiaryId; 
+        
+        var food = foodDiaryEntry.Food;
+        food.Name = updateFoodDiaryEntryDto.Name;
+        food.Protein = updateFoodDiaryEntryDto.Protein;
+        food.Carbs = updateFoodDiaryEntryDto.Carbs;
+        food.Fat = updateFoodDiaryEntryDto.Fat;
+        food.Calories = updateFoodDiaryEntryDto.Calories;
+        
+        dbContext.Foods.Update(food);
+        dbContext.FoodDiaryEntries.Update(foodDiaryEntry);
+        await dbContext.SaveChangesAsync();
+        
+        await transaction.CommitAsync();
+
         return foodDiaryEntry.FoodDiaryEntryId;
     }
 
@@ -103,7 +95,7 @@ public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryServic
             .FirstOrDefaultAsync(d => d.Date.Date == date.Date && d.UserId == userId);
     }
 
-    public async Task<List<Food>> GetDiaryFoodsByDate(DateTime date, string userId)
+    public async Task<List<FoodDto>> GetDiaryFoodsByDate(DateTime date, string userId)
     {
         var diary = await dbContext.Diaries
             .Include(d => d.FoodDiaries)
@@ -111,8 +103,18 @@ public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryServic
             .ThenInclude(fde => fde.Food)
             .FirstOrDefaultAsync(d => d.Date.Date == date && d.UserId == userId);
 
-        if (diary == null) return new List<Food>();
-        var foods = diary.FoodDiaries.SelectMany(fd => fd.FoodDiaryEntries.Select(fde => fde.Food)).ToList();
+        if (diary == null) return [];
+        var foods = diary.FoodDiaries.SelectMany(fd => fd.FoodDiaryEntries.Select(fde => new FoodDto()
+        {
+            Date = diary.Date,
+            FoodDiaryEntryId = fde.FoodDiaryEntryId,
+            FoodId = fde.Food.FoodId,
+            Name = fde.Food.Name,
+            Calories = fde.Food.Calories,
+            Protein = fde.Food.Protein,
+            Carbs = fde.Food.Carbs,
+            Fat = fde.Food.Fat
+        } )).ToList();
         return foods;
     }
 
@@ -136,5 +138,101 @@ public class FoodDiaryService(ApplicationDbContext dbContext) : IFoodDiaryServic
         }
 
         return nutritionInfo;
+    }
+
+    public async Task<FoodDto> GetFoodDiaryEntryById(int foodDiaryEntryId)
+    {
+        var foodDiaryEntry = await dbContext.FoodDiaryEntries
+            .Include(fde => fde.Food)
+            .Include(foodDiaryEntry => foodDiaryEntry.FoodDiary)
+            .ThenInclude(foodDiary => foodDiary.Diary).Include(foodDiaryEntry => foodDiaryEntry.FoodDiary)
+            .ThenInclude(foodDiary => foodDiary.MealType)
+            .FirstOrDefaultAsync(fde => fde.FoodDiaryEntryId == foodDiaryEntryId);
+
+        if (foodDiaryEntry == null) return null!;
+        
+        var food = foodDiaryEntry.Food;
+        var foodDto = new FoodDto
+        {
+            Date = foodDiaryEntry.FoodDiary.Diary.Date,
+            Meal = foodDiaryEntry.FoodDiary.MealType.Name,
+            FoodDiaryEntryId = foodDiaryEntry.FoodDiaryEntryId,
+            FoodId = food.FoodId,
+            Name = food.Name,
+            Calories = food.Calories,
+            Protein = food.Protein,
+            Carbs = food.Carbs,
+            Fat = food.Fat
+        };
+
+        return foodDto;
+    }
+
+    private async Task<MealType> GetMealByName(string name)
+    {
+        return await dbContext.MealTypes.AsNoTracking().FirstAsync(mt => mt.Name == name);
+    }
+    
+    private async Task<Diary> GetOrCreateDiaryByDate(DateTime date, string userId)
+    {
+        var diary = await dbContext.Diaries
+            .Include(d => d.FoodDiaries)
+            .ThenInclude(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .FirstOrDefaultAsync(d => d.Date.Date == date && d.UserId == userId);
+
+        if (diary != null) return diary;
+        
+        diary = new Diary
+        {
+            UserId = userId,
+            Date = date,
+            FoodDiaries = new List<FoodDiary>()
+        };
+        await dbContext.Diaries.AddAsync(diary);
+        await dbContext.SaveChangesAsync();
+
+        return diary;
+    }
+    
+    private async Task<FoodDiary> GetOrCreateFoodDiary(DateTime  date, string userId,
+        MealType mealType, Diary diary)
+    {
+        var foodDiary = await dbContext.FoodDiaries
+            .Include(fd => fd.FoodDiaryEntries)
+            .ThenInclude(fde => fde.Food)
+            .FirstOrDefaultAsync(fd => fd.Diary.Date.Date == date
+                                       && fd.MealTypeId == mealType!.MealTypeId
+                                       && fd.Diary.UserId == userId);
+
+        if (foodDiary != null) return foodDiary;
+        
+        foodDiary = new FoodDiary
+        {
+            DiaryId = diary.DiaryId,
+            MealTypeId = mealType!.MealTypeId,
+            FoodDiaryEntries = new List<FoodDiaryEntry>()
+        };
+        await dbContext.FoodDiaries.AddAsync(foodDiary);
+        await dbContext.SaveChangesAsync();
+
+        return foodDiary;
+    }
+
+    private async Task<Food> CreateFood(string name, double protein, double carbs, double fat, double calories)
+    {
+        var food = new Food
+        {
+            Name = name,
+            Protein = protein,
+            Carbs = carbs,
+            Fat = fat,
+            Calories = calories
+        };
+        
+        await dbContext.Foods.AddAsync(food);
+        await dbContext.SaveChangesAsync();
+
+        return food;
     }
 }

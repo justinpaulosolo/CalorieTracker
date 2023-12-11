@@ -1,21 +1,9 @@
 import { Button } from "@/components/ui/button.tsx";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs.tsx";
-import FoodQuickAddForm from "../components/food-diary/food-quick-add-form.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
+import FoodDiaryEntryQuickAddForm from "../components/food-diary/forms/food-diary-entry-quick-add-form.tsx";
 import { useNavigate } from "react-router-dom";
 
 export default function NewFoodDiaryEntryPage() {
@@ -37,9 +25,7 @@ export default function NewFoodDiaryEntryPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <FoodQuickAddForm
-                onSuccessfulSubmit={() => navigate("/food-diary/detailed")}
-              />
+              <FoodDiaryEntryQuickAddForm onSuccessfulSubmit={() => navigate("/")} />
             </CardContent>
           </Card>
         </TabsContent>
