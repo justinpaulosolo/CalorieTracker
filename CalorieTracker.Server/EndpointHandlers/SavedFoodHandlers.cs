@@ -25,4 +25,22 @@ public static class SavedFoodHandlers
             return TypedResults.Ok(0);
         }
     }
+    
+    public static async Task<Ok<GetAllSavedFoodsResponse>> GetAllSavedFoodsAsync(
+        ISavedFoodService savedFoodService,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        try
+        {
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var savedFoods = await savedFoodService.GetSavedFoodsAsync(userId!);
+            return TypedResults.Ok(new GetAllSavedFoodsResponse { SavedFoods = savedFoods });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details here
+            // Return an appropriate error response
+            return TypedResults.Ok(new GetAllSavedFoodsResponse());
+        }
+    }
 }

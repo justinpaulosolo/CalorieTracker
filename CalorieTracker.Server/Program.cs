@@ -32,6 +32,7 @@ app.UseHttpsRedirection();
 app.MapDiaryEndpoints();
 app.MapAccountEndpoints();
 app.MapNutritionEndpoints();
+app.MapSavedFoodEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

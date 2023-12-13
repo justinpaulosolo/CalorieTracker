@@ -1,6 +1,6 @@
-namespace CalorieTracker.Server.Entities;
+namespace CalorieTracker.Server.Models.SavedFood;
 
-public class SavedFood
+public class SavedFoodDto
 {
     public int SavedFoodId { get; set; }
     public string Name { get; set; } = default!;
@@ -8,7 +8,4 @@ public class SavedFood
     public double Carbs { get; set; }
     public double Fat { get; set; }
     public double Calories { get; set; }
-    
-    public string UserId { get; set; } = default!;
-    public ApplicationUser User { get; set; } = default!;
 }

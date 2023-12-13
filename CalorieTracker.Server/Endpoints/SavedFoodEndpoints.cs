@@ -14,6 +14,10 @@ public static class SavedFoodEndpoints
         savedFoodEndpoints.MapPost("/", SavedFoodHandlers.CreateSavedFoodAsync)
             .WithSummary("Create saved food")
             .WithDescription("Creates a new saved food for the current user");
+        
+        savedFoodEndpoints.MapGet("/", SavedFoodHandlers.GetAllSavedFoodsAsync)
+            .WithSummary("Get saved foods")
+            .WithDescription("Gets all saved foods for the current user");
 
         return savedFoodEndpoints;
     }

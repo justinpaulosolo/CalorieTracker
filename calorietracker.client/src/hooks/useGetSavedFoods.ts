@@ -6,7 +6,7 @@ export function useGetSavedFoods() {
   return useQuery({
     queryKey: ["saved-foods"],
     queryFn: async () => {
-      const response = await axios.get("/api/saved-foods");
+      const response = await axios.get("/api/saved-food");
       const data: SavedFoods = response.data;
       return data;
     }

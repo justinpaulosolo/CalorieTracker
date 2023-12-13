@@ -1,6 +1,7 @@
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
 using CalorieTracker.Server.Models.SavedFood;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Services;
 
@@ -21,5 +22,21 @@ public class SavedFoodService(ApplicationDbContext dbContext) : ISavedFoodServic
         dbContext.SavedFoods.Add(savedFood);
         await dbContext.SaveChangesAsync();
         return savedFood.SavedFoodId;
+    }
+
+    public async Task<List<SavedFoodDto>> GetSavedFoodsAsync(string userId)
+    {
+        return await dbContext.SavedFoods
+            .Where(savedFood => savedFood.UserId == userId)
+            .Select(savedFood => new SavedFoodDto
+            {
+                SavedFoodId = savedFood.SavedFoodId,
+                Name = savedFood.Name,
+                Calories = savedFood.Calories,
+                Protein = savedFood.Protein,
+                Carbs = savedFood.Carbs,
+                Fat = savedFood.Fat
+            })
+            .ToListAsync();
     }
 }
