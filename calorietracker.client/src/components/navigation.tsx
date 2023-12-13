@@ -4,7 +4,7 @@ import {
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
-  NavigationMenuTrigger,
+  NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
 import { Link, LinkProps } from "react-router-dom";
 import { cn } from "@/lib/utils.ts";
@@ -14,14 +14,20 @@ const components: { title: string; href: string; description: string }[] = [
     title: "Food Diary Dashboard",
     href: "/food-diary",
     description:
-      "A dashboard for viewing your food diary entries and statistics.",
+      "A dashboard for viewing your food diary entries and statistics."
   },
   {
     title: "Detailed View",
     href: "/food-diary/detailed",
     description:
-      "A detailed view for viewing your food diary entries broken down by meals",
+      "A detailed view for viewing your food diary entries broken down by meals"
   },
+  {
+    title: "Saved Food",
+    href: "/saved-foods",
+    description:
+      "A list of your saved foods that you can add to your food diary entries."
+  }
 ];
 
 export function Navigation() {
@@ -57,7 +63,7 @@ const ListItem = React.forwardRef<HTMLAnchorElement, LinkProps>(
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className,
+            className
           )}
           {...props}
         >
@@ -68,7 +74,7 @@ const ListItem = React.forwardRef<HTMLAnchorElement, LinkProps>(
         </Link>
       </li>
     );
-  },
+  }
 );
 
 ListItem.displayName = "ListItem";
