@@ -11,6 +11,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<FoodDiary> FoodDiaries { get; set; }
     public DbSet<Food> Foods { get; set; }
     public DbSet<FoodDiaryEntry> FoodDiaryEntries { get; set; }
+    public DbSet<SavedFood> SavedFoods { get; set; }
+    
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
