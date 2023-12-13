@@ -93,3 +93,16 @@ export type UpdateFoodDiaryEntryDto = {
   fat: number;
   calories: number;
 };
+
+export type SavedFood = {
+  savedFoodId: number;
+  name: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  calories: number;
+}
+
+export type SavedFoods = {
+  savedFoods: SavedFood[];
+}
