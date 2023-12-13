@@ -7,7 +7,6 @@ import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import GoalSettingsPage from "./pages/settings/GoalSettingsPage";
 import FoodDiaryDashboard from "@/pages/FoodDiaryDashboard.tsx";
 import DetailedFoodDiaryPage from "@/pages/DetailedFoodDiaryPage.tsx";
-import NewFoodDiaryEntryPage from "@/pages/NewFoodDiaryEntryPage.tsx";
 import UpdateMealEntryPage from "@/pages/UpdateMealEntryPage.tsx";
 
 function App() {
@@ -22,10 +21,6 @@ function App() {
         <Route
           path="/food-diary/detailed"
           element={<DetailedFoodDiaryPage />}
-        />
-        <Route
-          path="/food-diary/detailed/new/:date/:meal"
-          element={<NewFoodDiaryEntryPage />}
         />
         <Route path="/settings" element={<SettingsLayout />}>
           <Route path="/settings/goals" element={<GoalSettingsPage />} />

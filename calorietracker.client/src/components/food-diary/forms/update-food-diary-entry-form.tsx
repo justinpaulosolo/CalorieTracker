@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { FoodDiaryEntry, MealType, UpdateFoodDiaryEntryDto } from "@/utils/types";
+import { FoodDiaryEntry, MealTypes, UpdateFoodDiaryEntryDto } from "@/utils/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -45,7 +45,7 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
       fat: foodDiaryEntry.fat,
       calories: foodDiaryEntry.calories,
       date: new Date(foodDiaryEntry.date),
-      meal: foodDiaryEntry.meal as MealType
+      meal: foodDiaryEntry.meal as MealTypes
     }
   });
 
