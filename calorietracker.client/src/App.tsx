@@ -9,6 +9,7 @@ import FoodDiaryDashboard from "@/pages/FoodDiaryDashboard.tsx";
 import DetailedFoodDiaryPage from "@/pages/DetailedFoodDiaryPage.tsx";
 import UpdateMealEntryPage from "@/pages/UpdateMealEntryPage.tsx";
 import SavedFoodPage from "@/pages/SavedFoodsPage.tsx";
+import CreateSavedFoodPage from "@/pages/CreateSavedFoodPage.tsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           element={<DetailedFoodDiaryPage />}
         />
         <Route path="/saved-foods" element={<SavedFoodPage />} />
+        <Route path="/saved-foods/new" element={<CreateSavedFoodPage />} />
         <Route path="/settings" element={<SettingsLayout />}>
           <Route path="/settings/goals" element={<GoalSettingsPage />} />
           <Route path="/settings/account" element={<AccountSettingsPage />} />

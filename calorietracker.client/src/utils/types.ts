@@ -106,3 +106,11 @@ export type SavedFood = {
 export type SavedFoods = {
   savedFoods: SavedFood[];
 }
+
+export type CreateSavedFoodDto = {
+  name: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  calories: number;
+}
