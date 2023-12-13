@@ -1,6 +1,7 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import Header from "./header.tsx";
 import { useGetUserDetails } from "@/hooks/useGetUserDetails.ts";
+import Footer from "@/components/footer.tsx";
 
 function PrivateRoute() {
   const { data: User, isLoading } = useGetUserDetails();
@@ -21,9 +22,10 @@ function PrivateRoute() {
   return (
     <div className="h-screen flex flex-col space-y-6">
       <Header />
-      <div className="container max-w-5xl">
+      <div className="container max-w-5xl flex-grow">
         <main>{outlet}</main>
       </div>
+      <Footer />
     </div>
   );
 }
