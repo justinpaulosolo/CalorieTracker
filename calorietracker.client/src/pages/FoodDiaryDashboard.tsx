@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import NutritionInfoCard from "@/components/nutrition-info-card.tsx";
 import RecentFoodEntriesCard from "@/components/recent-food-entries-card.tsx";
-import FoodDiaryEntryQuickAddForm from "@/components/food-diary/forms/food-diary-entry-quick-add-form.tsx";
+import NewFoodDiaryEntryPage from "@/pages/NewFoodDiaryEntryPage.tsx";
 
 function FoodDiaryDashboard() {
   const [date] = useState(new Date());
@@ -21,7 +21,7 @@ function FoodDiaryDashboard() {
             <CardTitle>Add Food Diary Entry</CardTitle>
           </CardHeader>
           <CardContent>
-            <FoodDiaryEntryQuickAddForm date={date} />
+            <NewFoodDiaryEntryPage date={date} />
           </CardContent>
         </Card>
         <Card className="col-span-3 p-0">

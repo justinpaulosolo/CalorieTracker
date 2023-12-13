@@ -4,41 +4,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form.tsx";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { EditMealEntry, MealEntryTypeEnums } from "@/utils/types";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EditMealEntry, MealTypes } from "@/utils/types";
 import { useEditMealEntry } from "@/utils/services/meal-services";
 import { useNavigate } from "react-router-dom";
 
 const editMealEntrySchema = z.object({
   mealFoodEntryId: z.number(),
-  mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Other"], {
-    required_error: "Please select a meal.",
+  mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Snacks"], {
+    required_error: "Please select a meal."
   }),
   name: z.string().min(2, "Name must be at least characters"),
   proteins: z.coerce.number({
-    required_error: "Please enter protein amount.",
+    required_error: "Please enter protein amount."
   }),
   carbohydrates: z.coerce.number({
-    required_error: "Please enter carbohydrate amount.",
+    required_error: "Please enter carbohydrate amount."
   }),
   fats: z.coerce.number({ required_error: "Please enter fat amount." }),
   calories: z.coerce.number({
-    required_error: "Please enter calorie amount.",
-  }),
+    required_error: "Please enter calorie amount."
+  })
 });
 
 type EditMealEntryFormValues = z.infer<typeof editMealEntrySchema>;
@@ -58,13 +45,13 @@ export default function EditMealEntryForm(
     resolver: zodResolver(editMealEntrySchema),
     defaultValues: {
       mealFoodEntryId: mealEntry.foodMealEntryId,
-      mealType: mealEntry.mealType as MealEntryTypeEnums,
+      mealType: mealEntry.mealType as MealTypes,
       name: mealEntry.foodName,
       proteins: mealEntry.proteins,
       carbohydrates: mealEntry.carbohydrates,
       fats: mealEntry.fats,
-      calories: mealEntry.calories,
-    },
+      calories: mealEntry.calories
+    }
   });
 
   async function onSubmit(data: EditMealEntryFormValues) {
@@ -76,10 +63,10 @@ export default function EditMealEntryForm(
       carbohydrates: data.carbohydrates,
       fats: data.fats,
       calories: data.calories,
-      date: mealEntry.date,
+      date: mealEntry.date
     };
     await editMealEntry.mutateAsync(payload, {
-      onSuccess: () => navigate("/"),
+      onSuccess: () => navigate("/")
     });
   }
 

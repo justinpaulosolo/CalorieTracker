@@ -71,7 +71,7 @@ export type EditMealEntry = {
   date: string;
 };
 
-export type MealType = "Breakfast" | "Lunch" | "Dinner" | "Snacks";
+export type MealTypes = "Breakfast" | "Lunch" | "Dinner" | "Snacks";
 
 export type Nutrition = {
   calories: number;

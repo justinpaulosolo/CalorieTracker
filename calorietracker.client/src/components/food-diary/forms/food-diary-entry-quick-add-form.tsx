@@ -16,7 +16,9 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 
 const foodQuickAddFormSchema = z.object({
   date: z.date(),
-  meal: z.string(),
+  mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Snacks"], {
+    required_error: "Please select a meal."
+  }),
   foodName: z.string(),
   protein: z.coerce.number().int().min(0).max(999),
   carbs: z.coerce.number().int().min(0).max(999),
@@ -38,7 +40,7 @@ export default function FoodDiaryEntryQuickAddForm({ date }: FoodQuickAddFormPro
   const form = useForm<FoodQuickAddFormValues>({
     resolver: zodResolver(foodQuickAddFormSchema),
     defaultValues: {
-      meal: "",
+      mealType: undefined,
       foodName: "",
       protein: 0,
       carbs: 0,
@@ -55,7 +57,7 @@ export default function FoodDiaryEntryQuickAddForm({ date }: FoodQuickAddFormPro
       carbs: values.carbs,
       fat: values.fat,
       calories: values.calories,
-      meal: values.meal,
+      meal: values.mealType,
       date: format(values.date, "yyyy-MM-dd")
     };
 
@@ -112,7 +114,7 @@ export default function FoodDiaryEntryQuickAddForm({ date }: FoodQuickAddFormPro
         />
         <FormField
           control={form.control}
-          name="meal"
+          name="mealType"
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between">
