@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Icons } from "@/components/icons";
 import { useUpdateFoodDiaryEntry } from "@/hooks/useUpdateFoodDiaryEntry.ts";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast.ts";
 
 const foodDiaryEntryUpdateFormSchema = z.object({
   date: z.date(),
@@ -63,6 +64,10 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
     await mutateAsync(payload, {
       onSuccess: () => {
         form.reset();
+        toast({
+          title: "Food diary entry updated",
+          description: "Your food diary entry has been updated successfully."
+        });
         navigate("/food-diary");
       }
     });
