@@ -21,6 +21,4 @@ public static class NutritionGoalEndpoints
         
         return nutritionGoalEndpoints;
     }
-    
-    
 }

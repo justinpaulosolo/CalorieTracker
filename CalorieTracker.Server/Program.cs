@@ -33,6 +33,7 @@ app.MapDiaryEndpoints();
 app.MapAccountEndpoints();
 app.MapNutritionEndpoints();
 app.MapSavedFoodEndpoints();
+app.MapNutritionGoalEndpoints();
 
 app.MapFallbackToFile("/index.html");
 
