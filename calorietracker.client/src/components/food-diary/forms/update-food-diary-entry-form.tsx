@@ -16,6 +16,7 @@ import { Icons } from "@/components/icons";
 import { useUpdateFoodDiaryEntry } from "@/hooks/useUpdateFoodDiaryEntry.ts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast.ts";
+import { useDeleteFoodDiaryEntry } from "@/utils/services/food-diary-services.ts";
 
 const foodDiaryEntryUpdateFormSchema = z.object({
   date: z.date(),
@@ -34,7 +35,9 @@ interface FoodDiaryEntryEditFormProps {
 }
 
 export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEntryEditFormProps) {
-  const { mutateAsync, isPending } = useUpdateFoodDiaryEntry(foodDiaryEntry.foodDiaryEntryId!);
+  const deleteFoodDiaryEntry = useDeleteFoodDiaryEntry();
+  const updateFoodDiaryEntry = useUpdateFoodDiaryEntry(foodDiaryEntry.foodDiaryEntryId!);
+
   const navigate = useNavigate();
 
   const form = useForm<FoodDiaryEntryEditFormValues>({
@@ -61,12 +64,24 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
       meal: values.meal
     };
 
-    await mutateAsync(payload, {
+    await updateFoodDiaryEntry.mutateAsync(payload, {
       onSuccess: () => {
         form.reset();
         toast({
           title: "Food diary entry updated",
           description: "Your food diary entry has been updated successfully."
+        });
+        navigate("/food-diary");
+      }
+    });
+  };
+
+  const handleDelete = async (foodDiaryEntryId: number) => {
+    await deleteFoodDiaryEntry.mutateAsync(foodDiaryEntryId, {
+      onSuccess: () => {
+        toast({
+          title: "Food diary entry deleted",
+          description: "Your food diary entry has been deleted successfully."
         });
         navigate("/food-diary");
       }
@@ -219,11 +234,30 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
             </FormItem>
           )}
         />
-        <Button disabled={isPending} type="submit">
-          {isPending ? (
+        <Button disabled={updateFoodDiaryEntry.isPending || deleteFoodDiaryEntry.isPending} type="submit">
+          {updateFoodDiaryEntry.isPending ? (
             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            "Submit"
+            "Update"
+          )}
+        </Button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or
+          </span>
+          </div>
+        </div>
+        <Button type="button" variant="destructive"
+                disabled={deleteFoodDiaryEntry.isPending || updateFoodDiaryEntry.isPending}
+                onClick={() => handleDelete(foodDiaryEntry.foodDiaryEntryId!)}>
+          {deleteFoodDiaryEntry.isPending ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Delete"
           )}
         </Button>
       </form>
