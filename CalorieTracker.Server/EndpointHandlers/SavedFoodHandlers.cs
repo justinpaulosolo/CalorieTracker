@@ -43,4 +43,23 @@ public static class SavedFoodHandlers
             return TypedResults.Ok(new GetAllSavedFoodsResponse());
         }
     }
+    
+    public static async Task<Ok<bool>> DeleteSavedFoodAsync(
+        ISavedFoodService savedFoodService,
+        int savedFoodId,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        try
+        {
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var success = await savedFoodService.DeleteSavedFoodAsync(savedFoodId, userId!);
+            return TypedResults.Ok(success);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details here
+            // Return an appropriate error response
+            return TypedResults.Ok(false);
+        }
+    }
 }

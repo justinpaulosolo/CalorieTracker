@@ -18,6 +18,10 @@ public static class SavedFoodEndpoints
         savedFoodEndpoints.MapGet("/", SavedFoodHandlers.GetAllSavedFoodsAsync)
             .WithSummary("Get saved foods")
             .WithDescription("Gets all saved foods for the current user");
+        
+        savedFoodEndpoints.MapDelete("/{savedFoodId:int}", SavedFoodHandlers.DeleteSavedFoodAsync)
+            .WithSummary("Delete saved food")
+            .WithDescription("Deletes a saved food for the current user");
 
         return savedFoodEndpoints;
     }

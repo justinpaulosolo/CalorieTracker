@@ -39,4 +39,19 @@ public class SavedFoodService(ApplicationDbContext dbContext) : ISavedFoodServic
             })
             .ToListAsync();
     }
+
+    public async Task<bool> DeleteSavedFoodAsync(int savedFoodId, string userId)
+    {
+        var savedFood = await dbContext.SavedFoods
+            .FirstOrDefaultAsync(savedFood => savedFood.SavedFoodId == savedFoodId && savedFood.UserId == userId);
+        
+        if (savedFood == null)
+        {
+            return false;
+        }
+        
+        dbContext.SavedFoods.Remove(savedFood);
+        await dbContext.SaveChangesAsync();
+        return true;
+    }
 }

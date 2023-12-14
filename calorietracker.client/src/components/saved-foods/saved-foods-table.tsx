@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useDeleteSavedFood } from "@/hooks/useDeleteSavedFood.ts";
 
 export default function SavedFoodsTable() {
   const { data, isLoading } = useGetSavedFoods();
+  const deleteSavedFood = useDeleteSavedFood();
 
   if (isLoading)
     return (
@@ -20,7 +22,7 @@ export default function SavedFoodsTable() {
     );
 
   const onDeleteClick = async (id: number) => {
-    console.log(`Deleting ${id}`);
+    deleteSavedFood.mutate(id);
   };
 
   return <Table>
