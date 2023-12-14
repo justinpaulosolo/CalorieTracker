@@ -10,6 +10,7 @@ public static class DependencyInjection
         services.AddTransient<IFoodDiaryService, FoodDiaryService>();
         services.AddTransient<IDiaryService, DiaryService>();
         services.AddTransient<IAccountService, AccountService>();
+        services.AddTransient<INutritionGoalService, NutritionGoalService>();
 
         return services;
     }
