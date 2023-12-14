@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalorieTracker.Server.Services;
 
-public class NutritionGoalServices(ApplicationDbContext dbContext) : INutritionGoalServices
+public class NutritionGoalService(ApplicationDbContext dbContext) : INutritionGoalService
 {
     public async Task<int> CreateNutritionGoalAsync(CreateNutritionGoalDto createNutritionGoalDto, string userId)
     {

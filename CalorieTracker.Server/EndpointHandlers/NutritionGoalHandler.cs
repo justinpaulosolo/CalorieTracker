@@ -8,14 +8,14 @@ namespace CalorieTracker.Server.EndpointHandlers;
 public static class NutritionGoalHandler
 {
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreateNutritionGoalAsync(
-        INutritionGoalServices nutritionGoalServices,
+        INutritionGoalService nutritionGoalService,
         CreateNutritionGoalDto createNutritionGoalDto,
         ClaimsPrincipal claimsPrincipal)
     {
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var nutritionGoalId = await nutritionGoalServices.CreateNutritionGoalAsync(createNutritionGoalDto, userId!);
+            var nutritionGoalId = await nutritionGoalService.CreateNutritionGoalAsync(createNutritionGoalDto, userId!);
             return TypedResults.Ok(nutritionGoalId);
         }
         catch (Exception ex)
@@ -27,13 +27,13 @@ public static class NutritionGoalHandler
     }
     
     public static async Task<Results<Ok<NutritionGoalDto>, BadRequest<string>>> GetNutritionGoalAsync(
-        INutritionGoalServices nutritionGoalServices,
+        INutritionGoalService nutritionGoalService,
         ClaimsPrincipal claimsPrincipal)
     {
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var nutritionGoal = await nutritionGoalServices.GetNutritionGoalAsync(userId!);
+            var nutritionGoal = await nutritionGoalService.GetNutritionGoalAsync(userId!);
             return TypedResults.Ok(nutritionGoal);
         }
         catch (Exception ex)
