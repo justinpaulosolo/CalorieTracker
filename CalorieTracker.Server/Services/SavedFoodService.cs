@@ -40,6 +40,13 @@ public class SavedFoodService(ApplicationDbContext dbContext) : ISavedFoodServic
             .ToListAsync();
     }
 
+    public async Task<SavedFood?> GetSavedFoodByIdAsync(int savedFoodId, string userId)
+    {
+        return await dbContext.SavedFoods
+            .Where(savedFood => savedFood.SavedFoodId == savedFoodId && savedFood.UserId == userId)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<bool> DeleteSavedFoodAsync(int savedFoodId, string userId)
     {
         var savedFood = await dbContext.SavedFoods

@@ -44,6 +44,39 @@ public static class SavedFoodHandlers
         }
     }
     
+    public static async Task<Results<Ok<SavedFoodDto>, BadRequest>> GetSavedFoodAsync(
+        ISavedFoodService savedFoodService,
+        int savedFoodId,
+        ClaimsPrincipal claimsPrincipal)
+    {
+        try
+        {
+            var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var savedFood = await savedFoodService.GetSavedFoodByIdAsync(savedFoodId, userId!);
+            
+            if (savedFood == null)
+            {
+                return TypedResults.BadRequest();
+            }
+            
+            return TypedResults.Ok(new SavedFoodDto
+            {
+                SavedFoodId = savedFood.SavedFoodId,
+                Name = savedFood.Name,
+                Calories = savedFood.Calories,
+                Protein = savedFood.Protein,
+                Carbs = savedFood.Carbs,
+                Fat = savedFood.Fat
+            });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details here
+            // Return an appropriate error response
+            return TypedResults.Ok(new SavedFoodDto());
+        }
+    }
+    
     public static async Task<Ok<bool>> DeleteSavedFoodAsync(
         ISavedFoodService savedFoodService,
         int savedFoodId,
