@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import FoodDiaryEntryQuickAddForm from "../components/food-diary/forms/food-diary-entry-quick-add-form.tsx";
+import FoodDiaryEntryAddForm from "@/components/food-diary/forms/food-diary-entry-add-form.tsx";
 
 export default function NewFoodDiaryEntryPage({ date }: { date: Date }) {
   return (
@@ -13,7 +14,7 @@ export default function NewFoodDiaryEntryPage({ date }: { date: Date }) {
           <FoodDiaryEntryQuickAddForm date={date} />
         </TabsContent>
         <TabsContent value="yourfoods">
-          <p>List of foods goes here</p>
+          <FoodDiaryEntryAddForm date={date} />
         </TabsContent>
       </Tabs>
     </div>
