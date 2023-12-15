@@ -129,3 +129,11 @@ export type CreateNutritionGoalDto = {
   carbs: number;
   fat: number;
 }
+
+export type UpdateNutritionGoalDto = {
+  nutritionGoalId: number;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
