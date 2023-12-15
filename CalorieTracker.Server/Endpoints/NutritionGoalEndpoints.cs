@@ -19,6 +19,10 @@ public static class NutritionGoalEndpoints
             .WithSummary("Get a nutrition goal")
             .WithDescription("Retrieves a nutrition goal for the current user");
         
+        nutritionGoalEndpoints.MapGet("/update", NutritionGoalHandler.UpdateNutritionGoalAsync)
+            .WithSummary("Update a nutrition goal")
+            .WithDescription("Updates a nutrition goal for the current user");
+        
         return nutritionGoalEndpoints;
     }
 }

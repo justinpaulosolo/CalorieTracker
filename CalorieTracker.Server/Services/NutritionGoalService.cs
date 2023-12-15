@@ -39,4 +39,27 @@ public class NutritionGoalService(ApplicationDbContext dbContext) : INutritionGo
 
         return nutritionGoal;
     }
+
+    public async Task<NutritionGoalDto> UpdateNutritionGoalAsync(UpdateNutritionGoalDto updateNutritionGoalDto, string userId)
+    {
+        var nutritionGoal = await dbContext.NutritionGoals
+            .Where(ng => ng.UserId == userId)
+            .FirstAsync();
+        
+        nutritionGoal.Calories = updateNutritionGoalDto.Calories;
+        nutritionGoal.Protein = updateNutritionGoalDto.Protein;
+        nutritionGoal.Carbs = updateNutritionGoalDto.Carbs;
+        nutritionGoal.Fat = updateNutritionGoalDto.Fat;
+        
+        await dbContext.SaveChangesAsync();
+
+        return new NutritionGoalDto
+        {
+            NutritionGoalId = nutritionGoal.NutritionGoalId,
+            Calories = nutritionGoal.Calories,
+            Protein = nutritionGoal.Protein,
+            Carbs = nutritionGoal.Carbs,
+            Fat = nutritionGoal.Fat
+        };
+    }
 }
