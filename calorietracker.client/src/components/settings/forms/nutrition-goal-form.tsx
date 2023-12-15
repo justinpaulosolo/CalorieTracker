@@ -19,37 +19,42 @@ const schema = z.object({
 
 // TODO: Default form values not working when doing a hard reload
 export default function NutritionGoalForm() {
-  const nutritionalGoal = useGetNutritionGoal();
+  const nutritionGoal = useGetNutritionGoal();
   const createNutritionGoal = useCreateNutritionGoal();
   const updateNutritionGoal = useUpdateNutritionGoal();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      calories: nutritionalGoal.data?.calories || 0,
-      protein: nutritionalGoal.data?.protein || 0,
-      carbs: nutritionalGoal.data?.carbs || 0,
-      fat: nutritionalGoal.data?.fat || 0
+      calories: nutritionGoal.data?.calories || 0,
+      protein: nutritionGoal.data?.protein || 0,
+      carbs: nutritionGoal.data?.carbs || 0,
+      fat: nutritionGoal.data?.fat || 0
     }
   });
 
-  if (nutritionalGoal.isLoading) return <div>Loading...</div>;
+  if (nutritionGoal.isLoading) return <div>Loading...</div>;
 
   const onSubmit = async (values: any) => {
-    if (nutritionalGoal.data == null) {
-      console.log("create", nutritionalGoal.data);
+    if (nutritionGoal.data == null) {
       const payload: CreateNutritionGoalDto = {
         calories: values.calories,
         protein: values.protein,
         carbs: values.carbs,
         fat: values.fat
       };
-      await createNutritionGoal.mutateAsync(payload);
+      await createNutritionGoal.mutateAsync(payload, {
+        onSuccess: () => {
+          toast({
+            title: "Nutrition goal created",
+            description: "Your nutrition goal has been created."
+          });
+        }
+      });
     }
-    if (nutritionalGoal.data != null) {
-      console.log("update", nutritionalGoal.data);
+    if (nutritionGoal.data != null) {
       const payload: UpdateNutritionGoalDto = {
-        nutritionGoalId: nutritionalGoal.data.nutritionGoalId,
+        nutritionGoalId: nutritionGoal.data.nutritionGoalId,
         calories: values.calories,
         protein: values.protein,
         carbs: values.carbs,
