@@ -4,7 +4,7 @@ import Register from "./pages/RegisterPage";
 import PrivateRoute from "./components/private-route";
 import SettingsLayout from "./components/settings/settings-layout";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
-import GoalSettingsPage from "./pages/settings/GoalSettingsPage";
+import NutritionGoalPage from "./pages/settings/NutritionGoalPage.tsx";
 import FoodDiaryDashboard from "@/pages/FoodDiaryDashboard.tsx";
 import DetailedFoodDiaryPage from "@/pages/DetailedFoodDiaryPage.tsx";
 import UpdateMealEntryPage from "@/pages/UpdateMealEntryPage.tsx";
@@ -27,7 +27,7 @@ function App() {
         <Route path="/saved-foods" element={<SavedFoodPage />} />
         <Route path="/saved-foods/new" element={<CreateSavedFoodPage />} />
         <Route path="/settings" element={<SettingsLayout />}>
-          <Route path="/settings/goals" element={<GoalSettingsPage />} />
+          <Route path="/settings/nutritional-goal" element={<NutritionGoalPage />} />
           <Route path="/settings/account" element={<AccountSettingsPage />} />
         </Route>
       </Route>
