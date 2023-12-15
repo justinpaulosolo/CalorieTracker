@@ -1,17 +1,14 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Beef, Croissant, EggFried, Flame } from "lucide-react";
 import { useGetNutritionInfo } from "@/hooks/useGetNutritionInfo.ts";
 import { Icons } from "@/components/icons.tsx";
 import { format } from "date-fns";
+import { useGetNutritionGoal } from "@/hooks/nutrition-goal/useGetNutritionGoal.ts";
 
 export function NutritionInfoCard({ date }: { date: Date }) {
-  const { data: NutritionInfo, isLoading } = useGetNutritionInfo(
-    format(date, "yyyy-MM-dd"),
+  const nutritionGoal = useGetNutritionGoal();
+  const nutritionInfo = useGetNutritionInfo(
+    format(date, "yyyy-MM-dd")
   );
   return (
     <>
@@ -22,12 +19,18 @@ export function NutritionInfoCard({ date }: { date: Date }) {
         </CardHeader>
         <CardContent className="flex justify-center">
           <div className="text-2xl font-medium">
-            {isLoading ? (
+            {nutritionInfo.isLoading || nutritionGoal.isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              NutritionInfo?.calories
-            )}
-            <span className="text-lg text-muted-foreground">kcal</span>
+              nutritionInfo.data?.calories
+            )} {
+            nutritionGoal.data?.calories && (
+              <span className="text-sm text-muted-foreground">
+                  / {nutritionGoal.data?.calories}
+                </span>
+            )
+          }
+            <span className="text-lg text-muted-foreground">{" "}kcal</span>
           </div>
         </CardContent>
       </Card>
@@ -38,12 +41,17 @@ export function NutritionInfoCard({ date }: { date: Date }) {
         </CardHeader>
         <CardContent className="flex justify-center">
           <div className="text-2xl font-medium">
-            {isLoading ? (
+            {nutritionInfo.isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              NutritionInfo?.protein
+              nutritionInfo.data?.protein
+            )} {
+            nutritionGoal.data?.calories && (
+              <span className="text-sm text-muted-foreground">
+                  / {nutritionGoal.data?.protein}
+                </span>
             )}
-            <span className="text-lg text-muted-foreground">g</span>
+            <span className="text-lg text-muted-foreground">{" "}g</span>
           </div>
         </CardContent>
       </Card>
@@ -54,12 +62,17 @@ export function NutritionInfoCard({ date }: { date: Date }) {
         </CardHeader>
         <CardContent className="flex justify-center">
           <div className="text-2xl font-medium">
-            {isLoading ? (
+            {nutritionInfo.isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              NutritionInfo?.carbs
+              nutritionInfo.data?.carbs
+            )} {
+            nutritionGoal.data?.calories && (
+              <span className="text-sm text-muted-foreground">
+                  / {nutritionGoal.data?.carbs}
+                </span>
             )}
-            <span className="text-lg text-muted-foreground">g</span>
+            <span className="text-lg text-muted-foreground">{" "}g</span>
           </div>
         </CardContent>
       </Card>
@@ -70,12 +83,17 @@ export function NutritionInfoCard({ date }: { date: Date }) {
         </CardHeader>
         <CardContent className="flex justify-center">
           <div className="text-2xl font-medium">
-            {isLoading ? (
+            {nutritionInfo.isLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              NutritionInfo?.fat
+              nutritionInfo.data?.fat
+            )} {
+            nutritionGoal.data?.calories && (
+              <span className="text-sm text-muted-foreground">
+                  / {nutritionGoal.data?.fat}
+                </span>
             )}
-            <span className="text-lg text-muted-foreground">g</span>
+            <span className="text-lg text-muted-foreground">{" "}g</span>
           </div>
         </CardContent>
       </Card>
