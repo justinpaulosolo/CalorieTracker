@@ -35,6 +35,10 @@ public static class NutritionGoalHandler
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             var nutritionGoal = await nutritionGoalService.GetNutritionGoalAsync(userId!);
+
+            if (nutritionGoal == null)
+                return TypedResults.BadRequest("Nutrition goal not found");
+                    
             return TypedResults.Ok(nutritionGoal);
         }
         catch (Exception ex)
@@ -55,7 +59,7 @@ public static class NutritionGoalHandler
         try
         {
             var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var nutritionGoal = await nutritionGoalService.UpdateNutritionGoalAsync(updateNutritionGoalDto, userId!);
+            var nutritionGoal = await nutritionGoalService.UpdateNutritionGoalAsync(updateNutritionGoalDto);
             return TypedResults.Ok(nutritionGoal);
         }
         catch (Exception ex)

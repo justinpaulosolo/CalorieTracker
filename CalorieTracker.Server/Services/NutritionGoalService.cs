@@ -40,10 +40,10 @@ public class NutritionGoalService(ApplicationDbContext dbContext) : INutritionGo
         return nutritionGoal;
     }
 
-    public async Task<NutritionGoalDto> UpdateNutritionGoalAsync(UpdateNutritionGoalDto updateNutritionGoalDto, string userId)
+    public async Task<NutritionGoalDto> UpdateNutritionGoalAsync(UpdateNutritionGoalDto updateNutritionGoalDto)
     {
         var nutritionGoal = await dbContext.NutritionGoals
-            .Where(ng => ng.UserId == userId)
+            .Where(ng => ng.NutritionGoalId == updateNutritionGoalDto.NutritionGoalId)
             .FirstAsync();
         
         nutritionGoal.Calories = updateNutritionGoalDto.Calories;
