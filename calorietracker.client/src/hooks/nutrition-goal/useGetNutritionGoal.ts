@@ -9,6 +9,9 @@ export function useGetNutritionGoal() {
       const response = await axios.get("/api/nutrition-goal");
       const data: NutritionGoal = response.data;
       return data;
-    }
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: false
   });
 }
