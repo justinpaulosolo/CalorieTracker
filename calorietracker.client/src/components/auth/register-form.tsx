@@ -22,9 +22,10 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(values: RegisterUser) {
-    // Todo: Navigate to login page after successful registration not working, Error showing despite successful registration
     await registerUser.mutateAsync(values, {
-      onSuccess: () => navigate("/"),
+      onSuccess: () => {
+        navigate('/login');
+      },
       onError: () => {
         const formError = {
           type: "server",

@@ -12,7 +12,7 @@ export function useRegisterUser() {
   return useMutation({
     mutationFn: async (payload: RegisterUser) => {
       const response = await axios.post("/api/account/register", payload);
-      return response.data.response.data;
+      return response.data.response;
     },
   });
 }
