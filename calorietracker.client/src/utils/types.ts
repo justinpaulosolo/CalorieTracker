@@ -1,9 +1,11 @@
 import * as z from "zod";
-import { loginFormSchema, registerFormSchema } from "@/utils/schemas.ts";
+import { accountSettingsSchema, loginFormSchema, registerFormSchema } from "@/utils/schemas.ts";
 
 export type RegisterUser = z.infer<typeof registerFormSchema>;
 
 export type LoginUser = z.infer<typeof loginFormSchema>;
+
+export type AccountSettings = z.infer<typeof accountSettingsSchema>;
 
 export type User = {
   userId: string;
