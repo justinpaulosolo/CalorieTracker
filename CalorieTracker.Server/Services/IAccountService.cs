@@ -11,5 +11,6 @@ public interface IAccountService
     public Task<AccountDto> GetUserDetailsByIdAsync(string userId);
     public Task<AccountDto> GetUserDetailsByUserNameAsync(string userName);
     public Task<AccountDto> GetUserDetailsByEmailAsync(string email);
+    public Task<AccountDto> UpdateAccountAsync(UpdateAccountDto updateAccountDto, string userId);
     public Task LogoutUserAsync();
 }

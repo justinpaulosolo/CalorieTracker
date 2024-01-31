@@ -91,6 +91,28 @@ public class AccountService : IAccountService
             Email = user.Email!
         };
     }
+    
+    public async Task<AccountDto?> UpdateAccountAsync(UpdateAccountDto updateAccountDto, string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        user.UserName = updateAccountDto.UserName;
+        user.Email = updateAccountDto.Email;
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            throw new Exception("Failed to update user");
+        }
+        return new AccountDto
+        {
+            UserId = user.Id,
+            UserName = user.UserName!,
+            Email = user.Email!
+        };
+    }
 
     public async Task LogoutUserAsync()
     {

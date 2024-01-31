@@ -5,15 +5,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { AccountSettings, LoginUser } from "@/utils/types.ts";
 import { accountSettingsSchema } from "@/utils/schemas.ts";
+import { useGetUserDetails } from "@/hooks/useGetUserDetails";
 
 //TODO: Make account settings endpoint
 export default function AccountSettingsPage() {
+  const user = useGetUserDetails();
 
   const form = useForm<AccountSettings>({
     resolver: zodResolver(accountSettingsSchema),
     defaultValues: {
-      email: "",
-      username: "",
+      email: user.data?.email ?? "",
+      username: user.data?.userName ?? "",
       password: ""
     }
   });

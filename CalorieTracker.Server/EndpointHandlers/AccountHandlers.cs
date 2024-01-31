@@ -79,4 +79,28 @@ public static class AccountHandlers
             Email = user.Email
         });
     }
+
+    public static async Task<Results<Ok<AccountDto>,BadRequest<string>>> UpdateUser(
+        ClaimsPrincipal claimsPrincipal,
+        IAccountService accountService,
+        UpdateAccountDto updateAccountDto)
+    {
+        var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        try
+        {
+            var user = await accountService.UpdateAccountAsync(updateAccountDto, userId!);
+
+            return TypedResults.Ok(new AccountDto
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                Email = user.Email
+            });
+        }
+        catch (System.Exception)
+        {
+            return TypedResults.BadRequest("Error updating user");
+        }
+    }
 }
