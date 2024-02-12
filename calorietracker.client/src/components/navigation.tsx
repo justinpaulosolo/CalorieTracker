@@ -9,7 +9,22 @@ import {
 import { Link, LinkProps } from "react-router-dom";
 import { cn } from "@/lib/utils.ts";
 
-const components: { title: string; href: string; description: string }[] = [
+const exerciseDiaryNavItems: { title: string; href: string; description: string }[] = [
+  {
+    title: "Exercise Diary Dashboard",
+    href: "/exercise",
+    description:
+      "A dashboard for viewing your exercise entries and statistics."
+  },
+  {
+    title: "Detailed View",
+    href: "/food-diary/detailed",
+    description:
+      "A detailed view for viewing your food diary entries broken down by meals"
+  },
+];
+
+const foodDiaryNavItems: { title: string; href: string; description: string }[] = [
   {
     title: "Food Diary Dashboard",
     href: "/food-diary",
@@ -27,7 +42,13 @@ const components: { title: string; href: string; description: string }[] = [
     href: "/saved-foods",
     description:
       "A list of your saved foods that you can add to your food diary entries."
-  }
+  },
+  {
+    title: "Exercise Diary Dashboard",
+    href: "/exercise",
+    description:
+      "A dashboard for viewing your exercise entries and statistics."
+  },
 ];
 
 export function Navigation() {
@@ -38,7 +59,23 @@ export function Navigation() {
           <NavigationMenuTrigger>Foods</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="p-6 w-[400px]">
-              {components.map(component => (
+              {foodDiaryNavItems.map(component => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  to={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Exercise</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="p-6 w-[400px]">
+              {exerciseDiaryNavItems.map(component => (
                 <ListItem
                   key={component.title}
                   title={component.title}
