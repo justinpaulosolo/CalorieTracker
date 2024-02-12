@@ -28,6 +28,11 @@ public static class AccountEndpoints
             .WithSummary("Get user details")
             .WithDescription("Gets the details of the current user");
 
+        accountEndpoints.MapPut("/update", AccountHandlers.UpdateAccount)
+            .RequireAuthorization()
+            .WithSummary("Update Account")
+            .WithDescription("Updates accounts username and email");
+
         return accountEndpoints;
     }
 }

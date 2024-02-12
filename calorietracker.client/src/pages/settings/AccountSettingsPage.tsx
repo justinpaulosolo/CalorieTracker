@@ -3,15 +3,18 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AccountSettings, LoginUser } from "@/utils/types.ts";
+import { UpdateAccount, UpdateAccountDto } from "@/utils/types.ts";
 import { accountSettingsSchema } from "@/utils/schemas.ts";
 import { useGetUserDetails } from "@/hooks/useGetUserDetails";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import {toast} from "@/components/ui/use-toast.ts";
 
 //TODO: Make account settings endpoint
 export default function AccountSettingsPage() {
   const user = useGetUserDetails();
+  const updateUser = useUpdateUser()
 
-  const form = useForm<AccountSettings>({
+  const form = useForm<UpdateAccount>({
     resolver: zodResolver(accountSettingsSchema),
     defaultValues: {
       email: user.data?.email ?? "",
@@ -20,8 +23,21 @@ export default function AccountSettingsPage() {
     }
   });
 
-  function onSubmit(values: LoginUser) {
+  async function onSubmit(values: UpdateAccountDto) {
     console.log(values);
+    const payload: UpdateAccountDto = {
+      username: values.username,
+      email: values.email,
+    }
+    console.log(payload, "<------ payload")
+    await updateUser.mutateAsync(payload, {
+      onSuccess: () => {
+        console.log("Success");
+        toast({title: "Account update success"})
+      }, onError: () => {
+        console.log("Error");
+      }
+    });
   }
 
   // Todo: Fix login forms styling
@@ -64,7 +80,7 @@ export default function AccountSettingsPage() {
             <FormItem className="w-72">
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input required type="password" {...field} />
+                <Input type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

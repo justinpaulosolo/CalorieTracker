@@ -3,6 +3,8 @@ using CalorieTracker.Server.Models.Account;
 using CalorieTracker.Server.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CalorieTracker.Server.EndpointHandlers;
 
@@ -80,10 +82,10 @@ public static class AccountHandlers
         });
     }
 
-    public static async Task<Results<Ok<AccountDto>,BadRequest<string>>> UpdateUser(
+    public static async Task<Results<Ok<AccountDto>,BadRequest<string>>> UpdateAccount(
         ClaimsPrincipal claimsPrincipal,
         IAccountService accountService,
-        UpdateAccountDto updateAccountDto)
+        [FromBody]UpdateAccountDto updateAccountDto)
     {
         var userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
 

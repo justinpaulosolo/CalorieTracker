@@ -5,7 +5,7 @@ export type RegisterUser = z.infer<typeof registerFormSchema>;
 
 export type LoginUser = z.infer<typeof loginFormSchema>;
 
-export type AccountSettings = z.infer<typeof accountSettingsSchema>;
+export type UpdateAccount = z.infer<typeof accountSettingsSchema>;
 
 export type User = {
   userId: string;
@@ -138,4 +138,9 @@ export type UpdateNutritionGoalDto = {
   protein: number;
   carbs: number;
   fat: number;
+}
+
+export type UpdateAccountDto = {
+  email: string,
+  username: string,
 }

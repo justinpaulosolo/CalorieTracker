@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CreateFoodDiaryEntryDto, useCreateFoodDiaryEntry } from "@/utils/services/diary-services.ts";
 
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
 
 const foodQuickAddFormSchema = z.object({
   date: z.date(),
@@ -64,6 +65,7 @@ export default function FoodDiaryEntryQuickAddForm({ date }: FoodQuickAddFormPro
     await mutateAsync(createFoodDiaryEntryDto, {
       onSuccess: () => {
         form.reset();
+        toast("Food diary entry added");
       }
     });
   }
