@@ -18,7 +18,7 @@ const exerciseDiaryNavItems: { title: string; href: string; description: string 
   },
   {
     title: "Detailed View",
-    href: "/food-diary/detailed",
+    href: "/exercise/detailed",
     description:
       "A detailed view for viewing your food diary entries broken down by meals"
   },

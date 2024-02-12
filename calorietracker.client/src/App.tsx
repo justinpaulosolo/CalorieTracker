@@ -10,6 +10,8 @@ import DetailedFoodDiaryPage from "@/pages/DetailedFoodDiaryPage.tsx";
 import UpdateMealEntryPage from "@/pages/UpdateMealEntryPage.tsx";
 import SavedFoodPage from "@/pages/SavedFoodsPage.tsx";
 import CreateSavedFoodPage from "@/pages/CreateSavedFoodPage.tsx";
+import ExerciseDiaryDashboard from "./pages/ExerciseDiaryDashboard.tsx";
+import ExerciseDiaryDetailedView from "./pages/ExerciseDiaryDetailedView.tsx";
 
 function App() {
   return (
@@ -17,6 +19,12 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route element={<PrivateRoute />}>
+        // Exercise Diary Routes
+        <Route path="/exercise" element={<ExerciseDiaryDashboard />} />
+        <Route path="/exercise/detailed" element={<ExerciseDiaryDetailedView />} />
+
+
+        // Food Diary Routes
         <Route path="/" element={<Navigate to="/food-diary" replace />} />
         <Route path="/food-diary" element={<FoodDiaryDashboard />} />
         <Route path="/food-diary/entry/:id" element={<UpdateMealEntryPage />} />
@@ -24,15 +32,20 @@ function App() {
           path="/food-diary/detailed"
           element={<DetailedFoodDiaryPage />}
         />
+
+        // Saved Foods Routes
         <Route path="/saved-foods" element={<SavedFoodPage />} />
         <Route path="/saved-foods/new" element={<CreateSavedFoodPage />} />
+
+
+        // Settings Routes
         <Route path="/settings" element={<SettingsLayout />}>
           <Route path="/settings/nutritional-goal" element={<NutritionGoalPage />} />
           <Route path="/settings/account" element={<AccountSettingsPage />} />
         </Route>
       </Route>
     </Routes>
-  );
+  )
 }
 
 export default App;
