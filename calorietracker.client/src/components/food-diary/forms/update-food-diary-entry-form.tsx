@@ -15,8 +15,8 @@ import { Input } from "@/components/ui/input.tsx";
 import { Icons } from "@/components/icons";
 import { useUpdateFoodDiaryEntry } from "@/hooks/useUpdateFoodDiaryEntry.ts";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast.ts";
 import { useDeleteFoodDiaryEntry } from "@/utils/services/food-diary-services.ts";
+import { toast } from "sonner";
 
 const foodDiaryEntryUpdateFormSchema = z.object({
   date: z.date(),
@@ -67,10 +67,7 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
     await updateFoodDiaryEntry.mutateAsync(payload, {
       onSuccess: () => {
         form.reset();
-        toast({
-          title: "Food diary entry updated",
-          description: "Your food diary entry has been updated successfully."
-        });
+        toast("Food diary entry updated");
         navigate("/food-diary");
       }
     });
@@ -79,10 +76,7 @@ export default function UpdateFoodDiaryEntryForm({ foodDiaryEntry }: FoodDiaryEn
   const handleDelete = async (foodDiaryEntryId: number) => {
     await deleteFoodDiaryEntry.mutateAsync(foodDiaryEntryId, {
       onSuccess: () => {
-        toast({
-          title: "Food diary entry deleted",
-          description: "Your food diary entry has been deleted successfully."
-        });
+        toast("Food diary entry deleted");
         navigate("/food-diary");
       }
     });
