@@ -1,6 +1,6 @@
-namespace CalorieTracker.Server.Models.Exerecise;
+namespace CalorieTracker.Server.Models.Exercise;
 
-public class ExcerciseDto
+public class CreateExcerciseTypeDto
 {
     public string Name { get; set; } = default!;
 }
