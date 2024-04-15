@@ -13,6 +13,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<FoodDiaryEntry> FoodDiaryEntries { get; set; }
     public DbSet<SavedFood> SavedFoods { get; set; }
     public DbSet<NutritionGoal> NutritionGoals { get; set; }
+
+    // Exercise
+    public DbSet<ExerciseType> ExerciseTypes { get; set; }
+    public DbSet<SavedExercise> SavedExercises { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
