@@ -34,6 +34,7 @@ app.MapAccountEndpoints();
 app.MapNutritionEndpoints();
 app.MapSavedFoodEndpoints();
 app.MapNutritionGoalEndpoints();
+app.MapExerciseEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

@@ -11,7 +11,7 @@ public static class DependencyInjection
         services.AddTransient<IDiaryService, DiaryService>();
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<INutritionGoalService, NutritionGoalService>();
-
+        services.AddTransient<IExerciseService, ExerciseService>();
         return services;
     }
 }

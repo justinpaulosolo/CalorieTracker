@@ -18,4 +18,9 @@ public class ExerciseService(ApplicationDbContext dbContext) : IExerciseService
     {
         return await dbContext.ExerciseTypes.ToListAsync();
     }
+
+    public Task<int> CreateExerciseType(ExerciseType exerciseType)
+    {
+        throw new NotImplementedException();
+    }
 }
