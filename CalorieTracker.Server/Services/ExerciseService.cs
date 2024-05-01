@@ -2,6 +2,7 @@ namespace CalorieTracker.Server.Services;
 
 using CalorieTracker.Server.Data;
 using CalorieTracker.Server.Entities;
+using CalorieTracker.Server.Models.Exercise;
 using Microsoft.EntityFrameworkCore;
 
 public class ExerciseService(ApplicationDbContext dbContext) : IExerciseService
@@ -19,8 +20,36 @@ public class ExerciseService(ApplicationDbContext dbContext) : IExerciseService
         return await dbContext.ExerciseTypes.ToListAsync();
     }
 
-    public Task<int> CreateExerciseType(ExerciseType exerciseType)
+    public async Task<int> CreateExerciseType(CreateExerciseTypeDto createExerciseTypeDto)
     {
-        throw new NotImplementedException();
+        var newExerciseType = new ExerciseType
+        {
+            Name = createExerciseTypeDto.Name,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        await dbContext.ExerciseTypes.AddAsync(newExerciseType);
+
+        await dbContext.SaveChangesAsync();
+
+        return newExerciseType.ExerciseTypeId;
+    }
+
+    public async Task<bool> DeleteExerciseTypeById(int id)
+    {
+        var exerciseType = await dbContext.ExerciseTypes
+            .Where(e => e.ExerciseTypeId == id)
+            .FirstOrDefaultAsync();
+        
+        if (exerciseType == null)
+        {
+            return false;
+        }
+
+        dbContext.ExerciseTypes.Remove(exerciseType);
+        var result = await dbContext.SaveChangesAsync();
+
+        return result > 0;
     }
 }

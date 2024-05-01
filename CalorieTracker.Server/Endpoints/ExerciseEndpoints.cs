@@ -15,6 +15,14 @@ public static class ExerciseEndpoints
             .WithSummary("Get all exercise types")
             .WithDescription("Retrieves all exercise types");
 
+        exerciseEndpoints.MapPost("/types", ExerciseHandlers.CreateExerciseType)
+            .WithSummary("Create a new exercise type")
+            .WithDescription("Creates a new exercise type");
+
+        exerciseEndpoints.MapDelete("/types/{exerciseTypeId:int}", ExerciseHandlers.DeleteExerciseTypeById)
+            .WithSummary("Delete an exercise type by ID")
+            .WithDescription("Deletes an exercise type by ID");
+
         return exerciseEndpoints;
     }
 }
