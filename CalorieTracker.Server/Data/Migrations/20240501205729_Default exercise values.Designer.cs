@@ -3,6 +3,7 @@ using System;
 using CalorieTracker.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501205729_Default exercise values")]
+    partial class Defaultexercisevalues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -99,43 +102,6 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Diaries");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiary", b =>
-                {
-                    b.Property<int>("ExerciseDiaryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DiaryId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ExerciseDiaryId");
-
-                    b.HasIndex("DiaryId");
-
-                    b.ToTable("ExerciseDiaries");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiaryEntry", b =>
-                {
-                    b.Property<int>("ExerciseDiaryEntryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExerciseDiaryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExerciseTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ExerciseDiaryEntryId");
-
-                    b.HasIndex("ExerciseDiaryId");
-
-                    b.HasIndex("ExerciseTypeId");
-
-                    b.ToTable("ExerciseDiaryEntries");
                 });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseType", b =>
@@ -551,36 +517,6 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiary", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.Entities.Diary", "Diary")
-                        .WithMany("ExerciseDiaries")
-                        .HasForeignKey("DiaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Diary");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiaryEntry", b =>
-                {
-                    b.HasOne("CalorieTracker.Server.Entities.ExerciseDiary", "ExerciseDiary")
-                        .WithMany("ExerciseDiaryEntries")
-                        .HasForeignKey("ExerciseDiaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CalorieTracker.Server.Entities.ExerciseType", "ExerciseType")
-                        .WithMany()
-                        .HasForeignKey("ExerciseTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ExerciseDiary");
-
-                    b.Navigation("ExerciseType");
-                });
-
             modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiary", b =>
                 {
                     b.HasOne("CalorieTracker.Server.Entities.Diary", "Diary")
@@ -712,14 +648,7 @@ namespace CalorieTracker.Server.Data.Migrations
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.Diary", b =>
                 {
-                    b.Navigation("ExerciseDiaries");
-
                     b.Navigation("FoodDiaries");
-                });
-
-            modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiary", b =>
-                {
-                    b.Navigation("ExerciseDiaryEntries");
                 });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.FoodDiary", b =>
