@@ -6,9 +6,19 @@ namespace CalorieTracker.Server.Services;
 
 public class ExerciseDiaryService(ApplicationDbContext dbContext) : IExerciseDiaryService
 {
-    public Task<int> CreateExerciseDiary(CreateExerciseDiaryDto createExerciseDiaryDto)
+    public async Task<int> CreateExerciseDiaryAsync(CreateExerciseDiaryDto createExerciseDiaryDto)
     {
-        throw new NotImplementedException();
+        var exerciseDiary = new ExerciseDiary
+        {
+            DiaryId = createExerciseDiaryDto.DiaryId,
+            ExerciseDiaryId = createExerciseDiaryDto.ExerciseTypeId
+        };
+
+        dbContext.ExerciseDiaries.Add(exerciseDiary);
+
+        await dbContext.SaveChangesAsync();
+
+        return exerciseDiary.ExerciseDiaryId;
     }
 
     public Task<bool> DeleteExerciseDiaryById(int id)
