@@ -15,11 +15,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<NutritionGoal> NutritionGoals { get; set; }
 
     // Exercise
+    public DbSet<Exercise> Exercise { get; set; }
     public DbSet<ExerciseType> ExerciseTypes { get; set; }
     public DbSet<SavedExercise> SavedExercises { get; set; }
     public DbSet<ExerciseDiary> ExerciseDiaries { get; set; }
     public DbSet<ExerciseDiaryEntry> ExerciseDiaryEntries { get; set; }
-    
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
@@ -35,15 +36,79 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         );
 
         modelBuilder.Entity<ExerciseType>().HasData(
-            new ExerciseType { ExerciseTypeId = 1, Name = "Running" },
-            new ExerciseType { ExerciseTypeId = 2, Name = "Walking" },
-            new ExerciseType { ExerciseTypeId = 3, Name = "Cycling" },
-            new ExerciseType { ExerciseTypeId = 4, Name = "Swimming" },
-            new ExerciseType { ExerciseTypeId = 5, Name = "Weightlifting" },
-            new ExerciseType { ExerciseTypeId = 6, Name = "Yoga" },
-            new ExerciseType { ExerciseTypeId = 7, Name = "Pilates" },
-            new ExerciseType { ExerciseTypeId = 8, Name = "Dancing" },
-            new ExerciseType { ExerciseTypeId = 9, Name = "Boxing" }
+            new ExerciseType
+            {
+                ExerciseTypeId = 1,
+                Name = "Cardio",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new ExerciseType
+            {
+                ExerciseTypeId = 2,
+                Name = "Strength",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            }
+        );
+
+        modelBuilder.Entity<Exercise>().HasData(
+            new Exercise
+            {
+                ExerciseId = 1,
+                Name = "Running",
+                ExerciseTypeId = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new Exercise
+            {
+                ExerciseId = 2,
+                Name = "Cycling",
+                ExerciseTypeId = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new Exercise
+            {
+                ExerciseId = 3,
+                Name = "Swimming",
+                ExerciseTypeId = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new Exercise
+            {
+                ExerciseId = 4,
+                Name = "Walking",
+                ExerciseTypeId = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new Exercise
+            {
+                ExerciseId = 5,
+                Name = "Weightlifting",
+                ExerciseTypeId = 2,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            },
+            new Exercise
+            {
+                ExerciseId = 6,
+                Name = "Bodyweight",
+                ExerciseTypeId = 2,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            },
+            new Exercise
+            {
+                ExerciseId = 7,
+                Name = "Yoga",
+                ExerciseTypeId = 2,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            }
         );
     }
 }

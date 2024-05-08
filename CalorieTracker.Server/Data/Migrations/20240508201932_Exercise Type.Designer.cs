@@ -3,6 +3,7 @@ using System;
 using CalorieTracker.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240508201932_Exercise Type")]
+    partial class ExerciseType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -125,64 +128,6 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.HasIndex("ExerciseTypeId");
 
                     b.ToTable("Exercise");
-
-                    b.HasData(
-                        new
-                        {
-                            ExerciseId = 1,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(600),
-                            ExerciseTypeId = 1,
-                            Name = "Running",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(600)
-                        },
-                        new
-                        {
-                            ExerciseId = 2,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(600),
-                            ExerciseTypeId = 1,
-                            Name = "Cycling",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(610)
-                        },
-                        new
-                        {
-                            ExerciseId = 3,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(610),
-                            ExerciseTypeId = 1,
-                            Name = "Swimming",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(610)
-                        },
-                        new
-                        {
-                            ExerciseId = 4,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(610),
-                            ExerciseTypeId = 1,
-                            Name = "Walking",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(610)
-                        },
-                        new
-                        {
-                            ExerciseId = 5,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620),
-                            ExerciseTypeId = 2,
-                            Name = "Weightlifting",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620)
-                        },
-                        new
-                        {
-                            ExerciseId = 6,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620),
-                            ExerciseTypeId = 2,
-                            Name = "Bodyweight",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620)
-                        },
-                        new
-                        {
-                            ExerciseId = 7,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620),
-                            ExerciseTypeId = 2,
-                            Name = "Yoga",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(620)
-                        });
                 });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.ExerciseDiary", b =>
@@ -241,22 +186,6 @@ namespace CalorieTracker.Server.Data.Migrations
                     b.HasKey("ExerciseTypeId");
 
                     b.ToTable("ExerciseTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            ExerciseTypeId = 1,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(520),
-                            Name = "Cardio",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(570)
-                        },
-                        new
-                        {
-                            ExerciseTypeId = 2,
-                            CreatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(580),
-                            Name = "Strength",
-                            UpdatedAt = new DateTime(2024, 5, 8, 13, 32, 33, 366, DateTimeKind.Local).AddTicks(580)
-                        });
                 });
 
             modelBuilder.Entity("CalorieTracker.Server.Entities.Food", b =>
