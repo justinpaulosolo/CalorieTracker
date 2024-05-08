@@ -52,4 +52,12 @@ public class ExerciseService(ApplicationDbContext dbContext) : IExerciseService
 
         return result > 0;
     }
+
+    public async Task<List<Exercise>> GetExerciseByType(string exerciseType)
+    {
+        return await dbContext.Exercises
+            .Include(e => e.ExerciseType)
+            .Where(e => e.ExerciseType.Name == exerciseType)
+            .ToListAsync();
+    }
 }

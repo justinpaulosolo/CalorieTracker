@@ -5,6 +5,7 @@ namespace CalorieTracker.Server.Services;
 
 public interface IExerciseService
 {
+    public Task<List<Exercise>> GetExerciseByType (string exerciseType);
     public Task<int?> GetExerciseTypeById(int id);
     public Task<List<ExerciseType>> GetAllExerciseType();
     public Task<int> CreateExerciseType(CreateExerciseTypeDto createExerciseTypeDto);

@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<NutritionGoal> NutritionGoals { get; set; }
 
     // Exercise
-    public DbSet<Exercise> Exercise { get; set; }
+    public DbSet<Exercise> Exercises { get; set; }
     public DbSet<ExerciseType> ExerciseTypes { get; set; }
     public DbSet<SavedExercise> SavedExercises { get; set; }
     public DbSet<ExerciseDiary> ExerciseDiaries { get; set; }
